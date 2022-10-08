@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity name="sys_user" title="系统用户">
+    <short-description>系统用户表</short-description>
+    <filed name="username" title="用户名" type="String" length="30"/>
+    <filed name="password" title="用户密码" type="String" length="50"/>
+    <filed name="nickname" title="用户昵称" type="String" length="30"/>
+</entity>
