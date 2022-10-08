@@ -6,3 +6,6 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     username: root
     password: 12345678
+springdoc:
+  api-docs:
+    path: /api-docs

@@ -21,6 +21,7 @@
         <testable.version>0.7.7</testable.version>
         <snakeyaml.version>1.30</snakeyaml.version>
         <caffeine.version>3.1.1</caffeine.version>
+        <springdoc-openapi-ui.version>1.6.11</springdoc-openapi-ui.version>
     </properties>
 
     <dependencies>
@@ -62,6 +63,11 @@
                 <groupId>com.github.ben-manes.caffeine</groupId>
                 <artifactId>caffeine</artifactId>
                 <version>${caffeine.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-ui</artifactId>
+                <version>${springdoc-openapi-ui.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba.testable</groupId>
