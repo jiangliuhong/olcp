@@ -1,7 +1,6 @@
 package top.jiangliuhong.olcp.engine.bean;
 
 import lombok.Getter;
-import top.jiangliuhong.olcp.engine.bean.ColumnInfo;
 import top.jiangliuhong.olcp.engine.load.bean.EntityInfo;
 import top.jiangliuhong.olcp.engine.load.bean.FieldInfo;
 
