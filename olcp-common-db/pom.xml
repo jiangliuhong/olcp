@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>olcp-data</artifactId>
+    <artifactId>olcp-common-db</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -18,8 +18,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>top.jiangliuhong.olcp</groupId>
+            <artifactId>olcp-common-core</artifactId>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -33,32 +33,6 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba.testable</groupId>
-            <artifactId>testable-all</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 

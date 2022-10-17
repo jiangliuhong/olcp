@@ -1,4 +1,4 @@
-package top.jiangliuhong.olcp.utils;
+package top.jiangliuhong.olcp.common.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;

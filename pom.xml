@@ -6,12 +6,18 @@
     <packaging>pom</packaging>
     <modules>
         <module>olcp-data</module>
+        <module>olcp-common-auth</module>
+        <module>olcp-common-core</module>
+        <module>olcp-common-web</module>
+        <module>olcp-single</module>
+        <module>olcp-common-db</module>
     </modules>
     <groupId>top.jiangliuhong.olcp</groupId>
     <artifactId>olcp</artifactId>
     <version>0.1-SNAPSHOT</version>
 
     <properties>
+        <olcp.version>0.1-SNAPSHOT</olcp.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <mybatis.version>2.2.2</mybatis.version>
@@ -22,6 +28,8 @@
         <snakeyaml.version>1.30</snakeyaml.version>
         <caffeine.version>3.1.1</caffeine.version>
         <springdoc-openapi-ui.version>1.6.11</springdoc-openapi-ui.version>
+        <swagger.version>2.2.2</swagger.version>
+        <jwt.version>0.9.1</jwt.version>
     </properties>
 
     <dependencies>
@@ -29,9 +37,41 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
+            <!-- module -->
+            <dependency>
+                <groupId>top.jiangliuhong.olcp</groupId>
+                <artifactId>olcp-common-core</artifactId>
+                <version>${olcp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.jiangliuhong.olcp</groupId>
+                <artifactId>olcp-common-auth</artifactId>
+                <version>${olcp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.jiangliuhong.olcp</groupId>
+                <artifactId>olcp-common-core</artifactId>
+                <version>${olcp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.jiangliuhong.olcp</groupId>
+                <artifactId>olcp-common-web</artifactId>
+                <version>${olcp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.jiangliuhong.olcp</groupId>
+                <artifactId>olcp-common-db</artifactId>
+                <version>${olcp.version}</version>
+            </dependency>
+            <!-- module -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -68,6 +108,16 @@
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-ui</artifactId>
                 <version>${springdoc-openapi-ui.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jwt.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba.testable</groupId>

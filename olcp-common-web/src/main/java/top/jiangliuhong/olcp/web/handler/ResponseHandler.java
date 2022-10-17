@@ -1,7 +1,8 @@
-package top.jiangliuhong.olcp.common.handler;
+package top.jiangliuhong.olcp.web.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import top.jiangliuhong.olcp.common.bean.ApiResult;
 
 @RestControllerAdvice
+@Schema
 public class ResponseHandler implements ResponseBodyAdvice<Object> {
 
     @Override

@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-//@EnableConfigurationProperties({Jwt})
-public class OlcpDataApp {
+public class OlcpSingleApp {
+
     public static void main(String[] args) {
-        SpringApplication.run(OlcpDataApp.class);
+        SpringApplication.run(OlcpSingleApp.class);
     }
 }

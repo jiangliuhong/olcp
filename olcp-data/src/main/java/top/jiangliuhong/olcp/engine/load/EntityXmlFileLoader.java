@@ -7,7 +7,7 @@ import org.dom4j.Element;
 import top.jiangliuhong.olcp.engine.load.bean.EntityInfo;
 import top.jiangliuhong.olcp.engine.load.bean.FieldInfo;
 import top.jiangliuhong.olcp.engine.type.FieldType;
-import top.jiangliuhong.olcp.utils.XmlUtil;
+import top.jiangliuhong.olcp.common.utils.XmlUtil;
 
 import java.io.File;
 import java.util.ArrayList;

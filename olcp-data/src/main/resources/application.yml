@@ -9,3 +9,9 @@ spring:
 springdoc:
   api-docs:
     path: /api-docs
+olcp:
+  jwt:
+    tokenHeader: X-Token
+    tokenHead: Bearer
+    secret: ocl-secret
+    expiration: 604800
