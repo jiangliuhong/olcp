@@ -24,6 +24,9 @@ public class ResponseHandler implements ResponseBodyAdvice<Object> {
         if (returnType.getGenericParameterType().equals(ApiResult.class)) {
             return false;
         }
+        if (returnType.getContainingClass().getName().startsWith("org.springdoc")) {
+            return false;
+        }
         return AnnotatedElementUtils.hasAnnotation(returnType.getContainingClass(), RestController.class) ||
                 returnType.hasMethodAnnotation(ResponseBody.class);
     }

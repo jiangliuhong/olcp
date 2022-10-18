@@ -1,20 +1,19 @@
 package top.jiangliuhong.olcp.auth.config;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import top.jiangliuhong.olcp.auth.service.JwtAuthenticationTokenFilter;
-import top.jiangliuhong.olcp.auth.service.JwtTokenHandler;
+import top.jiangliuhong.olcp.auth.api.UserAuthApi;
+import top.jiangliuhong.olcp.auth.properties.JwtProperties;
+import top.jiangliuhong.olcp.auth.service.*;
 
-@Configuration
-public class SpringSecurityConfig {
+@EnableConfigurationProperties({JwtProperties.class})
+public class AuthAutoConfigure {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         //省略HttpSecurity的配置
@@ -24,16 +23,16 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    UserDetailsService userDetailsService() {
-        InMemoryUserDetailsManager users = new InMemoryUserDetailsManager();
-        users.createUser(User.withUsername("javaboy").password("{noop}123").roles("admin").build());
-        users.createUser(User.withUsername("江南一点雨").password("{noop}123").roles("admin").build());
-        return users;
+    public UserDetailsService userDetailsService() {
+//        InMemoryUserDetailsManager users = new InMemoryUserDetailsManager();
+//        users.createUser(User.withUsername("javaboy").password("{noop}123").roles("admin").build());
+//        users.createUser(User.withUsername("江南一点雨").password("{noop}123").roles("admin").build());
+        return new UserDetailsServiceImpl();
     }
 
     @Bean
     WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().antMatchers("/login");
+        return web -> web.ignoring().antMatchers("/api/v1/auth/login");
     }
 
 
@@ -47,9 +46,23 @@ public class SpringSecurityConfig {
         return new JwtAuthenticationTokenFilter();
     }
 
+    @Bean
+    public UserAuthenticationProvider olcpAuthenticationProvider() {
+        return new UserAuthenticationProvider();
+    }
 
     @Bean
     public JwtTokenHandler jwtTokenHandler() {
         return new JwtTokenHandler();
+    }
+
+    @Bean
+    public UserAuthService userAuthService() {
+        return new UserAuthService();
+    }
+
+    @Bean
+    public UserAuthApi userAuthApi() {
+        return new UserAuthApi();
     }
 }

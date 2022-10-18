@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  top.jiangliuhong.olcp.auth.config.AuthAutoConfigure
+  top.jiangliuhong.olcp.web.WebAutoConfigure
