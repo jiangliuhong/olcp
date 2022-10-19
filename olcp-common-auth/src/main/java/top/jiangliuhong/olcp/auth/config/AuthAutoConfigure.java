@@ -24,9 +24,6 @@ public class AuthAutoConfigure {
 
     @Bean
     public UserDetailsService userDetailsService() {
-//        InMemoryUserDetailsManager users = new InMemoryUserDetailsManager();
-//        users.createUser(User.withUsername("javaboy").password("{noop}123").roles("admin").build());
-//        users.createUser(User.withUsername("江南一点雨").password("{noop}123").roles("admin").build());
         return new UserDetailsServiceImpl();
     }
 

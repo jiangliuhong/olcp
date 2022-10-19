@@ -21,6 +21,10 @@
             <artifactId>olcp-common-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>top.jiangliuhong.olcp</groupId>
+            <artifactId>olcp-common-db</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
         </dependency>

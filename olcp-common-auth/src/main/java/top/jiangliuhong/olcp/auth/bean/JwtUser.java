@@ -2,7 +2,6 @@ package top.jiangliuhong.olcp.auth.bean;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import top.jiangliuhong.olcp.common.bean.OlcpUser;
 
 import java.util.Collection;
 
@@ -11,10 +10,10 @@ import java.util.Collection;
  */
 public class JwtUser implements UserDetails {
 
-    private final OlcpUser olcpUser;
+    private final UserDO user;
 
-    public JwtUser(OlcpUser olcpUser) {
-        this.olcpUser = olcpUser;
+    public JwtUser(UserDO user) {
+        this.user = user;
     }
 
     @Override
@@ -24,12 +23,12 @@ public class JwtUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.olcpUser.getPassword();
+        return this.user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.olcpUser.getUsername();
+        return this.user.getUsername();
     }
 
     @Override

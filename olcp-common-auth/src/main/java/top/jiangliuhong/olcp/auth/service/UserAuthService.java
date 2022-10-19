@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserAuthService {
-
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -19,6 +18,8 @@ public class UserAuthService {
 
     public String login(String username, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        //String pwd = passwordEncoder.encode("test");
+        //test: $2a$10$BUuG0a5K7cVd6ktES5.oEOVtGQFnIg3csRLL28bBzTaGWl4rGimyO
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new BadCredentialsException("密码不正确");
         }
