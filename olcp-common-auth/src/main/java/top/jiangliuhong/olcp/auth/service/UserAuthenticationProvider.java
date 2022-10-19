@@ -15,8 +15,6 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
-    private JwtTokenHandler jwtTokenHandler;
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
