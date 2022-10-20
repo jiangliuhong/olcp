@@ -1,15 +1,17 @@
 package top.jiangliuhong.olcp.auth.api;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import top.jiangliuhong.olcp.auth.bean.LoginVO;
 import top.jiangliuhong.olcp.auth.bean.UserDO;
-import top.jiangliuhong.olcp.auth.bean.vo.LoginVO;
-import top.jiangliuhong.olcp.auth.bean.vo.UserVO;
+import top.jiangliuhong.olcp.auth.bean.UserVO;
 import top.jiangliuhong.olcp.auth.service.UserAuthService;
 import top.jiangliuhong.olcp.auth.service.UserService;
 
@@ -22,6 +24,12 @@ public class UserAuthApi {
     @Autowired
     private UserService userService;
 
+    /**
+     * user login
+     * 
+     * @param loginVO login vo
+     * @return token string
+     */
     @PostMapping("/login")
     @Tag(name = "登录")
     public String login(@RequestBody LoginVO loginVO) {
@@ -33,12 +41,15 @@ public class UserAuthApi {
 
     @PostMapping("/user")
     @Tag(name = "新增用户")
-    public UserVO addUser(UserVO user) {
+    public UserVO addUser(@RequestBody UserVO user) {
         UserDO userDO = new UserDO();
         userDO.setUsername(user.getUsername());
         userDO.setPassword(user.getPassword());
         userDO.setNickname(user.getNickname());
-        return userService.save(userDO);
+        userDO = userService.save(userDO);
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(userDO, userVO);
+        return userVO;
     }
 
 }

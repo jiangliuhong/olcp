@@ -18,7 +18,7 @@ public class TableInfo {
     private final List<ColumnInfo> columns = new ArrayList<>();
     private final Map<String, ColumnInfo> columnMaps = new HashMap<>();
     private final ColumnInfo primary;
-
+`
     public TableInfo(EntityInfo entityInfo) {
         this.tableName = entityInfo.getName();
         ColumnInfo primary = null;

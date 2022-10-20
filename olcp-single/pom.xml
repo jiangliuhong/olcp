@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>top.jiangliuhong.olcp</groupId>
-            <artifactId>olcp-common-auth</artifactId>
+            <artifactId>olcp-auth-api</artifactId>
         </dependency>
     </dependencies>
 

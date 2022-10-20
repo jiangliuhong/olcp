@@ -8,6 +8,7 @@
         <module>olcp-single</module>
         <module>olcp-common</module>
         <module>olcp-data</module>
+        <module>olcp-api</module>
     </modules>
     <groupId>top.jiangliuhong.olcp</groupId>
     <artifactId>olcp</artifactId>
@@ -71,6 +72,11 @@
             <dependency>
                 <groupId>top.jiangliuhong.olcp</groupId>
                 <artifactId>olcp-data-base</artifactId>
+                <version>${olcp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.jiangliuhong.olcp</groupId>
+                <artifactId>olcp-auth-api</artifactId>
                 <version>${olcp.version}</version>
             </dependency>
             <!-- module -->

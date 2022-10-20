@@ -1,4 +1,4 @@
-package top.jiangliuhong.olcp.auth.bean.vo;
+package top.jiangliuhong.olcp.auth.bean;
 
 import lombok.Data;
 

@@ -3,29 +3,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>olcp-data</artifactId>
+        <artifactId>olcp</artifactId>
         <groupId>top.jiangliuhong.olcp</groupId>
         <version>0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>olcp-data-base</artifactId>
+    <artifactId>olcp-api</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>olcp-auth-api</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>top.jiangliuhong.olcp</groupId>
-            <artifactId>olcp-common-db</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-    </dependencies>
 
 </project>

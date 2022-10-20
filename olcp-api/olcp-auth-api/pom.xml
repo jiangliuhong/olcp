@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>olcp-data</artifactId>
+        <artifactId>olcp-api</artifactId>
         <groupId>top.jiangliuhong.olcp</groupId>
         <version>0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>olcp-data-base</artifactId>
+    <artifactId>olcp-auth-api</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>top.jiangliuhong.olcp</groupId>
-            <artifactId>olcp-common-db</artifactId>
+            <artifactId>olcp-common-auth</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -27,5 +27,4 @@
             <optional>true</optional>
         </dependency>
     </dependencies>
-
 </project>

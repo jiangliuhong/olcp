@@ -6,7 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import top.jiangliuhong.olcp.auth.api.UserAuthApi;
+
+import top.jiangliuhong.olcp.auth.handler.AuthBeforeConvertCallback;
 import top.jiangliuhong.olcp.auth.handler.JwtAuthenticationTokenFilter;
 import top.jiangliuhong.olcp.auth.handler.JwtTokenHandler;
 import top.jiangliuhong.olcp.auth.handler.RestAuthorizationEntryPoint;
@@ -45,11 +46,6 @@ public class AuthAutoConfigure {
         return new JwtAuthenticationTokenFilter();
     }
 
-//    @Bean
-//    public UserAuthenticationProvider olcpAuthenticationProvider() {
-//        return new UserAuthenticationProvider();
-//    }
-
     @Bean
     public JwtTokenHandler jwtTokenHandler() {
         return new JwtTokenHandler();
@@ -66,7 +62,7 @@ public class AuthAutoConfigure {
     }
 
     @Bean
-    public UserAuthApi userAuthApi() {
-        return new UserAuthApi();
+    public AuthBeforeConvertCallback authBeforeConvertCallback() {
+        return new AuthBeforeConvertCallback();
     }
 }

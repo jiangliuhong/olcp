@@ -16,6 +16,10 @@ public class JwtUser implements UserDetails {
         this.user = user;
     }
 
+    public UserDO getUser() {
+        return this.user;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
