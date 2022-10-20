@@ -1,4 +1,4 @@
-package top.jiangliuhong.olcp.auth.service;
+package top.jiangliuhong.olcp.auth.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;

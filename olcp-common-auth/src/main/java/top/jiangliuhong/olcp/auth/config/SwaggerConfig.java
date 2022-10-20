@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class SwaggerDocket {
+public class SwaggerConfig {
 
     @Bean
     public GroupedOpenApi authApi() {
@@ -16,4 +16,5 @@ public class SwaggerDocket {
                 .addOpenApiCustomiser(openApi -> openApi.info(new Info().title("Actuator API").version("1.0.0")))
                 .build();
     }
+
 }

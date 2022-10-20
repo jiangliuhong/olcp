@@ -1,4 +1,4 @@
-package top.jiangliuhong.olcp.auth.service;
+package top.jiangliuhong.olcp.auth.handler;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -6,7 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import top.jiangliuhong.olcp.auth.properties.JwtProperties;
+import top.jiangliuhong.olcp.auth.properties.AuthProperties;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ import java.util.Map;
 @Slf4j
 public class JwtTokenHandler {
     @Autowired
-    private JwtProperties jwtProperties;
+    private AuthProperties authProperties;
 
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_CREATED = "created";
@@ -29,6 +29,7 @@ public class JwtTokenHandler {
             Claims claims = getClaimsFromToken(token);
             username = claims.getSubject();
         } catch (Exception e) {
+            log.error("parse token error",e);
             username = null;
         }
         return username;
@@ -65,7 +66,7 @@ public class JwtTokenHandler {
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate())
                 //签名算法
-                .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecret())
+                .signWith(SignatureAlgorithm.HS512, authProperties.getJwt().getSecret())
                 .compact();
     }
 
@@ -73,13 +74,13 @@ public class JwtTokenHandler {
      * 生成token的过期时间
      */
     private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + jwtProperties.getExpiration() * 1000);
+        return new Date(System.currentTimeMillis() + authProperties.getJwt().getExpiration() * 1000);
     }
 
     private Claims getClaimsFromToken(String token) {
         try {
             return Jwts.parser()
-                    .setSigningKey(jwtProperties.getSecret())
+                    .setSigningKey(authProperties.getJwt().getSecret())
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {

@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import top.jiangliuhong.olcp.auth.handler.JwtTokenHandler;
 
 public class UserAuthService {
     @Autowired
@@ -23,6 +24,7 @@ public class UserAuthService {
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new BadCredentialsException("密码不正确");
         }
+        // 更新 security 登录对象
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return jwtTokenHandler.generateToken(userDetails);

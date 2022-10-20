@@ -8,6 +8,7 @@ public enum ApiResultStatus implements IApiResultStatus {
     BAD_REQUEST(400, "Bad Request params exception"),
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
     UNAUTHORIZED(401, "认证异常"),
+    FORBIDDEN(403, "没有权限"),
     ;
     private final Integer code;
     private final String message;

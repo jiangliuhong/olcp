@@ -1,4 +1,4 @@
-package top.jiangliuhong.olcp.auth.service;
+package top.jiangliuhong.olcp.auth.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
+import top.jiangliuhong.olcp.auth.properties.AuthProperties;
 import top.jiangliuhong.olcp.auth.properties.JwtProperties;
 
 import javax.servlet.FilterChain;
@@ -20,7 +21,7 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Autowired
-    private JwtProperties jwtProperties;
+    private AuthProperties authProperties;
     @Autowired
     private JwtTokenHandler jwtTokenHandler;
     @Autowired
@@ -30,9 +31,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String authHeader = request.getHeader(jwtProperties.getTokenHead());
+        JwtProperties jwtProperties = authProperties.getJwt();
+        String authHeader = request.getHeader(jwtProperties.getTokenHeader());
         if (StringUtils.isNotBlank(authHeader) && authHeader.startsWith(jwtProperties.getTokenHead())) {
-            String authToken = authHeader.substring(jwtProperties.getTokenHeader().length());
+            String authToken = authHeader.substring(jwtProperties.getTokenHead().length());
             String username = jwtTokenHandler.getUserNameFromToken(authToken);
             log.info("checking authentication " + username);
             if (StringUtils.isNotBlank(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
