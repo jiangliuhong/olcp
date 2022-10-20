@@ -6,11 +6,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>olcp-data</module>
-        <module>olcp-common-auth</module>
-        <module>olcp-common-core</module>
-        <module>olcp-common-web</module>
         <module>olcp-single</module>
-        <module>olcp-common-db</module>
+        <module>olcp-common</module>
     </modules>
     <groupId>top.jiangliuhong.olcp</groupId>
     <artifactId>olcp</artifactId>
