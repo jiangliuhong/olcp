@@ -1,7 +1,9 @@
 package top.jiangliuhong.olcp.common.bean;
 
-import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 import top.jiangliuhong.olcp.common.consts.ApiResultStatus;
 import top.jiangliuhong.olcp.common.consts.IApiResultStatus;
 
@@ -11,9 +13,13 @@ import top.jiangliuhong.olcp.common.consts.IApiResultStatus;
  * @param <T>
  */
 @Data
+@Schema(title = "统一结果对象")
 public class ApiResult<T> {
+    @Schema(title = "状态码")
     private Integer code;
+    @Schema(title = "错误信息")
     private String message;
+    @Schema(title = "接口数据")
     private T data;
 
     private ApiResult(IApiResultStatus resultStatus, T data) {
@@ -49,6 +55,5 @@ public class ApiResult<T> {
     public static <T> ApiResult<T> fail(IApiResultStatus resultStatus, T data, String message) {
         return new ApiResult<T>(resultStatus, data, message);
     }
-
 
 }
