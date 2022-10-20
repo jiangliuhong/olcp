@@ -1,4 +1,4 @@
-package top.jiangliuhong.olcp.engine.type;
+package top.jiangliuhong.olcp.data.type;
 
 /**
  * sql script type

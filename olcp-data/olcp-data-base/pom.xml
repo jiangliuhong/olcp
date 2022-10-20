@@ -3,18 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>olcp</artifactId>
+        <artifactId>olcp-data</artifactId>
         <groupId>top.jiangliuhong.olcp</groupId>
         <version>0.1-SNAPSHOT</version>
     </parent>
-    <modules>
-        <module>olcp-data-base</module>
-        <module>olcp-data-engine</module>
-    </modules>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>olcp-data</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>olcp-data-base</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>

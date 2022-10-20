@@ -1,4 +1,4 @@
-package top.jiangliuhong.olcp.engine.bean;
+package top.jiangliuhong.olcp.data.bean;
 
 import lombok.Getter;
 import top.jiangliuhong.olcp.engine.load.bean.EntityInfo;

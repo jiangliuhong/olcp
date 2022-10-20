@@ -1,4 +1,4 @@
-package top.jiangliuhong.olcp.engine.bean.vo;
+package top.jiangliuhong.olcp.data.bean.vo;
 
 import lombok.Data;
 

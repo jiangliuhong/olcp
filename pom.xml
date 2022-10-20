@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>olcp-data</module>
         <module>olcp-single</module>
         <module>olcp-common</module>
+        <module>olcp-data</module>
     </modules>
     <groupId>top.jiangliuhong.olcp</groupId>
     <artifactId>olcp</artifactId>
@@ -66,6 +66,11 @@
             <dependency>
                 <groupId>top.jiangliuhong.olcp</groupId>
                 <artifactId>olcp-common-db</artifactId>
+                <version>${olcp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.jiangliuhong.olcp</groupId>
+                <artifactId>olcp-data-base</artifactId>
                 <version>${olcp.version}</version>
             </dependency>
             <!-- module -->
