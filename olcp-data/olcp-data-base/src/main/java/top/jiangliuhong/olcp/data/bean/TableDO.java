@@ -1,14 +1,14 @@
 package top.jiangliuhong.olcp.data.bean;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.relational.core.mapping.Table;
 import top.jiangliuhong.olcp.common.bean.BaseDO;
 import top.jiangliuhong.olcp.data.type.EngineType;
 
 @Getter
 @Setter
-@Schema(name = "sys_table")
+@Table("sys_table")
 public class TableDO extends BaseDO {
     private String name;
     private String title;
