@@ -18,6 +18,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>top.jiangliuhong.olcp</groupId>
+            <artifactId>olcp-data-engine</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>

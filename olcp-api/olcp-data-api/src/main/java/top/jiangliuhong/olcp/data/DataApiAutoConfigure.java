@@ -1,5 +1,5 @@
 package top.jiangliuhong.olcp.data;
 
-public class DataAutoConfigure {
+public class DataApiAutoConfigure {
 
 }

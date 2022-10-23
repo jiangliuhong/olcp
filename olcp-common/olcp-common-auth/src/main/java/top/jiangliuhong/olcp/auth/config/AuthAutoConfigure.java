@@ -2,13 +2,11 @@ package top.jiangliuhong.olcp.auth.config;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import top.jiangliuhong.olcp.auth.dao.UserRepository;
 import top.jiangliuhong.olcp.auth.handler.BaseAuthInterceptor;
 import top.jiangliuhong.olcp.auth.handler.JwtAuthenticationTokenFilter;
 import top.jiangliuhong.olcp.auth.handler.JwtTokenHandler;

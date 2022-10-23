@@ -10,13 +10,13 @@ import java.util.Collection;
  */
 public class JwtUser implements UserDetails {
 
-    private final UserDO user;
+    private final SimpleUserDO user;
 
-    public JwtUser(UserDO user) {
+    public JwtUser(SimpleUserDO user) {
         this.user = user;
     }
 
-    public UserDO getUser() {
+    public SimpleUserDO getUser() {
         return this.user;
     }
 

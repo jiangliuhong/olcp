@@ -6,7 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import top.jiangliuhong.olcp.auth.bean.JwtUser;
-import top.jiangliuhong.olcp.auth.bean.UserDO;
+import top.jiangliuhong.olcp.auth.bean.SimpleUserDO;
+import top.jiangliuhong.olcp.common.exception.BusinessException;
 
 /**
  * user details service
@@ -19,9 +20,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 从数据库中取出用户信息
-        UserDO user = userService.getByUsername(username);
+        SimpleUserDO user = userService.getByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException("username not found");
+            throw new BusinessException("用户名不存在");
         }
         // 返回UserDetails实现类
         return new JwtUser(user);

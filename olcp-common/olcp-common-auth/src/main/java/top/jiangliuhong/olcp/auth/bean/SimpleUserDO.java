@@ -11,10 +11,11 @@ import javax.persistence.Table;
 @Setter
 @Entity
 @Table(name = "sys_user")
-public class UserDO extends BaseDO {
+public class SimpleUserDO extends BaseDO {
 
     private String username;
     private String password;
     private String nickname;
+    private String appId;
 
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import top.jiangliuhong.olcp.auth.bean.LoginVO;
-import top.jiangliuhong.olcp.auth.bean.UserDO;
+import top.jiangliuhong.olcp.auth.bean.SimpleUserDO;
 import top.jiangliuhong.olcp.auth.bean.UserVO;
 import top.jiangliuhong.olcp.auth.service.UserAuthService;
 import top.jiangliuhong.olcp.auth.service.UserService;
@@ -42,7 +42,7 @@ public class UserAuthApi {
     @PostMapping("/user")
     @Tag(name = "新增修改用户")
     public UserVO addUser(@RequestBody UserVO user) {
-        UserDO userDO = new UserDO();
+        SimpleUserDO userDO = new SimpleUserDO();
         userDO.setUsername(user.getUsername());
         userDO.setPassword(user.getPassword());
         userDO.setNickname(user.getNickname());

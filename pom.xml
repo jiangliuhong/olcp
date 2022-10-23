@@ -76,7 +76,17 @@
             </dependency>
             <dependency>
                 <groupId>top.jiangliuhong.olcp</groupId>
+                <artifactId>olcp-data-engine</artifactId>
+                <version>${olcp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.jiangliuhong.olcp</groupId>
                 <artifactId>olcp-auth-api</artifactId>
+                <version>${olcp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.jiangliuhong.olcp</groupId>
+                <artifactId>olcp-data-api</artifactId>
                 <version>${olcp.version}</version>
             </dependency>
             <!-- module -->

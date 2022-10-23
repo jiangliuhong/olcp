@@ -5,14 +5,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import top.jiangliuhong.olcp.auth.bean.JwtUser;
-import top.jiangliuhong.olcp.auth.bean.UserDO;
+import top.jiangliuhong.olcp.auth.bean.SimpleUserDO;
 
 /**
  * auth (user) utils
  */
 public class AuthUtils {
 
-    public static UserDO getCurrentUser() {
+    public static SimpleUserDO getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             return null;

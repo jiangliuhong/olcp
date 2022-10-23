@@ -23,7 +23,7 @@
         </dependency>
         <dependency>
             <groupId>top.jiangliuhong.olcp</groupId>
-            <artifactId>olcp-common-db</artifactId>
+            <artifactId>olcp-data-base</artifactId>
         </dependency>
         <dependency>
             <groupId>top.jiangliuhong.olcp</groupId>
