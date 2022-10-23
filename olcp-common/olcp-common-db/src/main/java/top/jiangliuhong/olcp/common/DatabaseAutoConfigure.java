@@ -1,10 +1,15 @@
 package top.jiangliuhong.olcp.common;
 
-import com.zaxxer.hikari.HikariDataSource;
-import org.hibernate.EmptyInterceptor;
-import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
+import java.util.List;
+import java.util.Properties;
+
+import javax.annotation.Resource;
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -12,29 +17,26 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
-import top.jiangliuhong.olcp.common.bean.BaseDO;
-import top.jiangliuhong.olcp.common.handler.DefaultBeforeConvertCallback;
 
-import javax.annotation.Resource;
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
+import com.zaxxer.hikari.HikariDataSource;
+import top.jiangliuhong.olcp.common.handler.BaseFieldInterceptor;
+import top.jiangliuhong.olcp.common.handler.EntityInterceptorConfig;
+import top.jiangliuhong.olcp.common.handler.IEntityInterceptor;
 
 /**
  * database configure
  */
 @Configuration
-@EnableJpaRepositories
+// @EnableTransactionManagement
+@EnableJpaRepositories(basePackages = "top.jiangliuhong.olcp")
+@EntityScan(basePackages = "top.jiangliuhong.olcp")
 public class DatabaseAutoConfigure {
-
 
     @Resource
     private DataSourceProperties properties;
 
     @Bean
     public DataSource dataSource() {
-        //return DataSourceBuilder.create().build();
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setJdbcUrl(properties.getUrl());
         dataSource.setDriverClassName(properties.getDriverClassName());
@@ -45,29 +47,15 @@ public class DatabaseAutoConfigure {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setGenerateDdl(false);
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("top.jiangliuhong.olcp");
         factory.setDataSource(dataSource());
-
-        Map<String, Object> jpaProperties = new HashMap<String, Object>();
-        jpaProperties.put("hibernate.ejb.interceptor", hibernateInterceptor());
+        factory.setJpaProperties(additionalProperties());
         return factory;
     }
-
-  /*  @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-            EntityManagerFactoryBuilder factory, DataSource dataSource,
-            JpaProperties properties) {
-        Map<String, Object> jpaProperties = new HashMap<String, Object>();
-        jpaProperties.putAll(properties.getHibernateProperties(dataSource));
-        jpaProperties.put("hibernate.ejb.interceptor", hibernateInterceptor());
-        return factory.dataSource(dataSource).packages("sample.data.jpa")
-                .properties((Map) jpaProperties).build();
-    }*/
 
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
@@ -76,11 +64,25 @@ public class DatabaseAutoConfigure {
         return txManager;
     }
 
-    @Bean
-    public EmptyInterceptor hibernateInterceptor() {
-        // https://cloud.tencent.com/developer/ask/sof/36933
-        return new DefaultBeforeConvertCallback();
+    Properties additionalProperties() {
+        // Map<String, Object> jpaProperties = new HashMap<>();
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto", "none");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
+        // properties.setProperty("hibernate.ejb.interceptor",
+        // "top.jiangliuhong.olcp.common.handler.CommonInterceptor");
+        // jpaProperties.put("hibernate.hbm2ddl.auto", "none");
+        return properties;
     }
 
+    @Bean
+    public BaseFieldInterceptor baseFieldInterceptor() {
+        return new BaseFieldInterceptor();
+    }
 
+    @Bean
+    @Autowired(required = false)
+    public EntityInterceptorConfig entityInterceptorConfig(List<IEntityInterceptor> interceptors) {
+        return new EntityInterceptorConfig(interceptors);
+    }
 }

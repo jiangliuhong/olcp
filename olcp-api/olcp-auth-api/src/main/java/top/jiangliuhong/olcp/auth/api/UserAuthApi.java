@@ -40,12 +40,13 @@ public class UserAuthApi {
     }
 
     @PostMapping("/user")
-    @Tag(name = "新增用户")
+    @Tag(name = "新增修改用户")
     public UserVO addUser(@RequestBody UserVO user) {
         UserDO userDO = new UserDO();
         userDO.setUsername(user.getUsername());
         userDO.setPassword(user.getPassword());
         userDO.setNickname(user.getNickname());
+        userDO.setId(user.getId());
         userDO = userService.save(userDO);
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(userDO, userVO);

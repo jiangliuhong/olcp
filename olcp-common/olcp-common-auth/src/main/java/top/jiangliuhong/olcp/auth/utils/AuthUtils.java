@@ -18,7 +18,7 @@ public class AuthUtils {
             return null;
         }
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken)authentication;
-        JwtUser jwtUser = (JwtUser)authenticationToken.getCredentials();
+        JwtUser jwtUser = (JwtUser)authenticationToken.getPrincipal();
         if (jwtUser == null) {
             return null;
         }

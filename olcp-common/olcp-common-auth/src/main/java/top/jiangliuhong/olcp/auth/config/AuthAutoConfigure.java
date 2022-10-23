@@ -2,12 +2,14 @@ package top.jiangliuhong.olcp.auth.config;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import top.jiangliuhong.olcp.auth.handler.AuthBeforeConvertCallback;
+import top.jiangliuhong.olcp.auth.dao.UserRepository;
+import top.jiangliuhong.olcp.auth.handler.BaseAuthInterceptor;
 import top.jiangliuhong.olcp.auth.handler.JwtAuthenticationTokenFilter;
 import top.jiangliuhong.olcp.auth.handler.JwtTokenHandler;
 import top.jiangliuhong.olcp.auth.handler.RestAuthorizationEntryPoint;
@@ -19,6 +21,7 @@ import top.jiangliuhong.olcp.auth.service.UserService;
 
 @Configuration
 @EnableConfigurationProperties({AuthProperties.class})
+// @ComponentScan("top.jiangliuhong.olcp.auth.dao")
 public class AuthAutoConfigure {
 
     @Bean
@@ -62,7 +65,7 @@ public class AuthAutoConfigure {
     }
 
     @Bean
-    public AuthBeforeConvertCallback authBeforeConvertCallback() {
-        return new AuthBeforeConvertCallback();
+    public BaseAuthInterceptor baseAuthInterceptor() {
+        return new BaseAuthInterceptor();
     }
 }

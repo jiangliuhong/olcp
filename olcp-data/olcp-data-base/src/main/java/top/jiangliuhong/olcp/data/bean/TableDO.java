@@ -2,13 +2,14 @@ package top.jiangliuhong.olcp.data.bean;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.relational.core.mapping.Table;
 import top.jiangliuhong.olcp.common.bean.BaseDO;
 import top.jiangliuhong.olcp.data.type.EngineType;
 
+import javax.persistence.Table;
+
 @Getter
 @Setter
-@Table("sys_table")
+@Table(name = "sys_table")
 public class TableDO extends BaseDO {
     private String name;
     private String title;

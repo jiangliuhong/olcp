@@ -15,6 +15,7 @@ public class UserService {
 
     public UserDO save(UserDO userDO) {
         userDO.setPassword(passwordEncoder.encode(userDO.getPassword()));
+//        userDO.setId("1");
         userDO = userRepository.save(userDO);
         return userDO;
     }
