@@ -1,12 +1,12 @@
 package top.jiangliuhong.olcp.data.bean;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import lombok.Getter;
 import lombok.Setter;
 import top.jiangliuhong.olcp.common.bean.BaseDO;
 import top.jiangliuhong.olcp.data.type.FieldType;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Getter
 @Setter

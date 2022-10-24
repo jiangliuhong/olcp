@@ -15,7 +15,7 @@ public class UserDO extends BaseDO {
     private String username;
     private String password;
     private String nickname;
-    private String appid;
+    private String appId;
     private Boolean active;
     private String email;
     private String phone;

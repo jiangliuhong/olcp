@@ -8,11 +8,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import top.jiangliuhong.olcp.web.handler.CommonApiInfo;
 import top.jiangliuhong.olcp.web.handler.ControllerExceptionAdvice;
+import top.jiangliuhong.olcp.web.handler.ResponseHandler;
 import top.jiangliuhong.olcp.web.properties.ApiProperties;
 
 @Configuration
 @EnableConfigurationProperties({ApiProperties.class})
-@Import({ControllerExceptionAdvice.class, CommonApiInfo.class})
+@Import({ControllerExceptionAdvice.class, ResponseHandler.class, CommonApiInfo.class})
 public class WebAutoConfigure {
 
     @Autowired
@@ -24,8 +25,5 @@ public class WebAutoConfigure {
         commonApiInfo.customOpenAPI(openAPI);
         return openAPI;
     }
-
-//    @Bean
-//    public SpringDocConfigProperties
 
 }
