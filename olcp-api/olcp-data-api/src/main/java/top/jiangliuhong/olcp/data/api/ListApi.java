@@ -14,5 +14,15 @@ public class ListApi {
         return id;
     }
 
+    @GetMapping("/{id}/data")
+    public String data(@PathVariable String id) {
+        return id;
+    }
+    
+    @GetMapping("/{id}/data/{recordId}")
+    public String oneData(@PathVariable String id, @PathVariable String recordId) {
+        return id;
+    }
+
 
 }

@@ -10,9 +10,10 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Entity
-@Table(name = "sys_list")
-public class ListDO extends BaseDO {
+@Table(name = "sys_list_field")
+public class ListFieldDO extends BaseDO {
     private String title;
+    private String listId;
+    private String fieldId;
     private String appId;
-
 }

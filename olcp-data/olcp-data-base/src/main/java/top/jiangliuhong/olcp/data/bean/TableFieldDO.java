@@ -11,11 +11,12 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Entity
-@Table(name = "sys_field")
-public class FieldDO extends BaseDO {
+@Table(name = "sys_table_field")
+public class TableFieldDO extends BaseDO {
     private String name;
     private String title;
     private String tableId;
+    private String appId;
     private FieldType type;
     private Integer maxLength;
     private Integer maxPrecision;

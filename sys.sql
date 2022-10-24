@@ -32,30 +32,11 @@ CREATE TABLE IF NOT EXISTS sys_code_value
     name        VARCHAR(30)  NOT NULL unique,
     title       VARCHAR(200) NOT NULL,
     active      boolean,
+    app_id      VARCHAR(32)  NOT NULL,
     create_time datetime,
     update_time datetime,
     create_user varchar(32),
     update_user varchar(32),
-    PRIMARY KEY (id)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-
-CREATE TABLE IF NOT EXISTS sys_field
-(
-    id                 varchar(32)  not null,
-    name               VARCHAR(30)  NOT NULL unique,
-    title              VARCHAR(200) NOT NULL,
-    table_id           varchar(32)  not null,
-    max_length         int          not null,
-    max_precision      int default 0,
-    default_value      varchar(200),
-    short_description  varchar(200),
-    required           boolean,
-    reference_table_id varchar(200),
-    create_time        datetime,
-    update_time        datetime,
-    create_user        varchar(32),
-    update_user        varchar(32),
     PRIMARY KEY (id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -90,6 +71,20 @@ CREATE TABLE IF NOT EXISTS sys_list
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+CREATE TABLE IF NOT EXISTS sys_list_field
+(
+    id          varchar(32)  not null,
+    title       VARCHAR(200) NOT NULL,
+    list_id     VARCHAR(32)  NOT NULL,
+    field_id    VARCHAR(32)  NOT NULL,
+    app_id      VARCHAR(32)  NOT NULL,
+    create_time datetime,
+    update_time datetime,
+    create_user varchar(32),
+    update_user varchar(32)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
 CREATE TABLE IF NOT EXISTS sys_table
 (
     id                varchar(32)  not null,
@@ -109,6 +104,28 @@ CREATE TABLE IF NOT EXISTS sys_table
     PRIMARY KEY (id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+CREATE TABLE IF NOT EXISTS sys_table_field
+(
+    id                 varchar(32)  not null,
+    name               VARCHAR(30)  NOT NULL unique,
+    title              VARCHAR(200) NOT NULL,
+    table_id           varchar(32)  not null,
+    app_id             VARCHAR(32)  NOT NULL,
+    max_length         int          not null,
+    max_precision      int default 0,
+    default_value      varchar(200),
+    short_description  varchar(200),
+    required           boolean,
+    reference_table_id varchar(200),
+    create_time        datetime,
+    update_time        datetime,
+    create_user        varchar(32),
+    update_user        varchar(32),
+    PRIMARY KEY (id)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
 
 CREATE TABLE IF NOT EXISTS sys_user
 (

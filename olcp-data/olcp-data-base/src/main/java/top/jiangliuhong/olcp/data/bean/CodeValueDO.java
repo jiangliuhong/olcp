@@ -15,4 +15,5 @@ public class CodeValueDO extends BaseDO {
     private String name;
     private String title;
     private Boolean active;
+    private String appId;
 }
