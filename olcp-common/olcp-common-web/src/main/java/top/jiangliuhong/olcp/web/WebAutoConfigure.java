@@ -1,39 +1,31 @@
 package top.jiangliuhong.olcp.web;
 
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Contact;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
-import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.http.HttpHeaders;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import top.jiangliuhong.olcp.web.handler.CommonApiInfo;
+import top.jiangliuhong.olcp.web.handler.ControllerExceptionAdvice;
+import top.jiangliuhong.olcp.web.properties.ApiProperties;
 
-@ComponentScan
+@Configuration
+@EnableConfigurationProperties({ApiProperties.class})
+@Import({ControllerExceptionAdvice.class, CommonApiInfo.class})
 public class WebAutoConfigure {
+
+    @Autowired
+    private CommonApiInfo commonApiInfo;
 
     @Bean
     public OpenAPI customOpenAPI() {
-        Contact contact = new Contact();
-        contact.setName("ja_rome@163.com");
-
-        OpenAPI openAPI = new OpenAPI().info(new Info().title("OLCP"));
-        // oauth2.0 password
-        openAPI.schemaRequirement(HttpHeaders.AUTHORIZATION, this.securityScheme());
-        //全局安全校验项，也可以在对应的controller上加注解SecurityRequirement
-        openAPI.addSecurityItem(new SecurityRequirement().addList(HttpHeaders.AUTHORIZATION));
-
+        OpenAPI openAPI = new OpenAPI();
+        commonApiInfo.customOpenAPI(openAPI);
         return openAPI;
     }
 
-    private SecurityScheme securityScheme() {
-        SecurityScheme securityScheme = new SecurityScheme();
-        //类型
-        securityScheme.setType(SecurityScheme.Type.APIKEY);
-        //请求头的name
-        securityScheme.setName(HttpHeaders.AUTHORIZATION);
-        //token所在未知
-        securityScheme.setIn(SecurityScheme.In.HEADER);
-        return securityScheme;
-    }
+//    @Bean
+//    public SpringDocConfigProperties
+
 }
