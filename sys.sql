@@ -126,6 +126,21 @@ CREATE TABLE IF NOT EXISTS sys_table_field
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+CREATE TABLE IF NOT EXISTS sys_table_relationship
+(
+    id               varchar(32) not null,
+    table_id         varchar(32) not null,
+    table_related_id varchar(32) not null,
+    table_field_id   varchar(32) not null,
+    type             varchar(30) not null,
+    `read_only`      boolean,
+    create_time      datetime,
+    update_time      datetime,
+    create_user      varchar(32),
+    update_user      varchar(32),
+    PRIMARY KEY (id)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
 CREATE TABLE IF NOT EXISTS sys_user
 (
