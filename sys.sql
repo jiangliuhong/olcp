@@ -128,6 +128,23 @@ CREATE TABLE IF NOT EXISTS sys_table_field
 
 CREATE TABLE IF NOT EXISTS sys_table_relationship
 (
+    id          varchar(32)  not null,
+    name        VARCHAR(30)  NOT NULL unique,
+    title       VARCHAR(200) NOT NULL,
+    type        VARCHAR(30)  NOT NULL,
+    table_id    varchar(32)  not null,
+    field_id    varchar(32)  not null,
+    parent      varchar(32)  not null,
+    create_time datetime,
+    update_time datetime,
+    create_user varchar(32),
+    update_user varchar(32),
+    PRIMARY KEY (id)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE IF NOT EXISTS sys_table_index
+(
     id               varchar(32) not null,
     table_id         varchar(32) not null,
     table_related_id varchar(32) not null,
