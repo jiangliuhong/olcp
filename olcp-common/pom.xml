@@ -15,6 +15,7 @@
         <module>olcp-common-core</module>
         <module>olcp-common-web</module>
         <module>olcp-common-db</module>
+        <module>olcp-common-cache</module>
     </modules>
 
     <properties>

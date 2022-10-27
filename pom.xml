@@ -71,6 +71,11 @@
             </dependency>
             <dependency>
                 <groupId>top.jiangliuhong.olcp</groupId>
+                <artifactId>olcp-common-cache</artifactId>
+                <version>${olcp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.jiangliuhong.olcp</groupId>
                 <artifactId>olcp-data-base</artifactId>
                 <version>${olcp.version}</version>
             </dependency>
