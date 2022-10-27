@@ -19,7 +19,6 @@ public class TableDO extends BaseDO {
     private String shortDescription;
     private String parent;
     private Boolean virtualTable;
-    private String primaryKey;
     private EngineType engineType = EngineType.InnoDB;
     private String defaultCharset = "UTF-8";
 }

@@ -1,0 +1,44 @@
+olcp:
+  data:
+    system:
+      base:
+        tables:
+          - name: sys_app
+            title: 应用程序
+          - name: sys_code_type
+            title: 代码类型
+          - name: sys_code_value
+            title: 代码值
+          - name: sys_list
+            title: 列表
+          - name: sys_list_field
+            title: 列表字段
+          - name: sys_table
+            title: 数据表
+          - name: sys_table_field
+            title: 数据表字段
+          - name: sys_table_relationship
+            title: 数据表关联关系
+          - name: sys_table_index
+            title: 数据表索引
+          - name: sys_user
+            title: 用户
+        default_fields:
+          - name: id
+            title: ID
+            type: SysId
+            required: true
+          - name: createTime
+            title: 创建时间
+            type: DateTime
+          - name: updateTime
+            title: 修改时间
+            type: DateTime
+          - name: createUser
+            title: 创建人
+            type: Reference
+            reference-table-id: sys.user
+          - name: updateUser
+            title: 最后修改人
+            type: Reference
+            reference-table-id: sys.user

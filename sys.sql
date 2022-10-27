@@ -94,7 +94,6 @@ CREATE TABLE IF NOT EXISTS sys_table
     short_description varchar(200),
     parent            varchar(32),
     virtual_table     BOOLEAN,
-    primary_key       varchar(32),
     engine_type       varchar(30),
     default_charset   varchar(30),
     create_time       datetime,
