@@ -13,6 +13,8 @@ import java.util.List;
 public class AuthProperties {
     private List<String> ignoreUrls = new ArrayList<>();
     private JwtProperties jwt = new JwtProperties();
+    // 360 秒
+    private Integer userCacheExpire = 360;
 
     public List<String> getIgnoreUrls() {
         // add default urls

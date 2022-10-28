@@ -9,8 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
+import top.jiangliuhong.olcp.auth.consts.AuthConst;
 import top.jiangliuhong.olcp.auth.properties.AuthProperties;
 import top.jiangliuhong.olcp.auth.properties.JwtProperties;
+import top.jiangliuhong.olcp.common.cache.CacheUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -38,8 +40,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             String username = jwtTokenHandler.getUserNameFromToken(authToken);
             log.info("checking authentication " + username);
             if (StringUtils.isNotBlank(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
-                // TODO 目前每次请求都查询用户信息，考虑优化
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+                UserDetails userDetails = CacheUtils.getCacheValue(AuthConst.AUTH_USER_CACHE_NAME, username);
+                if (userDetails == null) {
+                    userDetails = this.userDetailsService.loadUserByUsername(username);
+                    CacheUtils.putCacheValue(AuthConst.AUTH_USER_CACHE_NAME, username, userDetails);
+                }
                 // 校验token
                 if (jwtTokenHandler.validateToken(authToken, userDetails)) {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

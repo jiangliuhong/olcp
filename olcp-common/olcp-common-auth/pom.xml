@@ -42,6 +42,10 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>top.jiangliuhong.olcp</groupId>
+            <artifactId>olcp-common-cache</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
