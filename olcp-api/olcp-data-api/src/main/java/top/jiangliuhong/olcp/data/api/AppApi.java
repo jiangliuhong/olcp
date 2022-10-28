@@ -3,12 +3,13 @@ package top.jiangliuhong.olcp.data.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.AppDO;
+import top.jiangliuhong.olcp.data.bean.AppCreateVO;
+import top.jiangliuhong.olcp.data.bean.AppUpdateVO;
 import top.jiangliuhong.olcp.data.bean.AppVO;
+import top.jiangliuhong.olcp.data.bean.cache.AppCachePO;
 import top.jiangliuhong.olcp.data.service.AppService;
 
 @Tag(name = "app", description = "应用程序API")
@@ -19,13 +20,31 @@ public class AppApi {
     @Autowired
     private AppService appService;
 
+    @GetMapping("/{id}")
+    @Operation(summary = "根据ID获取应用")
+    public AppVO getCurrentApp(@PathVariable String id) {
+        AppCachePO appCachePO = appService.getApp(id);
+        AppVO app = new AppVO();
+        BeanUtils.copyProperties(appCachePO, app);
+        return app;
+    }
+
     @PostMapping
     @Operation(summary = "新增应用程序")
-    public String add(@RequestBody AppVO appVO) {
+    public String add(@RequestBody AppCreateVO appVO) {
         AppDO app = new AppDO();
         app.setName(appVO.getName());
         app.setTitle(appVO.getTitle());
         appService.addApp(app);
         return app.getId();
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "修改应用程序")
+    public void update(@PathVariable String id, @RequestBody AppUpdateVO appVO) {
+        AppDO app = new AppDO();
+        app.setId(id);
+        app.setTitle(appVO.getTitle());
+        appService.update(app);
     }
 }

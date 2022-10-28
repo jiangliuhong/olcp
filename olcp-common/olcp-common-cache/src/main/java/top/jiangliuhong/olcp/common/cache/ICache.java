@@ -1,6 +1,5 @@
 package top.jiangliuhong.olcp.common.cache;
 
-import java.util.List;
 import java.util.Map;
 
 public interface ICache<K, V> {

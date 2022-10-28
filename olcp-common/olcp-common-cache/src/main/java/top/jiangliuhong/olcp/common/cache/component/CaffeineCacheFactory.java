@@ -1,35 +1,35 @@
 package top.jiangliuhong.olcp.common.cache.component;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
 import top.jiangliuhong.olcp.common.cache.ICache;
 import top.jiangliuhong.olcp.common.cache.ICacheFactory;
-import top.jiangliuhong.olcp.common.cache.properties.CacheProperties;
+import top.jiangliuhong.olcp.common.cache.consts.CacheFactoryNames;
+import top.jiangliuhong.olcp.common.cache.properties.CacheInfo;
+
+import java.util.concurrent.TimeUnit;
 
 public class CaffeineCacheFactory implements ICacheFactory {
 
-//    public <K, V> ICache<K, V> getCache() {
-//        return null;
-//    }
-//
-//
-//    public <T> Cache<String, T> getCache2() {
-//        return Caffeine.newBuilder()
-//                // 设置最后一次写入或访问后经过固定时间过期
-//                .expireAfterWrite(60, TimeUnit.SECONDS)
-//                // 初始的缓存空间大小
-//                .initialCapacity(100)
-//                // 缓存的最大条数
-//                .maximumSize(1000)
-//                .build();
-//    }
-
-
     @Override
     public String name() {
-        return "caffeine";
+        return CacheFactoryNames.CAFFEINE;
     }
 
     @Override
-    public ICache getCache(CacheProperties.Group group) {
-        return null;
+    public <K, V> ICache<K, V> getCache(CacheInfo info) {
+        Caffeine<Object, Object> builder = Caffeine.newBuilder();
+        if (info.getExpireAfterWrite() != null) {
+            builder.expireAfterWrite(info.getExpireAfterWrite(), TimeUnit.SECONDS);
+        }
+        if (info.getExpireAfterWrite() == null && info.getExpireAfterAccess() != null) {
+            builder.expireAfterAccess(info.getExpireAfterAccess(), TimeUnit.SECONDS);
+        }
+        if (info.getInitialCapacity() != null) {
+            builder.initialCapacity(info.getInitialCapacity());
+        }
+        if (info.getMaximumSize() != null) {
+            builder.maximumSize(info.getMaximumSize());
+        }
+        return new CaffeineCache<>(builder.build(), info.getName());
     }
 }

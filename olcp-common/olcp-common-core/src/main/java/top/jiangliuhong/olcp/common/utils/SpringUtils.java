@@ -4,16 +4,16 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.core.annotation.Order;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 public final class SpringUtils implements BeanFactoryPostProcessor {
 
-    /** Spring应用上下文环境 */
+    /**
+     * Spring应用上下文环境
+     */
     private static ConfigurableListableBeanFactory beanFactory;
 
     @Override
@@ -23,11 +23,11 @@ public final class SpringUtils implements BeanFactoryPostProcessor {
 
     @SuppressWarnings("unchecked")
     public static <T> T getBean(String name) throws BeansException {
-        return (T)beanFactory.getBean(name);
+        return (T) beanFactory.getBean(name);
     }
 
     public static <T> T getBean(Class<T> clz) throws BeansException {
-        return (T)beanFactory.getBean(clz);
+        return (T) beanFactory.getBean(clz);
     }
 
     public static <T> List<T> getBeans(Class<T> clz) {
@@ -37,13 +37,13 @@ public final class SpringUtils implements BeanFactoryPostProcessor {
             list.add(beans);
         });
         // sort by order
-        list.sort((bean1, bean2) -> {
+        /*list.sort((bean1, bean2) -> {
             Order order1 = bean1.getClass().getAnnotation(Order.class);
             Order order2 = bean2.getClass().getAnnotation(Order.class);
             int orderValue1 = order1 != null ? order1.value() : Integer.MAX_VALUE;
             int orderValue2 = order2 != null ? order2.value() : Integer.MAX_VALUE;
             return orderValue1 - orderValue2;
-        });
+        });*/
         return list;
     }
 
@@ -53,7 +53,7 @@ public final class SpringUtils implements BeanFactoryPostProcessor {
 
     /**
      * 判断以给定名字注册的bean定义是一个singleton还是一个prototype。 如果与给定名字相应的bean定义没有被找到，将会抛出一个异常（NoSuchBeanDefinitionException）
-     * 
+     *
      * @param name
      * @return
      * @throws NoSuchBeanDefinitionException

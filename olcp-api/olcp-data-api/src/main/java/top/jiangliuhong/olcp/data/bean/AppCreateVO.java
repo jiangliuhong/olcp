@@ -6,10 +6,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Schema(title = "应用信息")
-public class AppVO {
-    @Schema(title = "应用ID")
-    private String id;
+@Schema(title = "应用新增信息")
+public class AppCreateVO {
     @Schema(title = "应用名称")
     private String name;
     @Schema(title = "应用标题")
