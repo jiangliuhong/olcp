@@ -1,11 +1,13 @@
 package top.jiangliuhong.olcp.common.cache;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import top.jiangliuhong.olcp.common.cache.properties.CacheProperties;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class CacheContext {
 
 
@@ -29,5 +31,22 @@ public class CacheContext {
             ICache cache = factory.getCache(group);
             this.cacheMap.put(cache.name(), cache);
         }
+    }
+
+    public void addCache(ICache cache) {
+        if (StringUtils.isBlank(cache.name())) {
+            return;
+        }
+        for (CacheProperties.Group group : this.properties.getGroups()) {
+            if (StringUtils.equals(group.getName(), cache.name())) {
+//                log.
+                return;
+            }
+        }
+        if (this.cacheMap.containsKey(cache.name())) {
+
+            return;
+        }
+        this.cacheMap.put(cache.name(), cache);
     }
 }
