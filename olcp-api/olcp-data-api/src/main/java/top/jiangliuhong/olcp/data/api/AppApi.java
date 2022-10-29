@@ -24,6 +24,9 @@ public class AppApi {
     @Operation(summary = "根据ID获取应用")
     public AppVO getCurrentApp(@PathVariable String id) {
         AppCachePO appCachePO = appService.getApp(id);
+        if (appCachePO == null) {
+            return null;
+        }
         AppVO app = new AppVO();
         BeanUtils.copyProperties(appCachePO, app);
         return app;

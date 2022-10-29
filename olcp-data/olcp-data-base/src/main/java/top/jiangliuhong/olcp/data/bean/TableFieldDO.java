@@ -25,4 +25,5 @@ public class TableFieldDO extends BaseDO {
     private boolean required;
     private String referenceTableId;
     private Boolean systemField;
+    private Integer sn;
 }

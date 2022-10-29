@@ -28,17 +28,22 @@ olcp:
             title: ID
             type: SysId
             required: true
+            sn: 0
           - name: createTime
             title: 创建时间
             type: DateTime
+            sn: 1001
           - name: updateTime
             title: 修改时间
             type: DateTime
+            sn: 1002
           - name: createUser
             title: 创建人
             type: Reference
             reference-table-id: sys.user
+            sn: 1003
           - name: updateUser
             title: 最后修改人
             type: Reference
             reference-table-id: sys.user
+            sn: 1004
