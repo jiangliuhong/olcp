@@ -80,7 +80,7 @@ public class TableService {
         TableDO tableDB = tableOptional.orElseThrow(() -> new TableException("not found table for " + table.getId()));
         BeanUtils.copyNotNullProperties(table, tableDB);
         tableRepository.save(tableDB);
-        tableFieldService.updateField(table, table.getFields());
+        tableFieldService.updateField(tableDB, table.getFields());
     }
 
 }

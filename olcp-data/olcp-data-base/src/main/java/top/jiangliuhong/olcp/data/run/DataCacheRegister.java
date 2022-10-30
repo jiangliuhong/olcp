@@ -3,6 +3,7 @@ package top.jiangliuhong.olcp.data.run;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import top.jiangliuhong.olcp.common.cache.CacheContext;
 import top.jiangliuhong.olcp.common.cache.ICache;
 import top.jiangliuhong.olcp.common.cache.consts.CacheFactoryNames;
@@ -16,6 +17,7 @@ import top.jiangliuhong.olcp.data.service.AppService;
 import java.util.List;
 
 @Log
+@Order(10)
 public class DataCacheRegister implements CommandLineRunner {
 
     @Autowired

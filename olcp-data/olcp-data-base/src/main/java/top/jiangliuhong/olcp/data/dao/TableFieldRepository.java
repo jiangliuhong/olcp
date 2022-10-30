@@ -1,14 +1,17 @@
 package top.jiangliuhong.olcp.data.dao;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.PagingAndSortingRepository;
-
 import org.springframework.stereotype.Repository;
+import top.jiangliuhong.olcp.common.jpa.CommonSpecRepository;
 import top.jiangliuhong.olcp.data.bean.TableFieldDO;
 
+import javax.persistence.criteria.Predicate;
+import java.util.LinkedList;
 import java.util.List;
 
 @Repository
-public interface TableFieldRepository extends PagingAndSortingRepository<TableFieldDO, String> {
+public interface TableFieldRepository extends PagingAndSortingRepository<TableFieldDO, String>, CommonSpecRepository<TableFieldDO> {
 
     /**
      * 根据数据表ID查询
@@ -19,9 +22,23 @@ public interface TableFieldRepository extends PagingAndSortingRepository<TableFi
 
     /**
      * 通过ID批量查询
-     * 
+     *
      * @param ids id集合
      * @return 字段列表
      */
     public List<TableFieldDO> findAllByIdIn(Iterable<String> ids);
+
+    public default List<TableFieldDO> findUserField(String tableId) {
+        return this.findAll((Specification<TableFieldDO>) (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            predicates.add(criteriaBuilder.equal(root.get("tableId"), tableId));
+            predicates.add(
+                    criteriaBuilder.or(
+                            criteriaBuilder.isFalse(root.get("systemField")),
+                            criteriaBuilder.isNull(root.get("systemField"))
+                    )
+            );
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        });
+    }
 }

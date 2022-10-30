@@ -1,28 +1,19 @@
 package top.jiangliuhong.olcp.data.service;
 
-import java.util.AbstractCollection;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.transaction.Transactional;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.TableDO;
 import top.jiangliuhong.olcp.data.bean.TableFieldDO;
 import top.jiangliuhong.olcp.data.config.properties.SystemTableProperties;
 import top.jiangliuhong.olcp.data.dao.TableFieldRepository;
 import top.jiangliuhong.olcp.data.type.FieldType;
+
+import javax.transaction.Transactional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TableFieldService {
@@ -74,10 +65,10 @@ public class TableFieldService {
         }
 
         List<TableFieldDO> existFields = tableFieldRepository.findAllByIdIn(queryIds);
-        Set<String> existIds
-            = existFields.stream().collect(HashSet::new, (s, stu) -> s.add(stu.getId()), AbstractCollection::addAll);
-        Set<String> existNames
-            = existFields.stream().collect(HashSet::new, (s, stu) -> s.add(stu.getId()), AbstractCollection::addAll);
+        Set<String> existIds = existFields.stream()
+                .collect(HashSet::new, (s, stu) -> s.add(stu.getId()), AbstractCollection::addAll);
+        Set<String> existNames = existFields.stream()
+                .collect(HashSet::new, (s, stu) -> s.add(stu.getId()), AbstractCollection::addAll);
         Map<String, List<TableFieldDO>> fieldMaps = fields.stream().collect(Collectors.groupingBy(field -> {
             if (StringUtils.isNotBlank(field.getId()) && existIds.contains(field.getId())) {
                 return "update";
@@ -93,7 +84,7 @@ public class TableFieldService {
         List<TableFieldDO> updateLists = fieldMaps.get("update");
         if (CollectionUtils.isNotEmpty(updateLists)) {
             Map<String, TableFieldDO> updateMaps
-                = updateLists.stream().collect(Collectors.toMap(TableFieldDO::getId, f -> f));
+                    = updateLists.stream().collect(Collectors.toMap(TableFieldDO::getId, f -> f));
             for (TableFieldDO existField : existFields) {
                 TableFieldDO updateInfo = updateMaps.get(existField.getId());
                 updateInfo.setTableId(null);
@@ -112,7 +103,6 @@ public class TableFieldService {
         for (TableFieldDO field : fields) {
             field.setAppId(table.getAppId());
             field.setTableId(table.getId());
-            field.setSystemField(false);
             if (field.getType() == null) {
                 field.setType(FieldType.String);
             }
@@ -131,7 +121,7 @@ public class TableFieldService {
     private Map<String, String> getExistFieldNames(String tableId) {
         Map<String, String> names = new HashMap<>();
         // TODO use cache
-        List<TableFieldDO> existFields = tableFieldRepository.findAllByTableIdAndSystemFieldIsTrue(tableId);
+        List<TableFieldDO> existFields = tableFieldRepository.findUserField(tableId);
         for (TableFieldDO existField : existFields) {
             names.put(existField.getName(), existField.getId());
         }
