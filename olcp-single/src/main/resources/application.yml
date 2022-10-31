@@ -8,3 +8,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   main:
     allow-bean-definition-overriding: true
+  application:
+    name: olcp-single
+olcp:
+  app-id: all

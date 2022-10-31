@@ -19,4 +19,6 @@ public interface ICache<K, V> {
     public void remove(Iterable<? extends K> ks);
 
     public boolean exist(K k);
+
+    public Iterable<K> keys();
 }

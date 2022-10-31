@@ -1,10 +1,12 @@
 package top.jiangliuhong.olcp.data.dao;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import top.jiangliuhong.olcp.common.jpa.CommonSpecRepository;
 import top.jiangliuhong.olcp.data.bean.TableFieldDO;
+import top.jiangliuhong.olcp.data.bean.query.TableFieldQuery;
 
 import javax.persistence.criteria.Predicate;
 import java.util.LinkedList;
@@ -28,16 +30,29 @@ public interface TableFieldRepository extends PagingAndSortingRepository<TableFi
      */
     public List<TableFieldDO> findAllByIdIn(Iterable<String> ids);
 
-    public default List<TableFieldDO> findUserField(String tableId) {
+    /**
+     * 根据数据表ID查询
+     *
+     * @param tableFieldQuery 查询对象
+     * @return 字段集合
+     */
+    public default List<TableFieldDO> findAllByQuery(TableFieldQuery tableFieldQuery) {
         return this.findAll((Specification<TableFieldDO>) (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
-            predicates.add(criteriaBuilder.equal(root.get("tableId"), tableId));
-            predicates.add(
-                    criteriaBuilder.or(
-                            criteriaBuilder.isFalse(root.get("systemField")),
-                            criteriaBuilder.isNull(root.get("systemField"))
-                    )
-            );
+            if (StringUtils.isNotBlank(tableFieldQuery.getTableId())) {
+                predicates.add(criteriaBuilder.equal(root.get("tableId"), tableFieldQuery.getTableId()));
+            }
+            if (tableFieldQuery.getSystemField()) {
+                predicates.add(criteriaBuilder.isTrue(root.get("systemField")));
+            }
+            if (tableFieldQuery.getUserField()) {
+                predicates.add(
+                        criteriaBuilder.or(
+                                criteriaBuilder.isFalse(root.get("systemField")),
+                                criteriaBuilder.isNull(root.get("systemField"))
+                        )
+                );
+            }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });
     }

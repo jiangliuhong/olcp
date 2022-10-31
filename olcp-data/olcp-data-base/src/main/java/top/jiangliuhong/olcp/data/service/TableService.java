@@ -34,7 +34,7 @@ public class TableService {
         if (StringUtils.isBlank(table.getAppId())) {
             throw new TableException("请传入应用ID");
         }
-        if (!CacheUtils.exist(CacheNames.APP, table.getAppId())) {
+        if (!CacheUtils.exist(CacheNames.APP_ID, table.getAppId())) {
             throw new TableException("请传入正确的应用ID");
         }
         for (SystemTableProperties.Table sysTable : tableProperties.getTables()) {
@@ -83,4 +83,20 @@ public class TableService {
         tableFieldService.updateField(tableDB, table.getFields());
     }
 
+    public TableDTO getTableInfo(String id) {
+        Optional<TableDO> optionalTableDO = tableRepository.findById(id);
+        if (optionalTableDO.isEmpty()) {
+            return null;
+        }
+        TableDO tableDO = optionalTableDO.get();
+        TableDTO table = new TableDTO();
+        BeanUtils.copyProperties(tableDO, table);
+        // query field
+        List<TableFieldDO> fields = tableFieldService.getTableFields(id);
+        table.setFields(fields);
+        return table;
+    }
+
+//    public
+//    public
 }

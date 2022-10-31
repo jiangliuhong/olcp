@@ -34,15 +34,12 @@ public class DataCacheRegister implements CommandLineRunner {
     private void initAppCache() {
         CacheInfo appCacheInfo = CacheInfo.builder()
                 .type(CacheFactoryNames.CAFFEINE)
-                .name(CacheNames.APP)
+                .name(CacheNames.APP_ID)
                 .build();
         ICache<String, Object> appCache = cacheContext.addCache(appCacheInfo);
         List<AppDO> apps = appService.getAllApp();
         for (AppDO app : apps) {
-            AppCachePO ap = new AppCachePO();
-            BeanUtils.copyProperties(app, ap);
-            appCache.put(ap.getId(), ap);
-            appCache.put(ap.getName(), ap);
+            appService.saveCache(app);
         }
     }
 

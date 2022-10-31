@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.TableDO;
 import top.jiangliuhong.olcp.data.bean.TableFieldDO;
+import top.jiangliuhong.olcp.data.bean.query.TableFieldQuery;
 import top.jiangliuhong.olcp.data.config.properties.SystemTableProperties;
 import top.jiangliuhong.olcp.data.dao.TableFieldRepository;
 import top.jiangliuhong.olcp.data.type.FieldType;
@@ -22,6 +23,11 @@ public class TableFieldService {
     private TableFieldRepository tableFieldRepository;
     @Autowired
     private SystemTableProperties tableProperties;
+
+    public List<TableFieldDO> getTableFields(String tableId) {
+        TableFieldQuery query = TableFieldQuery.builder().tableId(tableId).build();
+        return tableFieldRepository.findAllByQuery(query);
+    }
 
     @Transactional
     public List<TableFieldDO> addField(TableDO table, List<TableFieldDO> fields) {
@@ -121,7 +127,8 @@ public class TableFieldService {
     private Map<String, String> getExistFieldNames(String tableId) {
         Map<String, String> names = new HashMap<>();
         // TODO use cache
-        List<TableFieldDO> existFields = tableFieldRepository.findUserField(tableId);
+        TableFieldQuery query = TableFieldQuery.builder().tableId(tableId).userField(true).build();
+        List<TableFieldDO> existFields = tableFieldRepository.findAllByQuery(query);
         for (TableFieldDO existField : existFields) {
             names.put(existField.getName(), existField.getId());
         }
