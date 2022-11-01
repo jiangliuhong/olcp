@@ -1,22 +1,27 @@
 package top.jiangliuhong.olcp.data.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import top.jiangliuhong.olcp.common.cache.CacheUtils;
 import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.TableDO;
 import top.jiangliuhong.olcp.data.bean.TableFieldDO;
+import top.jiangliuhong.olcp.data.bean.cache.TableCachePO;
+import top.jiangliuhong.olcp.data.bean.cache.TableFieldCachePO;
 import top.jiangliuhong.olcp.data.bean.dto.TableDTO;
 import top.jiangliuhong.olcp.data.config.properties.SystemTableProperties;
 import top.jiangliuhong.olcp.data.consts.CacheNames;
 import top.jiangliuhong.olcp.data.dao.TableRepository;
 import top.jiangliuhong.olcp.data.exception.TableException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TableService {
@@ -97,6 +102,39 @@ public class TableService {
         return table;
     }
 
-//    public
-//    public
+    public List<TableDTO> getAllTableByApp(String... appId) {
+        List<TableDO> tableDOList = tableRepository.findAllByAppIdIn(appId);
+        if (CollectionUtils.isEmpty(tableDOList)) {
+            return new ArrayList<>();
+        }
+        List<TableDTO> list = new ArrayList<>();
+        List<String> tableIds = new ArrayList<>();
+        tableDOList.forEach(f -> tableIds.add(f.getId()));
+        List<TableFieldDO> tableFields = tableFieldService.getTableFields(tableIds.toArray(new String[0]));
+        Map<String, List<TableFieldDO>> tableFieldMap = tableFields.stream().collect(Collectors.groupingBy(TableFieldDO::getTableId));
+        tableDOList.forEach(tableDO -> {
+            TableDTO table = new TableDTO();
+            BeanUtils.copyProperties(tableDO, table);
+            table.setFields(tableFieldMap.get(table.getId()));
+        });
+        return list;
+    }
+
+    public void saveCache(TableDTO table) {
+        TableCachePO tableCache = new TableCachePO();
+        BeanUtils.copyProperties(table, tableCache);
+        if (CollectionUtils.isNotEmpty(table.getFields())) {
+            List<TableFieldCachePO> tableFieldCaches = new ArrayList<>();
+            table.getFields().forEach(field -> {
+                TableFieldCachePO tfc = new TableFieldCachePO();
+                BeanUtils.copyProperties(field, tfc);
+                tableFieldCaches.add(tfc);
+            });
+            tableCache.setFields(tableFieldCaches);
+        }
+        CacheUtils.putCacheValue(CacheNames.TABLE_ID, tableCache.getId(), tableCache);
+        CacheUtils.putCacheValue(CacheNames.TABLE_NAME, tableCache.getName(), tableCache.getId());
+    }
+
+
 }

@@ -1,6 +1,6 @@
 package top.jiangliuhong.olcp.data.service;
 
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.IteratorUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,9 +30,8 @@ public class AppService {
 
     public String[] getServerAppIds() {
         if (ArrayUtils.contains(this.appIds, "all") || ArrayUtils.contains(this.appIds, "ALL")) {
-//            ICache<Object, Object> cache = CacheUtils.getCache(CacheNames.APP);
-            Set<String> keys = (Set<String>)CacheUtils.keys(CacheNames.APP_ID);
-            return ArrayUtils.toArray();
+            Set<String> keys = CacheUtils.keys(CacheNames.APP_ID);
+            return keys.toArray(new String[0]);
         }
         return appIds;
     }

@@ -1,15 +1,13 @@
 package top.jiangliuhong.olcp.data.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.TableVO;
+import top.jiangliuhong.olcp.data.bean.dto.TableDTO;
 import top.jiangliuhong.olcp.data.service.TableService;
 
 @Tag(name = "app", description = "应用程序API")
@@ -30,6 +28,15 @@ public class TableApi {
     @Operation(summary = "修改数据表")
     public void updateTable(@RequestBody TableVO tableVO) {
         tableService.updateTable(tableVO);
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "查询数据表")
+    public TableVO getTable(@PathVariable String id) {
+        TableDTO tableInfo = tableService.getTableInfo(id);
+        TableVO table = new TableVO();
+        BeanUtils.copyProperties(tableInfo, table);
+        return table;
     }
 
 }

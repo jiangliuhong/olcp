@@ -8,6 +8,7 @@ import top.jiangliuhong.olcp.common.jpa.CommonSpecRepository;
 import top.jiangliuhong.olcp.data.bean.TableFieldDO;
 import top.jiangliuhong.olcp.data.bean.query.TableFieldQuery;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +29,7 @@ public interface TableFieldRepository extends PagingAndSortingRepository<TableFi
      * @param ids id集合
      * @return 字段列表
      */
-    public List<TableFieldDO> findAllByIdIn(Iterable<String> ids);
+    public List<TableFieldDO> findAllByIdIn(List<String> ids);
 
     /**
      * 根据数据表ID查询
@@ -41,6 +42,13 @@ public interface TableFieldRepository extends PagingAndSortingRepository<TableFi
             List<Predicate> predicates = new LinkedList<>();
             if (StringUtils.isNotBlank(tableFieldQuery.getTableId())) {
                 predicates.add(criteriaBuilder.equal(root.get("tableId"), tableFieldQuery.getTableId()));
+            }
+            if (tableFieldQuery.getTableIds() != null && tableFieldQuery.getTableIds().length > 0) {
+                CriteriaBuilder.In<Object> tableId = criteriaBuilder.in(root.get("tableId"));
+                for (String id : tableFieldQuery.getTableIds()) {
+                    tableId.value(id);
+                }
+                predicates.add(tableId);
             }
             if (tableFieldQuery.getSystemField()) {
                 predicates.add(criteriaBuilder.isTrue(root.get("systemField")));

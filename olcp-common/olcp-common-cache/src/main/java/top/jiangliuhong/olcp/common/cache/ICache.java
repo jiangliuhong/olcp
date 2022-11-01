@@ -1,6 +1,7 @@
 package top.jiangliuhong.olcp.common.cache;
 
 import java.util.Map;
+import java.util.Set;
 
 public interface ICache<K, V> {
 
@@ -20,5 +21,5 @@ public interface ICache<K, V> {
 
     public boolean exist(K k);
 
-    public Iterable<K> keys();
+    public Set<K> keys();
 }

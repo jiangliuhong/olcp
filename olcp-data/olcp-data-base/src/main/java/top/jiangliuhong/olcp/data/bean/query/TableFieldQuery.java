@@ -10,6 +10,7 @@ import lombok.Setter;
 public class TableFieldQuery {
 
     private String tableId;
+    private String[] tableIds;
     private Boolean systemField;
     private Boolean userField;
 

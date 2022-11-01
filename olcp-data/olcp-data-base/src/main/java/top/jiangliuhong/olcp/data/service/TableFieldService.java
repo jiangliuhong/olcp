@@ -29,6 +29,11 @@ public class TableFieldService {
         return tableFieldRepository.findAllByQuery(query);
     }
 
+    public List<TableFieldDO> getTableFields(String... tableIds) {
+        TableFieldQuery query = TableFieldQuery.builder().tableIds(tableIds).build();
+        return tableFieldRepository.findAllByQuery(query);
+    }
+
     @Transactional
     public List<TableFieldDO> addField(TableDO table, List<TableFieldDO> fields) {
         if (fields == null) {

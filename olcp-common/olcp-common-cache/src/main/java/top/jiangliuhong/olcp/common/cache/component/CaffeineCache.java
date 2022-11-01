@@ -68,7 +68,7 @@ public class CaffeineCache<K, V> implements ICache<K, V> {
     }
 
     @Override
-    public Iterable<K> keys() {
+    public Set<K> keys() {
         return this.keys;
     }
 }

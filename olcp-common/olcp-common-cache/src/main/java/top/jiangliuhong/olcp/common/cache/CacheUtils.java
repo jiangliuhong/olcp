@@ -3,6 +3,7 @@ package top.jiangliuhong.olcp.common.cache;
 import top.jiangliuhong.olcp.common.utils.SpringUtils;
 
 import java.util.Map;
+import java.util.Set;
 
 public final class CacheUtils {
 
@@ -38,7 +39,7 @@ public final class CacheUtils {
         return cache.exist(k);
     }
 
-    public static <K> Iterable<K> keys(String cacheName) {
+    public static <K> Set<K> keys(String cacheName) {
         ICache<K, Object> cache = getCache(cacheName);
         return cache.keys();
     }
