@@ -10,7 +10,7 @@ import top.jiangliuhong.olcp.data.bean.TableVO;
 import top.jiangliuhong.olcp.data.bean.dto.TableDTO;
 import top.jiangliuhong.olcp.data.service.TableService;
 
-@Tag(name = "app", description = "应用程序API")
+@Tag(name = "table", description = "数据表API")
 @RestController
 @RequestMapping("/api/v1/data/table")
 public class TableApi {
@@ -34,6 +34,9 @@ public class TableApi {
     @Operation(summary = "查询数据表")
     public TableVO getTable(@PathVariable String id) {
         TableDTO tableInfo = tableService.getTableInfo(id);
+        if (tableInfo == null) {
+            return null;
+        }
         TableVO table = new TableVO();
         BeanUtils.copyProperties(tableInfo, table);
         return table;

@@ -64,17 +64,17 @@ public class TableService {
         table.setFields(fields);
         // TODO 创建默认列表
         // TODO 创建默认表单
+        this.saveCache(tableId);
         return tableId;
     }
 
     @Transactional
     public void updateTable(TableDTO table) {
         if (StringUtils.isBlank(table.getId())) {
-            throw new TableException("请传入系统ID");
+            throw new TableException("请传入表格ID");
         }
-        // TODO use cache
-        if (!tableRepository.existsById(table.getId())) {
-            throw new TableException("请传入正确的系统ID");
+        if (!CacheUtils.exist(CacheNames.TABLE_ID, table.getId())) {
+            throw new TableException("请传入正确的表格ID");
         }
         // 将不允许修改的字段设置为null
         table.setName(null);
@@ -86,6 +86,7 @@ public class TableService {
         BeanUtils.copyNotNullProperties(table, tableDB);
         tableRepository.save(tableDB);
         tableFieldService.updateField(tableDB, table.getFields());
+        this.saveCache(tableDB.getId());
     }
 
     public TableDTO getTableInfo(String id) {
@@ -118,6 +119,11 @@ public class TableService {
             table.setFields(tableFieldMap.get(table.getId()));
         });
         return list;
+    }
+
+    public void saveCache(String id) {
+        TableDTO tableInfo = getTableInfo(id);
+        this.saveCache(tableInfo);
     }
 
     public void saveCache(TableDTO table) {

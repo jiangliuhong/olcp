@@ -11,7 +11,7 @@ public class TableFieldQuery {
 
     private String tableId;
     private String[] tableIds;
-    private Boolean systemField;
-    private Boolean userField;
+    private boolean systemField;
+    private boolean userField;
 
 }

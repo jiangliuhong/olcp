@@ -50,10 +50,10 @@ public interface TableFieldRepository extends PagingAndSortingRepository<TableFi
                 }
                 predicates.add(tableId);
             }
-            if (tableFieldQuery.getSystemField()) {
+            if (tableFieldQuery.isSystemField()) {
                 predicates.add(criteriaBuilder.isTrue(root.get("systemField")));
             }
-            if (tableFieldQuery.getUserField()) {
+            if (tableFieldQuery.isUserField()) {
                 predicates.add(
                         criteriaBuilder.or(
                                 criteriaBuilder.isFalse(root.get("systemField")),
