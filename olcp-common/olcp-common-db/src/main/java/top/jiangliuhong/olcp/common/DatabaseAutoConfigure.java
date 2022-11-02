@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -13,6 +14,7 @@ import top.jiangliuhong.olcp.common.config.YamlPropertySourceFactory;
 import top.jiangliuhong.olcp.common.handler.BaseFieldInterceptor;
 import top.jiangliuhong.olcp.common.handler.EntityInterceptorConfig;
 import top.jiangliuhong.olcp.common.handler.IEntityInterceptor;
+import top.jiangliuhong.olcp.common.jpa.SqlExecutor;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
@@ -24,6 +26,7 @@ import java.util.List;
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "top.jiangliuhong.olcp")
 @EntityScan(basePackages = "top.jiangliuhong.olcp")
+@Import({SqlExecutor.class})
 @PropertySource(factory = YamlPropertySourceFactory.class, value = "classpath:common-db.yml")
 public class DatabaseAutoConfigure {
 
