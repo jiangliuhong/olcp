@@ -9,7 +9,7 @@ import top.jiangliuhong.olcp.data.bean.AppDO;
 import top.jiangliuhong.olcp.data.bean.AppCreateVO;
 import top.jiangliuhong.olcp.data.bean.AppUpdateVO;
 import top.jiangliuhong.olcp.data.bean.AppVO;
-import top.jiangliuhong.olcp.data.bean.cache.AppCachePO;
+import top.jiangliuhong.olcp.data.bean.po.AppPO;
 import top.jiangliuhong.olcp.data.service.AppService;
 
 @Tag(name = "app", description = "应用程序API")
@@ -23,12 +23,12 @@ public class AppApi {
     @GetMapping("/{id}")
     @Operation(summary = "根据ID获取应用")
     public AppVO getCurrentApp(@PathVariable String id) {
-        AppCachePO appCachePO = appService.getApp(id);
-        if (appCachePO == null) {
+        AppPO appPO = appService.getApp(id);
+        if (appPO == null) {
             return null;
         }
         AppVO app = new AppVO();
-        BeanUtils.copyProperties(appCachePO, app);
+        BeanUtils.copyProperties(appPO, app);
         return app;
     }
 

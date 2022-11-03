@@ -1,6 +1,5 @@
 package top.jiangliuhong.olcp.data.service;
 
-import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.IteratorUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -10,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import top.jiangliuhong.olcp.common.cache.CacheUtils;
 import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.AppDO;
-import top.jiangliuhong.olcp.data.bean.cache.AppCachePO;
+import top.jiangliuhong.olcp.data.bean.po.AppPO;
 import top.jiangliuhong.olcp.data.consts.CacheNames;
 import top.jiangliuhong.olcp.data.dao.AppRepository;
 import top.jiangliuhong.olcp.data.exception.AppException;
@@ -36,7 +35,7 @@ public class AppService {
         return appIds;
     }
 
-    public AppCachePO getApp(String id) {
+    public AppPO getApp(String id) {
         return CacheUtils.getCacheValue(CacheNames.APP_ID, id);
     }
 
@@ -81,9 +80,9 @@ public class AppService {
      * @param app app info
      */
     public void saveCache(AppDO app) {
-        AppCachePO appCachePO = new AppCachePO();
-        BeanUtils.copyProperties(app, appCachePO);
-        CacheUtils.putCacheValue(CacheNames.APP_ID, app.getId(), appCachePO);
+        AppPO appPO = new AppPO();
+        BeanUtils.copyProperties(app, appPO);
+        CacheUtils.putCacheValue(CacheNames.APP_ID, app.getId(), appPO);
         CacheUtils.putCacheValue(CacheNames.APP_NAME, app.getName(), app.getId());
     }
 

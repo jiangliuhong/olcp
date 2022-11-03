@@ -9,8 +9,8 @@ import top.jiangliuhong.olcp.common.cache.CacheUtils;
 import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.TableDO;
 import top.jiangliuhong.olcp.data.bean.TableFieldDO;
-import top.jiangliuhong.olcp.data.bean.cache.TableCachePO;
-import top.jiangliuhong.olcp.data.bean.cache.TableFieldCachePO;
+import top.jiangliuhong.olcp.data.bean.po.TablePO;
+import top.jiangliuhong.olcp.data.bean.po.TableFieldPO;
 import top.jiangliuhong.olcp.data.bean.dto.TableDTO;
 import top.jiangliuhong.olcp.data.config.properties.SystemTableProperties;
 import top.jiangliuhong.olcp.data.consts.CacheNames;
@@ -127,12 +127,12 @@ public class TableService {
     }
 
     public void saveCache(TableDTO table) {
-        TableCachePO tableCache = new TableCachePO();
+        TablePO tableCache = new TablePO();
         BeanUtils.copyProperties(table, tableCache);
         if (CollectionUtils.isNotEmpty(table.getFields())) {
-            List<TableFieldCachePO> tableFieldCaches = new ArrayList<>();
+            List<TableFieldPO> tableFieldCaches = new ArrayList<>();
             table.getFields().forEach(field -> {
-                TableFieldCachePO tfc = new TableFieldCachePO();
+                TableFieldPO tfc = new TableFieldPO();
                 BeanUtils.copyProperties(field, tfc);
                 tableFieldCaches.add(tfc);
             });

@@ -1,11 +1,11 @@
-package top.jiangliuhong.olcp.data.bean.cache;
+package top.jiangliuhong.olcp.data.bean.po;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class AppCachePO {
+public class AppPO {
     private String id;
     private String name;
     private String title;
