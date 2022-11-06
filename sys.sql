@@ -117,6 +117,7 @@ CREATE TABLE IF NOT EXISTS sys_table_field
     default_value      varchar(200),
     short_description  varchar(200),
     required           boolean,
+    uniqueness         boolean,
     reference_table_id varchar(200),
     system_field       boolean,
     sn                 integer default 1,

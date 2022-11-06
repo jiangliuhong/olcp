@@ -18,5 +18,6 @@ public class TableFieldPO {
     private String defaultValue;
     private String shortDescription;
     private boolean required;
+    private boolean uniqueness;
     private String referenceTableId;
 }

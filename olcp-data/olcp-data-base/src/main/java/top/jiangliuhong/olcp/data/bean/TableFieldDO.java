@@ -23,6 +23,7 @@ public class TableFieldDO extends BaseDO {
     private String defaultValue;
     private String shortDescription;
     private boolean required;
+    private boolean uniqueness;
     private String referenceTableId;
     private Boolean systemField;
     private Integer sn;
