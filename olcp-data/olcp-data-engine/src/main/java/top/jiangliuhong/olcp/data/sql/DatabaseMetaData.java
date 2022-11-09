@@ -22,6 +22,19 @@ public class DatabaseMetaData {
         sqlExecutor.executeDDL(createSql);
     }
 
+    public void delColumn() {
+        // ALTER TABLE table_name DROP column_name
+
+    }
+
+    public void addColumn() {
+
+    }
+
+    public void updateColumn() {
+
+    }
+
     private String generateCreateTable(TablePO tableSource) {
         TableProxy table = new TableProxy(tableSource);
         StringBuilder sql = new StringBuilder("CREATE TABLE ").append(table.getName()).append("(");
