@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.TableVO;
 import top.jiangliuhong.olcp.data.bean.dto.TableDTO;
+import top.jiangliuhong.olcp.data.service.DatabaseMetaDataService;
 import top.jiangliuhong.olcp.data.service.TableService;
 
 @Tag(name = "table", description = "数据表API")
@@ -18,16 +19,19 @@ public class TableApi {
     @Autowired
     private TableService tableService;
 
+    @Autowired
+    private DatabaseMetaDataService databaseMetaDataService;
+
     @PostMapping
     @Operation(summary = "新增数据表")
     public String addTable(@RequestBody TableVO tableVO) {
-        return tableService.addTable(tableVO);
+        return databaseMetaDataService.addTable(tableVO);
     }
 
     @PutMapping
     @Operation(summary = "修改数据表")
     public void updateTable(@RequestBody TableVO tableVO) {
-        tableService.updateTable(tableVO);
+        databaseMetaDataService.updateTable(tableVO);
     }
 
     @GetMapping("/{id}")

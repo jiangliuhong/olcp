@@ -4,7 +4,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import top.jiangliuhong.olcp.common.jpa.SqlExecutor;
+import top.jiangliuhong.olcp.data.bean.po.TableFieldPO;
 import top.jiangliuhong.olcp.data.bean.po.TablePO;
+import top.jiangliuhong.olcp.data.proxy.FieldProxy;
 import top.jiangliuhong.olcp.data.proxy.TableProxy;
 import top.jiangliuhong.olcp.data.type.EngineType;
 
@@ -22,17 +24,66 @@ public class DatabaseMetaData {
         sqlExecutor.executeDDL(createSql);
     }
 
-    public void delColumn() {
-        // ALTER TABLE table_name DROP column_name
-
+    public void delColumn(String tableName, String... columnNames) {
+        // ALTER TABLE <表名> DROP <字段名>；
+        if (StringUtils.isBlank(tableName)) {
+            return;
+        }
+        if (columnNames == null || columnNames.length == 0) {
+            return;
+        }
+        StringBuilder sqlBuilder = new StringBuilder();
+        for (String columnName : columnNames) {
+            sqlBuilder.append("ALTER TABLE ")
+                    .append(tableName)
+                    .append(" DROP ")
+                    .append(columnName)
+                    .append(";\n");
+        }
+        sqlExecutor.executeDDL(sqlBuilder.toString());
     }
 
-    public void addColumn() {
-
+    public void addColumn(String tableName, TableFieldPO... fieldPOS) {
+        // ALTER TABLE <表名> ADD <新字段名><数据类型>[约束条件];
+        if (StringUtils.isBlank(tableName)) {
+            return;
+        }
+        if (fieldPOS == null || fieldPOS.length == 0) {
+            return;
+        }
+        StringBuilder sqlBuilder = new StringBuilder();
+        for (TableFieldPO fieldPO : fieldPOS) {
+            FieldProxy fieldProxy = new FieldProxy(fieldPO);
+            sqlBuilder.append(" ALTER TABLE ")
+                    .append(tableName)
+                    .append(" ADD ")
+                    .append(fieldProxy.getName())
+                    .append(" ")
+                    .append(fieldProxy.getType());
+        }
+        sqlExecutor.executeDDL(sqlBuilder.toString());
     }
 
-    public void updateColumn() {
-
+    public void updateColumn(String tableName, TableFieldPO... fieldPOS) {
+        // ALTER TABLE <表名> MODIFY <字段名> <数据类型>
+        if (StringUtils.isBlank(tableName)) {
+            return;
+        }
+        if (fieldPOS == null || fieldPOS.length == 0) {
+            return;
+        }
+        StringBuilder sqlBuilder = new StringBuilder();
+        for (TableFieldPO fieldPO : fieldPOS) {
+            FieldProxy fieldProxy = new FieldProxy(fieldPO);
+            sqlBuilder.append(" ALTER TABLE ")
+                    .append(tableName)
+                    .append(" MODIFY ")
+                    .append(fieldProxy.getName())
+                    .append(" ")
+                    .append(fieldProxy.getType())
+                    .append(";\n");
+        }
+        sqlExecutor.executeDDL(sqlBuilder.toString());
     }
 
     private String generateCreateTable(TablePO tableSource) {
