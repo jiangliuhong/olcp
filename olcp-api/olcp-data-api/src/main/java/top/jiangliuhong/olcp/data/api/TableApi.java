@@ -1,13 +1,12 @@
 package top.jiangliuhong.olcp.data.api;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.TableVO;
-import top.jiangliuhong.olcp.data.bean.dto.TableDTO;
+import top.jiangliuhong.olcp.data.bean.po.TablePO;
 import top.jiangliuhong.olcp.data.service.DatabaseMetaDataService;
 import top.jiangliuhong.olcp.data.service.TableService;
 
@@ -37,7 +36,7 @@ public class TableApi {
     @GetMapping("/{id}")
     @Operation(summary = "查询数据表")
     public TableVO getTable(@PathVariable String id) {
-        TableDTO tableInfo = tableService.getTableInfo(id);
+        TablePO tableInfo = tableService.getTableInfo(id);
         if (tableInfo == null) {
             return null;
         }

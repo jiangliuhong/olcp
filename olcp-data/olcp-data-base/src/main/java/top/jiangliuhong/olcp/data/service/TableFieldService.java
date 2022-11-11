@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.TableDO;
 import top.jiangliuhong.olcp.data.bean.TableFieldDO;
+import top.jiangliuhong.olcp.data.bean.po.TableFieldUpdateResPO;
 import top.jiangliuhong.olcp.data.bean.query.TableFieldQuery;
 import top.jiangliuhong.olcp.data.config.properties.SystemTableProperties;
 import top.jiangliuhong.olcp.data.dao.TableFieldRepository;
+import top.jiangliuhong.olcp.data.exception.TableException;
 import top.jiangliuhong.olcp.data.type.FieldType;
 
 import javax.transaction.Transactional;
@@ -39,6 +41,7 @@ public class TableFieldService {
         if (fields == null) {
             fields = new ArrayList<>();
         }
+        this.checkField(fields);
         List<TableFieldDO> defaultFields = this.getDefaultFields();
         Set<String> defaultFieldName = new HashSet<>();
         for (TableFieldDO defaultField : defaultFields) {
@@ -55,24 +58,31 @@ public class TableFieldService {
     }
 
     @Transactional
-    public List<TableFieldDO> updateField(TableDO table, List<TableFieldDO> fields) {
+    public TableFieldUpdateResPO updateField(TableDO table, List<TableFieldDO> fields) {
+        List<TableFieldDO> defaultFields = this.getDefaultFields();
+        Set<String> defaultFieldName = new HashSet<>();
+        for (TableFieldDO defaultField : defaultFields) {
+            defaultFieldName.add(defaultField.getName());
+        }
+        if (!fields.isEmpty()) {
+            fields.removeIf(field -> defaultFieldName.contains(field.getName()));
+        }
+        this.checkField(fields);
+        TableFieldUpdateResPO res = new TableFieldUpdateResPO();
         Map<String, String> existFieldNames = this.getExistFieldNames(table.getId());
         List<String> queryIds = new ArrayList<>();
         // 筛选：需要删除的字段、需要新增的字段、需要修改的字段
         for (TableFieldDO field : fields) {
-            if (existFieldNames.containsKey(field.getName())) {
-                existFieldNames.remove(field.getName());
-            } else {
-                if (StringUtils.isNotBlank(field.getId())) {
-                    queryIds.add(field.getId());
-                }
+            existFieldNames.remove(field.getName());
+            if (StringUtils.isNotBlank(field.getId())) {
+                queryIds.add(field.getId());
             }
         }
-
         if (!existFieldNames.isEmpty()) {
             List<String> ids = new ArrayList<>();
             existFieldNames.forEach((k, v) -> ids.add(v));
             tableFieldRepository.deleteAllById(ids);
+            res.getDeletes().addAll(ids);
         }
 
         List<TableFieldDO> existFields = tableFieldRepository.findAllByIdIn(queryIds);
@@ -91,6 +101,7 @@ public class TableFieldService {
         if (CollectionUtils.isNotEmpty(addLists)) {
             addLists.removeIf(f -> existNames.contains(f.getName()));
             this.addFields(table, addLists);
+            res.getCreates().addAll(addLists);
         }
         List<TableFieldDO> updateLists = fieldMaps.get("update");
         if (CollectionUtils.isNotEmpty(updateLists)) {
@@ -105,8 +116,25 @@ public class TableFieldService {
                 BeanUtils.copyNotNullProperties(updateInfo, existField);
             }
             tableFieldRepository.saveAll(existFields);
+            res.getUpdates().addAll(existFields);
         }
-        return fields;
+        return res;
+    }
+
+    private void checkField(List<TableFieldDO> fields) {
+        // 判断名称是否为空
+        // 判断是否有重名的
+        Set<String> fieldNames = new HashSet<>();
+        fields.forEach(field -> {
+            if (StringUtils.isBlank(field.getName())) {
+                throw new TableException("名称不能为空");
+            }
+            if (fieldNames.contains(field.getName())) {
+                throw new TableException("名称重复:" + field.getName());
+            } else {
+                fieldNames.add(field.getName());
+            }
+        });
     }
 
     private void addFields(TableDO table, List<TableFieldDO> fields) {

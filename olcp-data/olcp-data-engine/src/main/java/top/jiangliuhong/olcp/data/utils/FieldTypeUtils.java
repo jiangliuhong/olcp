@@ -4,6 +4,12 @@ import top.jiangliuhong.olcp.data.bean.po.TableFieldPO;
 
 public final class FieldTypeUtils {
 
+    /**
+     * 获取字段数据库类型
+     *
+     * @param field 字段
+     * @return 数据库类型
+     */
     public static String transformFieldType(TableFieldPO field) {
         switch (field.getType()) {
             case Integer:

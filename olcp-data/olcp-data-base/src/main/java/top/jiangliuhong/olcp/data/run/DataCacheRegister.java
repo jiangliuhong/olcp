@@ -8,7 +8,7 @@ import top.jiangliuhong.olcp.common.cache.CacheContext;
 import top.jiangliuhong.olcp.common.cache.consts.CacheFactoryNames;
 import top.jiangliuhong.olcp.common.cache.properties.CacheInfo;
 import top.jiangliuhong.olcp.data.bean.AppDO;
-import top.jiangliuhong.olcp.data.bean.dto.TableDTO;
+import top.jiangliuhong.olcp.data.bean.po.TablePO;
 import top.jiangliuhong.olcp.data.consts.CacheNames;
 import top.jiangliuhong.olcp.data.service.AppService;
 import top.jiangliuhong.olcp.data.service.TableService;
@@ -47,7 +47,7 @@ public class DataCacheRegister implements CommandLineRunner {
 
     private void initTableCache() {
         String[] serverAppIds = appService.getServerAppIds();
-        List<TableDTO> tables = tableService.getAllTableByApp(serverAppIds);
+        List<TablePO> tables = tableService.getAllTableByApp(serverAppIds);
         tables.forEach(table -> tableService.saveCache(table));
     }
 

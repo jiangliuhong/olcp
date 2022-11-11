@@ -22,9 +22,9 @@ public class TableFieldDO extends BaseDO {
     private Integer maxPrecision;
     private String defaultValue;
     private String shortDescription;
-    private boolean required;
-    private boolean uniqueness;
+    private Boolean required = false;
+    private Boolean uniqueness = false;
     private String referenceTableId;
-    private Boolean systemField;
+    private Boolean systemField = false;
     private Integer sn;
 }

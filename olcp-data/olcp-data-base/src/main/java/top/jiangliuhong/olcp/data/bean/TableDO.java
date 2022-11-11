@@ -19,7 +19,7 @@ public class TableDO extends BaseDO {
     private String appId;
     private String shortDescription;
     private String parent;
-    private Boolean virtualTable;
+    private Boolean virtualTable = false;
     private EngineType engineType = EngineType.InnoDB;
-    private String defaultCharset = "UTF-8";
+    private String defaultCharset = "utf8";
 }

@@ -14,9 +14,9 @@ public class TablePO {
     private String name;
     private String title;
     private String appId;
-    private Boolean virtualTable;
+    private Boolean virtualTable = false;
     private EngineType engineType = EngineType.InnoDB;
-    private String defaultCharset = "UTF-8";
+    private String defaultCharset = "utf8";
     private List<TableFieldPO> fields;
 
 }

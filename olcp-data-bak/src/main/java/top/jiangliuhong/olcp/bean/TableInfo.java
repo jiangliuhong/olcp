@@ -14,7 +14,7 @@ public class TableInfo {
 
     private final String tableName;
     private final String engine = "InnoDB";
-    private final String defaultCharset = "UTF-8";
+    private final String defaultCharset = "utf8";
     private final List<ColumnInfo> columns = new ArrayList<>();
     private final Map<String, ColumnInfo> columnMaps = new HashMap<>();
     private final ColumnInfo primary;

@@ -8,6 +8,7 @@ import top.jiangliuhong.olcp.data.type.FieldType;
 @Setter
 public class TableFieldPO {
 
+    private String id;
     private String name;
     private String title;
     private String tableId;
@@ -17,7 +18,7 @@ public class TableFieldPO {
     private Integer maxPrecision;
     private String defaultValue;
     private String shortDescription;
-    private boolean required;
-    private boolean uniqueness;
+    private Boolean required = false;
+    private Boolean uniqueness = false;
     private String referenceTableId;
 }
