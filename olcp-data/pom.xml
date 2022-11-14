@@ -9,7 +9,7 @@
     </parent>
     <modules>
         <module>olcp-data-base</module>
-        <module>olcp-data-engine</module>
+        <module>olcp-data-context</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
 

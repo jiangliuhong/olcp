@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>top.jiangliuhong.olcp</groupId>
-            <artifactId>olcp-data-engine</artifactId>
+            <artifactId>olcp-data-context</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  top.jiangliuhong.olcp.data.DataEngineAutoConfigure
+  top.jiangliuhong.olcp.data.DataContextAutoConfigure

@@ -81,7 +81,7 @@
             </dependency>
             <dependency>
                 <groupId>top.jiangliuhong.olcp</groupId>
-                <artifactId>olcp-data-engine</artifactId>
+                <artifactId>olcp-data-context</artifactId>
                 <version>${olcp.version}</version>
             </dependency>
             <dependency>
