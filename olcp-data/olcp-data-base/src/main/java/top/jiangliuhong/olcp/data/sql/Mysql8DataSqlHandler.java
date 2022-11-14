@@ -4,8 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import top.jiangliuhong.olcp.data.bean.po.TableFieldPO;
 import top.jiangliuhong.olcp.data.bean.po.TablePO;
-import top.jiangliuhong.olcp.data.proxy.FieldProxy;
-import top.jiangliuhong.olcp.data.proxy.TableProxy;
+import top.jiangliuhong.olcp.data.bean.proxy.FieldProxy;
+import top.jiangliuhong.olcp.data.bean.proxy.TableProxy;
 import top.jiangliuhong.olcp.data.type.EngineType;
 
 @Component

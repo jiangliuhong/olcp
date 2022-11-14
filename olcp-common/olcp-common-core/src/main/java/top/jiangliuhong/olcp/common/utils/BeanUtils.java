@@ -1,5 +1,6 @@
 package top.jiangliuhong.olcp.common.utils;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -19,6 +20,16 @@ public final class BeanUtils {
 
     public static void copyProperties(Object source, Object target, String... ignores) {
         org.springframework.beans.BeanUtils.copyProperties(source, target, ignores);
+    }
+
+    public static void copyNotNullProperties(Object source, Object target, String... ignores) {
+        String[] nullField = getNullField(source);
+        if (ignores.length == 0) {
+            org.springframework.beans.BeanUtils.copyProperties(source, target, nullField);
+        } else {
+            String[] strings = ArrayUtils.addAll(nullField, ignores);
+            org.springframework.beans.BeanUtils.copyProperties(source, target, strings);
+        }
     }
 
     public static String[] getNullField(Object target) {

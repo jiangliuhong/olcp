@@ -1,9 +1,11 @@
 package top.jiangliuhong.olcp.data.service;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.jiangliuhong.olcp.common.consts.TableFieldNameConst;
 import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.TableDO;
 import top.jiangliuhong.olcp.data.bean.TableFieldDO;
@@ -70,28 +72,30 @@ public class TableFieldService {
         this.checkField(fields);
         TableFieldUpdateResPO res = new TableFieldUpdateResPO();
         Map<String, String> existFieldNames = this.getExistFieldNames(table.getId());
-        List<String> queryIds = new ArrayList<>();
+        List<String> queryNames = new ArrayList<>();
         // 筛选：需要删除的字段、需要新增的字段、需要修改的字段
         for (TableFieldDO field : fields) {
             existFieldNames.remove(field.getName());
             if (StringUtils.isNotBlank(field.getId())) {
-                queryIds.add(field.getId());
+                queryNames.add(field.getName());
             }
         }
         if (!existFieldNames.isEmpty()) {
-            List<String> ids = new ArrayList<>();
-            existFieldNames.forEach((k, v) -> ids.add(v));
-            tableFieldRepository.deleteAllById(ids);
-            res.getDeletes().addAll(ids);
+            List<String> deleteIds = new ArrayList<>();
+            List<String> deleteNames = new ArrayList<>();
+            existFieldNames.forEach((k, v) -> {
+                deleteIds.add(v);
+                deleteNames.add(k);
+            });
+            tableFieldRepository.deleteAllById(deleteIds);
+            res.getDeletes().addAll(deleteNames);
         }
 
-        List<TableFieldDO> existFields = tableFieldRepository.findAllByIdIn(queryIds);
-        Set<String> existIds = existFields.stream()
-                .collect(HashSet::new, (s, stu) -> s.add(stu.getId()), AbstractCollection::addAll);
+        List<TableFieldDO> existFields = tableFieldRepository.findAllByTableIdAndNameIn(table.getId(), queryNames);
         Set<String> existNames = existFields.stream()
-                .collect(HashSet::new, (s, stu) -> s.add(stu.getId()), AbstractCollection::addAll);
+                .collect(HashSet::new, (s, stu) -> s.add(stu.getName()), AbstractCollection::addAll);
         Map<String, List<TableFieldDO>> fieldMaps = fields.stream().collect(Collectors.groupingBy(field -> {
-            if (StringUtils.isNotBlank(field.getId()) && existIds.contains(field.getId())) {
+            if (existNames.contains(field.getName())) {
                 return "update";
             } else {
                 return "add";
@@ -99,26 +103,51 @@ public class TableFieldService {
         }));
         List<TableFieldDO> addLists = fieldMaps.get("add");
         if (CollectionUtils.isNotEmpty(addLists)) {
-            addLists.removeIf(f -> existNames.contains(f.getName()));
             this.addFields(table, addLists);
             res.getCreates().addAll(addLists);
         }
         List<TableFieldDO> updateLists = fieldMaps.get("update");
         if (CollectionUtils.isNotEmpty(updateLists)) {
             Map<String, TableFieldDO> updateMaps
-                    = updateLists.stream().collect(Collectors.toMap(TableFieldDO::getId, f -> f));
+                    = updateLists.stream().collect(Collectors.toMap(TableFieldDO::getName, f -> f));
             for (TableFieldDO existField : existFields) {
-                TableFieldDO updateInfo = updateMaps.get(existField.getId());
-                updateInfo.setTableId(null);
-                updateInfo.setName(null);
-                updateInfo.setAppId(null);
-                updateInfo.setSystemField(null);
-                BeanUtils.copyNotNullProperties(updateInfo, existField);
+                TableFieldDO updateInfo = updateMaps.get(existField.getName());
+                if (this.needUpdateDDL(existField, updateInfo)) {
+                    res.getUpdateForDDL().add(existField);
+                }
+                String[] tableIgnore = ArrayUtils.addAll(TableFieldNameConst.BASE_FIELD, "name", "appId", "systemField", "tableId");
+                BeanUtils.copyNotNullProperties(updateInfo, existField, tableIgnore);
             }
             tableFieldRepository.saveAll(existFields);
             res.getUpdates().addAll(existFields);
         }
         return res;
+    }
+
+    private boolean needUpdateDDL(TableFieldDO db, TableFieldDO update) {
+        boolean need = false;
+        if (StringUtils.isNotBlank(update.getName()) && !StringUtils.equals(update.getName(), db.getName())) {
+            need = true;
+        }
+        if (StringUtils.isNotBlank(update.getTitle()) && !StringUtils.equals(update.getTitle(), db.getTitle())) {
+            need = true;
+        }
+        if (update.getType() != null && update.getType() != db.getType()) {
+            need = true;
+        }
+        if (update.getMaxLength() != null && !update.getMaxLength().equals(db.getMaxLength())) {
+            need = true;
+        }
+        if (update.getMaxPrecision() != null && !update.getMaxPrecision().equals(db.getMaxPrecision())) {
+            need = true;
+        }
+        if (update.getRequired() != null && update.getRequired() != db.getRequired()) {
+            need = true;
+        }
+        if (update.getUniqueness() != null && update.getUniqueness() != db.getUniqueness()) {
+            need = true;
+        }
+        return need;
     }
 
     private void checkField(List<TableFieldDO> fields) {

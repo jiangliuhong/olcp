@@ -5,8 +5,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import top.jiangliuhong.olcp.common.jpa.SqlExecutor;
+import top.jiangliuhong.olcp.common.utils.BeanUtils;
+import top.jiangliuhong.olcp.common.utils.NameUtils;
 import top.jiangliuhong.olcp.data.bean.po.TableFieldPO;
 import top.jiangliuhong.olcp.data.bean.po.TablePO;
+import top.jiangliuhong.olcp.data.bean.proxy.TableProxy;
+
+import java.util.List;
 
 /**
  * 数据库元数据维护
@@ -25,6 +30,27 @@ public class DatabaseMetaData {
         }
         String createSql = dataSqlHandler.handler().createSql(table);
         sqlExecutor.executeDDL(createSql);
+    }
+
+    public void updateTable(TablePO table, List<String> deleteFields, List<TableFieldPO> updateFields, List<TableFieldPO> addFields) {
+        TableProxy tableProxy = new TableProxy(table);
+        if (CollectionUtils.isNotEmpty(deleteFields)) {
+            String[] deleted = deleteFields.toArray(new String[0]);
+            for (int i = 0; i < deleted.length; i++) {
+                deleted[i] = NameUtils.camelToUnderline(deleted[i]);
+            }
+            this.deleteColumn(tableProxy.getName(), deleted);
+        }
+        if (CollectionUtils.isNotEmpty(updateFields)) {
+            TableFieldPO[] addFieldArray = BeanUtils.copyBean(updateFields, TableFieldPO.class)
+                    .toArray(new TableFieldPO[0]);
+            this.updateColumn(tableProxy.getName(), addFieldArray);
+        }
+        if (CollectionUtils.isNotEmpty(addFields)) {
+            TableFieldPO[] addFieldArray = BeanUtils.copyBean(addFields, TableFieldPO.class)
+                    .toArray(new TableFieldPO[0]);
+            this.addColumn(tableProxy.getName(), addFieldArray);
+        }
     }
 
     public void deleteColumn(String tableName, String... columnNames) {

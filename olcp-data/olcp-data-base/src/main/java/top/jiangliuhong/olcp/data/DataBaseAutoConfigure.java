@@ -9,7 +9,7 @@ import top.jiangliuhong.olcp.data.config.properties.SystemTableProperties;
 import top.jiangliuhong.olcp.data.run.DataCacheRegister;
 
 @Configuration
-@ComponentScan("top.jiangliuhong.olcp.data.service")
+@ComponentScan({"top.jiangliuhong.olcp.data.service", "top.jiangliuhong.olcp.data.sql"})
 @PropertySource(factory = YamlPropertySourceFactory.class, value = "classpath:data-base.yml")
 @Import({SystemTableProperties.class, DataCacheRegister.class})
 public class DataBaseAutoConfigure {

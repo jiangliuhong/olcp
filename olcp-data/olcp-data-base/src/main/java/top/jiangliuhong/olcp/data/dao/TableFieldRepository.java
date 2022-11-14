@@ -32,6 +32,15 @@ public interface TableFieldRepository extends PagingAndSortingRepository<TableFi
     public List<TableFieldDO> findAllByIdIn(List<String> ids);
 
     /**
+     * 通过字段名称批量查询
+     *
+     * @param tableId 表格ID
+     * @param names   字段名
+     * @return 字段列表
+     */
+    public List<TableFieldDO> findAllByTableIdAndNameIn(String tableId, List<String> names);
+
+    /**
      * 根据数据表ID查询
      *
      * @param tableFieldQuery 查询对象

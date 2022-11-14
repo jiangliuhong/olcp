@@ -11,13 +11,14 @@ import top.jiangliuhong.olcp.common.consts.TableFieldNameConst;
 import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.TableDO;
 import top.jiangliuhong.olcp.data.bean.TableFieldDO;
-import top.jiangliuhong.olcp.data.bean.po.TableFieldUpdateResPO;
 import top.jiangliuhong.olcp.data.bean.po.TableFieldPO;
+import top.jiangliuhong.olcp.data.bean.po.TableFieldUpdateResPO;
 import top.jiangliuhong.olcp.data.bean.po.TablePO;
 import top.jiangliuhong.olcp.data.config.properties.SystemTableProperties;
 import top.jiangliuhong.olcp.data.consts.CacheNames;
 import top.jiangliuhong.olcp.data.dao.TableRepository;
 import top.jiangliuhong.olcp.data.exception.TableException;
+import top.jiangliuhong.olcp.data.sql.DatabaseMetaData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,8 @@ public class TableService {
     private SystemTableProperties tableProperties;
     @Autowired
     private TableFieldService tableFieldService;
+    @Autowired
+    private DatabaseMetaData databaseMetaData;
 
     @Transactional
     public void addTable(TablePO table) {
@@ -69,10 +72,12 @@ public class TableService {
         // TODO 创建默认列表
         // TODO 创建默认表单
         this.saveCache(table);
+        // 创建表
+        databaseMetaData.createTable(table);
     }
 
     @Transactional
-    public TableFieldUpdateResPO updateTable(TablePO table) {
+    public void updateTable(TablePO table) {
         if (StringUtils.isBlank(table.getId())) {
             throw new TableException("请传入表格ID");
         }
@@ -83,18 +88,22 @@ public class TableService {
         Optional<TableDO> tableOptional = tableRepository.findById(table.getId());
         TableDO tableDB = tableOptional.orElseThrow(() -> new TableException("not found table for " + table.getId()));
         String[] tableIgnore = ArrayUtils.addAll(TableFieldNameConst.BASE_FIELD, "name", "appId");
-        BeanUtils.copyProperties(table, tableDB, tableIgnore);
+        BeanUtils.copyNotNullProperties(table, tableDB, tableIgnore);
         tableRepository.save(tableDB);
         BeanUtils.copyProperties(tableDB, table);
         List<TableFieldDO> fields = BeanUtils.copyBean(table.getFields(), TableFieldDO.class);
         TableFieldUpdateResPO res = tableFieldService.updateField(tableDB, fields);
         table.setFields(new ArrayList<>());
-        table.getFields().addAll(BeanUtils.copyBean(res.getUpdates(), TableFieldPO.class));
-        table.getFields().addAll(BeanUtils.copyBean(res.getCreates(), TableFieldPO.class));
+        List<TableFieldPO> updateFields = BeanUtils.copyBean(res.getUpdates(), TableFieldPO.class);
+        List<TableFieldPO> createFields = BeanUtils.copyBean(res.getCreates(), TableFieldPO.class);
+        table.getFields().addAll(updateFields);
+        table.getFields().addAll(createFields);
         // TODO 索引
         // TODO 关系
         this.saveCache(table);
-        return res;
+        // 修改表结构
+        List<TableFieldPO> updateForDDLFields = BeanUtils.copyBean(res.getUpdateForDDL(), TableFieldPO.class);
+        databaseMetaData.updateTable(table, res.getDeletes(), updateForDDLFields, createFields);
     }
 
     public TablePO getTableInfo(String id) {

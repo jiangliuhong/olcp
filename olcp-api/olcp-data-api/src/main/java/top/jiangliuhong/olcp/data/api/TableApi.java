@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.TableVO;
 import top.jiangliuhong.olcp.data.bean.po.TablePO;
-import top.jiangliuhong.olcp.data.service.DatabaseMetaDataService;
 import top.jiangliuhong.olcp.data.service.TableService;
 
 @Tag(name = "table", description = "数据表API")
@@ -18,19 +17,17 @@ public class TableApi {
     @Autowired
     private TableService tableService;
 
-    @Autowired
-    private DatabaseMetaDataService databaseMetaDataService;
-
     @PostMapping
     @Operation(summary = "新增数据表")
     public String addTable(@RequestBody TableVO tableVO) {
-        return databaseMetaDataService.addTable(tableVO);
+        tableService.addTable(tableVO);
+        return tableVO.getId();
     }
 
     @PutMapping
     @Operation(summary = "修改数据表")
     public void updateTable(@RequestBody TableVO tableVO) {
-        databaseMetaDataService.updateTable(tableVO);
+        tableService.updateTable(tableVO);
     }
 
     @GetMapping("/{id}")

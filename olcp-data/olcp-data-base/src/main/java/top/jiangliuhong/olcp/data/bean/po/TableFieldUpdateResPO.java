@@ -13,4 +13,5 @@ public class TableFieldUpdateResPO {
     private List<TableFieldDO> updates = new ArrayList<>();
     private List<TableFieldDO> creates = new ArrayList<>();
     private List<String> deletes = new ArrayList<>();
+    private List<TableFieldDO> updateForDDL = new ArrayList<>();
 }

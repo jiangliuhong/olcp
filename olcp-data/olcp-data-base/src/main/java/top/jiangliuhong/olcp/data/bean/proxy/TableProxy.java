@@ -1,4 +1,4 @@
-package top.jiangliuhong.olcp.data.proxy;
+package top.jiangliuhong.olcp.data.bean.proxy;
 
 import top.jiangliuhong.olcp.common.cache.CacheUtils;
 import top.jiangliuhong.olcp.common.utils.NameUtils;

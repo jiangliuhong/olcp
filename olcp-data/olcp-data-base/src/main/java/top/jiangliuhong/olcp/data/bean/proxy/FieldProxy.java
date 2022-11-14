@@ -1,4 +1,4 @@
-package top.jiangliuhong.olcp.data.proxy;
+package top.jiangliuhong.olcp.data.bean.proxy;
 
 import top.jiangliuhong.olcp.common.utils.NameUtils;
 import top.jiangliuhong.olcp.data.bean.po.TableFieldPO;
