@@ -1,6 +1,6 @@
 package top.jiangliuhong.olcp.common.cache;
 
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import top.jiangliuhong.olcp.common.cache.exception.CacheNotFoundException;
 import top.jiangliuhong.olcp.common.cache.properties.CacheInfo;
@@ -9,7 +9,7 @@ import top.jiangliuhong.olcp.common.cache.properties.CacheProperties;
 import java.util.HashMap;
 import java.util.Map;
 
-@Log
+@Log4j2
 public class CacheContext {
 
 
@@ -59,15 +59,16 @@ public class CacheContext {
         }
         for (CacheInfo group : this.properties.getGroups()) {
             if (StringUtils.equals(group.getName(), cache.name())) {
-                log.warning("The cache name[" + cache.name() + "] is the same as the system keyword");
+                log.warn("The cache name[" + cache.name() + "] is the same as the system keyword");
                 return;
             }
         }
         if (this.cacheMap.containsKey(cache.name())) {
-            log.warning("duplicate cache names :" + cache.name());
+            log.warn("duplicate cache names :" + cache.name());
             return;
         }
         this.cacheMap.put(cache.name(), cache);
         log.info("Cache[" + cache.name() + "] added successfully");
+
     }
 }

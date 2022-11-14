@@ -1,5 +1,6 @@
 package top.jiangliuhong.olcp.data.service;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +12,7 @@ import top.jiangliuhong.olcp.common.consts.TableFieldNameConst;
 import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.TableDO;
 import top.jiangliuhong.olcp.data.bean.TableFieldDO;
+import top.jiangliuhong.olcp.data.bean.po.AppPO;
 import top.jiangliuhong.olcp.data.bean.po.TableFieldPO;
 import top.jiangliuhong.olcp.data.bean.po.TableFieldUpdateResPO;
 import top.jiangliuhong.olcp.data.bean.po.TablePO;
@@ -26,6 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Log4j2
 @Service
 public class TableService {
 
@@ -148,8 +151,13 @@ public class TableService {
     }
 
     public void saveCache(TablePO table) {
+        AppPO app = CacheUtils.getCacheValue(CacheNames.APP_ID, table.getAppId());
+        if (app == null) {
+            log.error("table cache error:table[" + table.getName() + "] appId[" + table.getAppId() + "] is not exist");
+            return;
+        }
         CacheUtils.putCacheValue(CacheNames.TABLE_ID, table.getId(), table);
-        CacheUtils.putCacheValue(CacheNames.TABLE_NAME, table.getName(), table.getId());
+        CacheUtils.putCacheValue(CacheNames.TABLE_NAME, app.getName() + "." + table.getName(), table.getId());
     }
 
 }

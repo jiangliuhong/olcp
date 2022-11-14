@@ -1,6 +1,6 @@
 package top.jiangliuhong.olcp.data.run;
 
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -15,7 +15,7 @@ import top.jiangliuhong.olcp.data.service.TableService;
 
 import java.util.List;
 
-@Log
+@Log4j2
 @Order(10)
 public class DataCacheRegister implements CommandLineRunner {
 
@@ -28,6 +28,7 @@ public class DataCacheRegister implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        log.info("start load data base cache");
         this.buildSysCache(
                 CacheNames.APP_ID,
                 CacheNames.APP_NAME,
@@ -36,6 +37,7 @@ public class DataCacheRegister implements CommandLineRunner {
         );
         this.initAppCache();
         this.initTableCache();
+        log.info("end load data base cache");
     }
 
     private void initAppCache() {
