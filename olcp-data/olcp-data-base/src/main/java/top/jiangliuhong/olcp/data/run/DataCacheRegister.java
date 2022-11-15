@@ -33,7 +33,9 @@ public class DataCacheRegister implements CommandLineRunner {
                 CacheNames.APP_ID,
                 CacheNames.APP_NAME,
                 CacheNames.TABLE_ID,
-                CacheNames.TABLE_NAME
+                CacheNames.TABLE_NAME,
+                CacheNames.SERVICE_ID,
+                CacheNames.SERVICE_NAME
         );
         this.initAppCache();
         this.initTableCache();
@@ -51,6 +53,10 @@ public class DataCacheRegister implements CommandLineRunner {
         String[] serverAppIds = appService.getServerAppIds();
         List<TablePO> tables = tableService.getAllTableByApp(serverAppIds);
         tables.forEach(table -> tableService.saveCache(table));
+    }
+
+    private void initServiceCache() {
+
     }
 
     private void buildSysCache(String... cacheName) {

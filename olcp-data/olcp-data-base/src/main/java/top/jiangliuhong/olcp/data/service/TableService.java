@@ -84,6 +84,10 @@ public class TableService {
         if (StringUtils.isBlank(table.getId())) {
             throw new TableException("请传入表格ID");
         }
+        SysAppCache appCache = new SysAppCache(table.getAppId());
+        if(!appCache.tableExist(table.getName())){
+
+        }
         if (!CacheUtils.exist(CacheNames.TABLE_ID, table.getId())) {
             throw new TableException("请传入正确的表格ID");
         }
@@ -145,19 +149,16 @@ public class TableService {
         return BeanUtils.copyBean(tableDOList, TablePO.class);
     }
 
-    public void saveCache(String id) {
-        TablePO tableInfo = getTableInfo(id);
-        this.saveCache(tableInfo);
-    }
-
     public void saveCache(TablePO table) {
-        AppPO app = CacheUtils.getCacheValue(CacheNames.APP_ID, table.getAppId());
-        if (app == null) {
-            log.error("table cache error:table[" + table.getName() + "] appId[" + table.getAppId() + "] is not exist");
-            return;
-        }
-        CacheUtils.putCacheValue(CacheNames.TABLE_ID, table.getId(), table);
-        CacheUtils.putCacheValue(CacheNames.TABLE_NAME, app.getName() + "." + table.getName(), table.getId());
+        SysAppCache appCache = new SysAppCache(table.getAppId());
+        appCache.saveTable(table);
+//        AppPO app = CacheUtils.getCacheValue(CacheNames.APP_ID, table.getAppId());
+//        if (app == null) {
+//            log.error("table cache error:table[" + table.getName() + "] appId[" + table.getAppId() + "] is not exist");
+//            return;
+//        }
+//        CacheUtils.putCacheValue(CacheNames.TABLE_ID, table.getId(), table);
+//        CacheUtils.putCacheValue(CacheNames.TABLE_NAME, app.getName() + "." + table.getName(), table.getId());
     }
 
 }
