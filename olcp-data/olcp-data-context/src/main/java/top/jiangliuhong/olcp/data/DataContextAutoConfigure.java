@@ -4,28 +4,25 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
-import groovy.util.GroovyScriptEngine;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import top.jiangliuhong.olcp.data.config.DataGroovyClassLoader;
+import top.jiangliuhong.olcp.data.script.DataGroovyClassLoader;
 import top.jiangliuhong.olcp.data.config.GroovyConfig;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Configuration
-@ComponentScan("top.jiangliuhong.olcp.data.context")
+@ComponentScan({"top.jiangliuhong.olcp.data.context", "top.jiangliuhong.olcp.data.script"})
 @Import({GroovyConfig.class})
 public class DataContextAutoConfigure {
 
     public static void main(String[] args) {
         Binding binding = new Binding();
 
-        GroovyClassLoader groovyClassLoader = new DataGroovyClassLoader(Thread.currentThread().getContextClassLoader());
+        GroovyClassLoader groovyClassLoader = new DataGroovyClassLoader(Thread.currentThread().getContextClassLoader(), null);
         // 设置配置
         CompilerConfiguration compilerConfiguration = new CompilerConfiguration();
         compilerConfiguration.setSourceEncoding("utf-8");
@@ -53,9 +50,9 @@ public class DataContextAutoConfigure {
         List<String> scripts = new ArrayList<>();
         String s1 =
                 "def exec(args){\n" +
-                "    def s = new com.test.Service() \n" +
-                "    return s.res()\n" +
-                "}";
+                        "    def s = new com.test.Service() \n" +
+                        "    return s.res()\n" +
+                        "}";
         scripts.add(s1);
         scripts.add(s1);
         for (String script : scripts) {

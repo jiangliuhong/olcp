@@ -33,9 +33,7 @@ public class DataCacheRegister implements CommandLineRunner {
                 CacheNames.APP_ID,
                 CacheNames.APP_NAME,
                 CacheNames.TABLE_ID,
-                CacheNames.TABLE_NAME,
-                CacheNames.SERVICE_ID,
-                CacheNames.SERVICE_NAME
+                CacheNames.TABLE_NAME
         );
         this.initAppCache();
         this.initTableCache();

@@ -12,10 +12,10 @@ import top.jiangliuhong.olcp.common.consts.TableFieldNameConst;
 import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.TableDO;
 import top.jiangliuhong.olcp.data.bean.TableFieldDO;
-import top.jiangliuhong.olcp.data.bean.po.AppPO;
 import top.jiangliuhong.olcp.data.bean.po.TableFieldPO;
 import top.jiangliuhong.olcp.data.bean.po.TableFieldUpdateResPO;
 import top.jiangliuhong.olcp.data.bean.po.TablePO;
+import top.jiangliuhong.olcp.data.component.SysAppCache;
 import top.jiangliuhong.olcp.data.config.properties.SystemTableProperties;
 import top.jiangliuhong.olcp.data.consts.CacheNames;
 import top.jiangliuhong.olcp.data.dao.TableRepository;
@@ -85,10 +85,11 @@ public class TableService {
             throw new TableException("请传入表格ID");
         }
         SysAppCache appCache = new SysAppCache(table.getAppId());
-        if(!appCache.tableExist(table.getName())){
-
+        TablePO tableByCache = appCache.getTable(table.getName());
+        if (tableByCache == null) {
+            throw new TableException("请传入正确的表格名称");
         }
-        if (!CacheUtils.exist(CacheNames.TABLE_ID, table.getId())) {
+        if (StringUtils.equals(table.getId(), tableByCache.getId())) {
             throw new TableException("请传入正确的表格ID");
         }
         // update table
@@ -152,13 +153,6 @@ public class TableService {
     public void saveCache(TablePO table) {
         SysAppCache appCache = new SysAppCache(table.getAppId());
         appCache.saveTable(table);
-//        AppPO app = CacheUtils.getCacheValue(CacheNames.APP_ID, table.getAppId());
-//        if (app == null) {
-//            log.error("table cache error:table[" + table.getName() + "] appId[" + table.getAppId() + "] is not exist");
-//            return;
-//        }
-//        CacheUtils.putCacheValue(CacheNames.TABLE_ID, table.getId(), table);
-//        CacheUtils.putCacheValue(CacheNames.TABLE_NAME, app.getName() + "." + table.getName(), table.getId());
     }
 
 }
