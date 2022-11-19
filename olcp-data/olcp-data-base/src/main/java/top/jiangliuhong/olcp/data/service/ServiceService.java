@@ -2,7 +2,7 @@ package top.jiangliuhong.olcp.data.service;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import top.jiangliuhong.olcp.data.bean.po.ServicePO;
+import top.jiangliuhong.olcp.data.bean.po.GroovyFilePO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +11,9 @@ import java.util.List;
 @Service
 public class ServiceService {
 
-    public List<ServicePO> getAllServiceByApp(String... appIds) {
-        List<ServicePO> list = new ArrayList<>();
-        ServicePO service = new ServicePO();
+    public List<GroovyFilePO> getAllServiceByApp(String... appIds) {
+        List<GroovyFilePO> list = new ArrayList<>();
+        GroovyFilePO service = new GroovyFilePO();
         service.setAppId("test-app");
         service.setName("TestUser");
         service.setScript("package olcp.test;\n" +
@@ -30,8 +30,8 @@ public class ServiceService {
         return list;
     }
 
-    public ServicePO getService(String appName, String serviceName) {
-        ServicePO service = new ServicePO();
+    public GroovyFilePO getService(String appName, String serviceName) {
+        GroovyFilePO service = new GroovyFilePO();
         service.setAppId("test-app");
         service.setName("TestUser");
         service.setScript("package olcp.test;\n" +

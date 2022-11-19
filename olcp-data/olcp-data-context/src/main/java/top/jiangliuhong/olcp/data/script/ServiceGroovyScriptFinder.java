@@ -3,7 +3,8 @@ package top.jiangliuhong.olcp.data.script;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import top.jiangliuhong.olcp.data.bean.po.ServicePO;
+import top.jiangliuhong.olcp.data.bean.po.GroovyFilePO;
+import top.jiangliuhong.olcp.data.service.GroovyFileService;
 import top.jiangliuhong.olcp.data.service.ServiceService;
 
 @Component
@@ -11,6 +12,9 @@ public class ServiceGroovyScriptFinder implements IGroovyScriptFinder {
 
     @Autowired
     private ServiceService serviceService;
+
+    @Autowired
+    private GroovyFileService groovyFileService;
 
     @Override
     public String findByClassname(String classname) {
@@ -24,7 +28,7 @@ public class ServiceGroovyScriptFinder implements IGroovyScriptFinder {
         }
         String appName = split[1];
         String serviceName = split[2];
-        ServicePO service = serviceService.getService(appName, serviceName);
+        GroovyFilePO service = serviceService.getService(appName, serviceName);
         if (service == null) {
             throw new RuntimeException("not found service class :" + classname);
         }

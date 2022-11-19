@@ -60,6 +60,9 @@ public final class BeanUtils {
     }
 
     public static <T> T copyBean(Object source, Class<T> clazz) {
+        if (source == null) {
+            return null;
+        }
         try {
             T dest = clazz.getDeclaredConstructor().newInstance();
             copyProperties(source, dest);
@@ -69,12 +72,12 @@ public final class BeanUtils {
         }
     }
 
-    public static <T> List<T> copyBean(List<?> objectes, Class<T> clazz) {
+    public static <T> List<T> copyBean(List<?> objects, Class<T> clazz) {
         List<T> list = new ArrayList<>();
-        if (objectes == null || objectes.size() == 0) {
+        if (objects == null || objects.size() == 0) {
             return list;
         }
-        objectes.forEach(object -> list.add(copyBean(object, clazz)));
+        objects.forEach(object -> list.add(copyBean(object, clazz)));
         return list;
     }
 

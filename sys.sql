@@ -179,3 +179,18 @@ CREATE TABLE IF NOT EXISTS sys_user
     PRIMARY KEY (id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+CREATE TABLE IF NOT EXISTS sys_groovy_file
+(
+    id          varchar(32) not null,
+    name        VARCHAR(30) NOT NULL,
+    app_id      VARCHAR(32) NOT NULL,
+    folder      VARCHAR(32),
+    script      TEXT        NOT NULL,
+    create_time datetime,
+    update_time datetime,
+    create_user varchar(32),
+    update_user varchar(32),
+    PRIMARY KEY (id)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
