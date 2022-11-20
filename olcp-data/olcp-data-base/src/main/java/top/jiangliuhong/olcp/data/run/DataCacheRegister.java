@@ -53,10 +53,6 @@ public class DataCacheRegister implements CommandLineRunner {
         tables.forEach(table -> tableService.saveCache(table));
     }
 
-    private void initServiceCache() {
-
-    }
-
     private void buildSysCache(String... cacheName) {
         for (String name : cacheName) {
             CacheInfo cache = CacheInfo.builder()

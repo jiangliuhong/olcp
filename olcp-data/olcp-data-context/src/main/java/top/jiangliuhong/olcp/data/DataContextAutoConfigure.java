@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-@ComponentScan({"top.jiangliuhong.olcp.data.context", "top.jiangliuhong.olcp.data.script"})
+@ComponentScan({"top.jiangliuhong.olcp.data.service", "top.jiangliuhong.olcp.data.script"})
 @Import({GroovyConfig.class})
 public class DataContextAutoConfigure {
 
