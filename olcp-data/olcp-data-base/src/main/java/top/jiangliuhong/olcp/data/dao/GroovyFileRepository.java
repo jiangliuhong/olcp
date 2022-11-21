@@ -1,8 +1,11 @@
 package top.jiangliuhong.olcp.data.dao;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import top.jiangliuhong.olcp.data.bean.GroovyFileDO;
+
+import java.util.List;
 
 @Repository
 public interface GroovyFileRepository extends CrudRepository<GroovyFileDO, String> {
@@ -26,4 +29,7 @@ public interface GroovyFileRepository extends CrudRepository<GroovyFileDO, Strin
      * @return 大于等于1 ： 存在，小于1 ：不存在
      */
     public Integer countByAppIdAndFolderAndName(String appId, String folder, String name);
+
+    @Query("select g.folder,g.name,g.appId from GroovyFileDO g where g.appId in ?1")
+    public List<GroovyFileDO> findFolderNameByAppId(String[] appIds);
 }

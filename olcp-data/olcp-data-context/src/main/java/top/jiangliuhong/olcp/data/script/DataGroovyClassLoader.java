@@ -4,7 +4,7 @@ import groovy.lang.GroovyClassLoader;
 
 public class DataGroovyClassLoader extends GroovyClassLoader {
 
-    private IGroovyScriptFinder finder;
+    private final IGroovyScriptFinder finder;
 
     public DataGroovyClassLoader(ClassLoader loader, IGroovyScriptFinder finder) {
         super(loader);

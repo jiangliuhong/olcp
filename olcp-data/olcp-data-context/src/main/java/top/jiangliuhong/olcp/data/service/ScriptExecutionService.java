@@ -4,7 +4,7 @@ import groovy.lang.GroovyClassLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.jiangliuhong.olcp.data.script.DataGroovyClassLoader;
-import top.jiangliuhong.olcp.data.script.ServiceGroovyScriptFinder;
+import top.jiangliuhong.olcp.data.script.GroovyScriptFinder;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
@@ -14,13 +14,13 @@ import java.util.Map;
 public class ScriptExecutionService {
 
     @Autowired
-    private ServiceGroovyScriptFinder serviceGroovyScriptFinder;
+    private GroovyScriptFinder groovyScriptFinder;
 
     private GroovyClassLoader groovyClassLoader;
 
     @PostConstruct
     public void init() {
-        this.groovyClassLoader = new DataGroovyClassLoader(Thread.currentThread().getContextClassLoader(), serviceGroovyScriptFinder);
+        this.groovyClassLoader = new DataGroovyClassLoader(Thread.currentThread().getContextClassLoader(), groovyScriptFinder);
     }
 
     public Object executeService(String classname, String method, Map<String, Object> param) {

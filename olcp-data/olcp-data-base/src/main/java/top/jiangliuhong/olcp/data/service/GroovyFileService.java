@@ -15,7 +15,7 @@ import top.jiangliuhong.olcp.data.dao.GroovyFileRepository;
 import top.jiangliuhong.olcp.data.event.GroovyFileChangeEvent;
 import top.jiangliuhong.olcp.data.exception.AppException;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class GroovyFileService {
@@ -33,14 +33,18 @@ public class GroovyFileService {
         if (StringUtils.isBlank(file.getScript())) {
             throw new BusinessException("文件内容不能为空");
         }
-        int count = groovyFileRepository.countByAppIdAndFolderAndName(file.getAppId(), file.getFolder(), file.getName());
-        if (count >= 1) {
-            throw new BusinessException("文件" + file.getFolder() + "." + file.getName() + "已存在");
+        if (StringUtils.isBlank(file.getFolder())) {
+            throw new BusinessException("文件目录不能为空");
         }
-        GroovyFileDO groovyFileDO = BeanUtils.copyBean(file, GroovyFileDO.class);
-        if (!CacheUtils.exist(CacheNames.APP_ID, file.getAppId())) {
+        checkFileExist(file);
+        AppPO app = CacheUtils.getCacheValue(CacheNames.APP_ID, file.getAppId());
+        if (app == null) {
             throw new AppException("app id is wrong:" + file.getAppId());
         }
+//        if (!file.getFolder().startsWith(app.getName() + ".")) {
+//            file.setFolder(app.getName() + "." + file.getFolder());
+//        }
+        GroovyFileDO groovyFileDO = BeanUtils.copyBean(file, GroovyFileDO.class);
         groovyFileRepository.save(groovyFileDO);
         file.setId(groovyFileDO.getId());
     }
@@ -55,6 +59,9 @@ public class GroovyFileService {
         if (StringUtils.isBlank(file.getScript())) {
             throw new BusinessException("文件内容不能为空");
         }
+        if (StringUtils.isBlank(file.getFolder())) {
+            throw new BusinessException("文件目录不能为空");
+        }
         Optional<GroovyFileDO> optional = groovyFileRepository.findById(file.getId());
         if (optional.isEmpty()) {
             throw new BusinessException("请传入正确的ID");
@@ -62,12 +69,10 @@ public class GroovyFileService {
         GroovyFileDO groovyFileDO = optional.get();
         if (!StringUtils.equals(groovyFileDO.getName(), file.getName())
                 || !StringUtils.equals(groovyFileDO.getFolder(), file.getFolder())) {
-            int count = groovyFileRepository.countByAppIdAndFolderAndName(file.getAppId(), file.getFolder(), file.getName());
-            if (count >= 1) {
-                String folder = StringUtils.isBlank(file.getFolder()) ? "" : file.getFolder() + ".";
-                throw new BusinessException("文件" + folder + file.getName() + "已存在");
-            }
+            checkFileExist(file);
         }
+        String oldFolder = groovyFileDO.getFolder();
+        String oldName = groovyFileDO.getName();
         BeanUtils.copyNotNullProperties(file, groovyFileDO, "appId");
         groovyFileDO.setName(file.getName());
         groovyFileDO.setFolder(file.getFolder());
@@ -76,11 +81,13 @@ public class GroovyFileService {
         }
         groovyFileRepository.save(groovyFileDO);
         AppPO appPO = CacheUtils.getCacheValue(CacheNames.APP_ID, groovyFileDO.getAppId());
-        this.applicationEventPublisher.publishEvent(
-                new GroovyFileChangeEvent(this, appPO.getName(),
-                        groovyFileDO.getFolder(),
-                        groovyFileDO.getName())
-        );
+        GroovyFileChangeEvent event = GroovyFileChangeEvent.builder()
+                .source(this)
+                .appName(appPO.getName())
+                .file(groovyFileDO.getFolder(), groovyFileDO.getName())
+                .oldFile(oldFolder, oldName)
+                .build();
+        this.applicationEventPublisher.publishEvent(event);
     }
 
     public GroovyFilePO get(String appName, String folder, String name) {
@@ -92,4 +99,32 @@ public class GroovyFileService {
         return BeanUtils.copyBean(file, GroovyFilePO.class);
     }
 
+    public Map<String, List<String>> getFileName(String... appIds) {
+        Map<String, List<String>> res = new HashMap<>();
+        if (appIds.length == 0) {
+            return res;
+        }
+        List<GroovyFileDO> files = groovyFileRepository.findFolderNameByAppId(appIds);
+        if (files != null && files.size() > 0) {
+            files.forEach(file -> {
+                AppPO app = CacheUtils.getCacheValue(CacheNames.APP_ID, file.getAppId());
+                String appName = app.getName();
+                if (!res.containsKey(appName)) {
+                    res.put(appName, new ArrayList<>());
+                }
+                List<String> strings = res.get(appName);
+                String fileName = (StringUtils.isBlank(file.getFolder()) ? "" : file.getFolder() + ".") + file.getName();
+                strings.add(fileName);
+            });
+        }
+        return res;
+    }
+
+    private void checkFileExist(GroovyFilePO file) {
+        int count = groovyFileRepository.countByAppIdAndFolderAndName(file.getAppId(), file.getFolder(), file.getName());
+        if (count >= 1) {
+            String folder = StringUtils.isBlank(file.getFolder()) ? "" : file.getFolder() + ".";
+            throw new BusinessException("文件" + folder + file.getName() + "已存在");
+        }
+    }
 }
