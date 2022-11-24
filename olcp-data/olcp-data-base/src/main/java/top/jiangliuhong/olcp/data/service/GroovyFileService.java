@@ -47,6 +47,7 @@ public class GroovyFileService {
         GroovyFileDO groovyFileDO = BeanUtils.copyBean(file, GroovyFileDO.class);
         groovyFileRepository.save(groovyFileDO);
         file.setId(groovyFileDO.getId());
+        this.saveCache(file);
     }
 
     public void update(GroovyFilePO file) {
@@ -67,8 +68,9 @@ public class GroovyFileService {
             throw new BusinessException("请传入正确的ID");
         }
         GroovyFileDO groovyFileDO = optional.get();
-        if (!StringUtils.equals(groovyFileDO.getName(), file.getName())
-                || !StringUtils.equals(groovyFileDO.getFolder(), file.getFolder())) {
+        boolean nameChange = !StringUtils.equals(groovyFileDO.getName(), file.getName())
+                || !StringUtils.equals(groovyFileDO.getFolder(), file.getFolder());
+        if (nameChange) {
             checkFileExist(file);
         }
         String oldFolder = groovyFileDO.getFolder();
@@ -87,6 +89,10 @@ public class GroovyFileService {
                 .file(groovyFileDO.getFolder(), groovyFileDO.getName())
                 .oldFile(oldFolder, oldName)
                 .build();
+        if (nameChange) {
+            this.deleteCache(oldFolder, oldName);
+        }
+        this.saveCache(file);
         this.applicationEventPublisher.publishEvent(event);
     }
 
@@ -98,6 +104,22 @@ public class GroovyFileService {
         GroovyFileDO file = groovyFileRepository.findByAppIdAndFolderAndName(appId, folder, name);
         return BeanUtils.copyBean(file, GroovyFilePO.class);
     }
+
+    public List<GroovyFilePO> getFiles(String... appIds) {
+        List<GroovyFileDO> files = groovyFileRepository.findAllByAppIdIn(appIds);
+        return BeanUtils.copyBean(files, GroovyFilePO.class);
+    }
+
+    public void saveCache(GroovyFilePO file) {
+        String fileName = file.getFolder() + "." + file.getName();
+        CacheUtils.putCacheValue(CacheNames.GROOVY_FILE, fileName, file.getScript());
+    }
+
+    public void deleteCache(String folder, String name) {
+        String fileName = folder + "." + name;
+        CacheUtils.remove(CacheNames.GROOVY_FILE, fileName);
+    }
+
 
     public Map<String, List<String>> getFileName(String... appIds) {
         Map<String, List<String>> res = new HashMap<>();

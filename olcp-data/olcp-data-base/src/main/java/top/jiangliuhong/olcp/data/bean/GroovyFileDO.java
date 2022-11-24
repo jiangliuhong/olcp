@@ -16,4 +16,20 @@ public class GroovyFileDO extends BaseDO {
     private String folder;
     private String script;
     private String appId;
+
+    public GroovyFileDO() {
+    }
+
+    public GroovyFileDO(String name, String folder, String appId) {
+        this.name = name;
+        this.folder = folder;
+        this.appId = appId;
+    }
+
+    public GroovyFileDO(String name, String folder, String script, String appId) {
+        this.name = name;
+        this.folder = folder;
+        this.script = script;
+        this.appId = appId;
+    }
 }

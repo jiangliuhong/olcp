@@ -8,9 +8,11 @@ import top.jiangliuhong.olcp.common.cache.CacheContext;
 import top.jiangliuhong.olcp.common.cache.consts.CacheFactoryNames;
 import top.jiangliuhong.olcp.common.cache.properties.CacheInfo;
 import top.jiangliuhong.olcp.data.bean.AppDO;
+import top.jiangliuhong.olcp.data.bean.po.GroovyFilePO;
 import top.jiangliuhong.olcp.data.bean.po.TablePO;
 import top.jiangliuhong.olcp.data.consts.CacheNames;
 import top.jiangliuhong.olcp.data.service.AppService;
+import top.jiangliuhong.olcp.data.service.GroovyFileService;
 import top.jiangliuhong.olcp.data.service.TableService;
 
 import java.util.List;
@@ -25,6 +27,8 @@ public class DataCacheRegister implements CommandLineRunner {
     private AppService appService;
     @Autowired
     private TableService tableService;
+    @Autowired
+    private GroovyFileService groovyFileService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -33,10 +37,13 @@ public class DataCacheRegister implements CommandLineRunner {
                 CacheNames.APP_ID,
                 CacheNames.APP_NAME,
                 CacheNames.TABLE_ID,
-                CacheNames.TABLE_NAME
+                CacheNames.TABLE_NAME,
+                CacheNames.GROOVY_FILE
         );
         this.initAppCache();
-        this.initTableCache();
+        String[] serverAppIds = appService.getServerAppIds();
+        this.initTableCache(serverAppIds);
+        this.initGroovyFileCache(serverAppIds);
         log.info("end load data base cache");
     }
 
@@ -47,8 +54,7 @@ public class DataCacheRegister implements CommandLineRunner {
         }
     }
 
-    private void initTableCache() {
-        String[] serverAppIds = appService.getServerAppIds();
+    private void initTableCache(String[] serverAppIds) {
         List<TablePO> tables = tableService.getAllTableByApp(serverAppIds);
         tables.forEach(table -> tableService.saveCache(table));
     }
@@ -61,5 +67,10 @@ public class DataCacheRegister implements CommandLineRunner {
                     .build();
             cacheContext.addCache(cache);
         }
+    }
+
+    private void initGroovyFileCache(String[] serverAppIds) {
+        List<GroovyFilePO> files = groovyFileService.getFiles(serverAppIds);
+        files.forEach(file -> groovyFileService.saveCache(file));
     }
 }

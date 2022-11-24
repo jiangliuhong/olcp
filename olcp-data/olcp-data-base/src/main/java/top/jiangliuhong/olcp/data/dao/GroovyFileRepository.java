@@ -30,6 +30,8 @@ public interface GroovyFileRepository extends CrudRepository<GroovyFileDO, Strin
      */
     public Integer countByAppIdAndFolderAndName(String appId, String folder, String name);
 
-    @Query("select g.folder,g.name,g.appId from GroovyFileDO g where g.appId in ?1")
+    public List<GroovyFileDO> findAllByAppIdIn(String[] appIds);
+
+    @Query("select  new GroovyFileDO(g.name,g.folder,g.appId) from GroovyFileDO g where g.appId in (?1)")
     public List<GroovyFileDO> findFolderNameByAppId(String[] appIds);
 }

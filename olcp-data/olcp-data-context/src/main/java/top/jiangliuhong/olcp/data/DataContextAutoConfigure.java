@@ -8,15 +8,25 @@ import org.codehaus.groovy.control.CompilerConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import top.jiangliuhong.olcp.data.run.GroovyFileRunner;
 import top.jiangliuhong.olcp.data.script.DataGroovyClassLoader;
 import top.jiangliuhong.olcp.data.config.GroovyConfig;
+import top.jiangliuhong.olcp.data.script.GroovyScriptFinder;
+import top.jiangliuhong.olcp.data.script.ScriptExecution;
+import top.jiangliuhong.olcp.data.script.ScriptRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-@ComponentScan({"top.jiangliuhong.olcp.data.service", "top.jiangliuhong.olcp.data.script"})
-@Import({GroovyConfig.class})
+@ComponentScan({"top.jiangliuhong.olcp.data.service"})
+@Import({
+        GroovyConfig.class,
+        GroovyFileRunner.class,
+        GroovyScriptFinder.class,
+        ScriptRunner.class,
+        ScriptExecution.class
+})
 public class DataContextAutoConfigure {
 
     public static void main(String[] args) {

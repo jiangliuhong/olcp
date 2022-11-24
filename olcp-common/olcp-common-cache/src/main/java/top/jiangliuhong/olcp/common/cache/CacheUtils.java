@@ -43,4 +43,9 @@ public final class CacheUtils {
         ICache<K, Object> cache = getCache(cacheName);
         return cache.keys();
     }
+
+    public static <K> void remove(String cacheName, K k) {
+        ICache<K, Object> cache = getCache(cacheName);
+        cache.remove(k);
+    }
 }

@@ -9,6 +9,7 @@ public enum ApiResultStatus implements IApiResultStatus {
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
     UNAUTHORIZED(401, "认证异常"),
     FORBIDDEN(403, "没有权限"),
+    NOTFOUND(404, "没有找到"),
     ;
     private final Integer code;
     private final String message;

@@ -4,11 +4,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import top.jiangliuhong.olcp.data.bean.GroovyFileDO;
 import top.jiangliuhong.olcp.data.bean.GroovyFileVO;
-import top.jiangliuhong.olcp.data.bean.ServiceExecuteVO;
 import top.jiangliuhong.olcp.data.service.GroovyFileService;
-import top.jiangliuhong.olcp.data.service.ScriptExecutionService;
 
 import java.util.Base64;
 
@@ -19,9 +16,6 @@ public class GroovyFileApi {
 
     @Autowired
     private GroovyFileService fileService;
-
-    @Autowired
-    private ScriptExecutionService scriptExecutionService;
 
 
     @PostMapping
@@ -44,12 +38,4 @@ public class GroovyFileApi {
         }
     }
 
-    @PostMapping("/exec")
-    public Object executeService(@RequestBody ServiceExecuteVO serviceExecuteVO) {
-        Object res = scriptExecutionService.executeService(
-                serviceExecuteVO.getClassname(),
-                serviceExecuteVO.getMethod(),
-                serviceExecuteVO.getParameters());
-        return res;
-    }
 }

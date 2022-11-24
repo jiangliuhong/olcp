@@ -1,10 +1,18 @@
-package olcp.test;
+package test;
 
-class TestUser {
-    def getUserInfo(Map<String, Object> params) {
+import olcp.annotation.Api;
+import olcp.annotation.Post;
+import olcp.function.AbstractApi;
+
+@Api
+class TestUser extends AbstractApi {
+
+    @Post("test")
+    def getUserInfo() {
         def info = [:]
         info.put("id", "1");
         info.put("name", "test");
         return info
     }
+
 }
