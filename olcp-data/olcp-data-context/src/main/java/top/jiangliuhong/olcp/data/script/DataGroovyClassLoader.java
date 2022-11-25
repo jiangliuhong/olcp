@@ -55,11 +55,18 @@ public class DataGroovyClassLoader extends GroovyClassLoader {
     }
 
     private void loadClassCache() {
-        this.classCache.put("olcp.annotation.Api", top.jiangliuhong.olcp.data.script.annotation.Api.class);
-        this.classCache.put("olcp.annotation.Post", top.jiangliuhong.olcp.data.script.annotation.Post.class);
-        this.classCache.put("olcp.annotation.Put", top.jiangliuhong.olcp.data.script.annotation.Put.class);
-        this.classCache.put("olcp.annotation.Get", top.jiangliuhong.olcp.data.script.annotation.Get.class);
-        this.classCache.put("olcp.annotation.Delete", top.jiangliuhong.olcp.data.script.annotation.Delete.class);
-        this.classCache.put("olcp.function.AbstractApi", top.jiangliuhong.olcp.data.script.function.AbstractApi.class);
+        loadClassCache(top.jiangliuhong.olcp.sdk.annotation.Api.class);
+        loadClassCache(top.jiangliuhong.olcp.sdk.annotation.Post.class);
+        loadClassCache(top.jiangliuhong.olcp.sdk.annotation.Put.class);
+        loadClassCache(top.jiangliuhong.olcp.sdk.annotation.Get.class);
+        loadClassCache(top.jiangliuhong.olcp.sdk.annotation.Delete.class);
+        loadClassCache(top.jiangliuhong.olcp.sdk.function.AbstractApi.class);
+    }
+
+    private void loadClassCache(Class<?> clazz) {
+        String packageName = clazz.getPackageName();
+        this.classCache.put(packageName, clazz);
+        String simplePackageName = packageName.replace("top.jiangliuhong.olcp.sdk", "olcp.annotation");
+        this.classCache.put(simplePackageName, clazz);
     }
 }

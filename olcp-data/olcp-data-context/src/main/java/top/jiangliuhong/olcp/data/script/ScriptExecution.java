@@ -4,10 +4,11 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import top.jiangliuhong.olcp.data.script.annotation.*;
+import top.jiangliuhong.olcp.sdk.annotation.*;
+import top.jiangliuhong.olcp.data.script.context.HttpAPIContext;
 import top.jiangliuhong.olcp.data.script.exception.APIExecuteException;
 import top.jiangliuhong.olcp.data.script.exception.APINotFoundException;
-import top.jiangliuhong.olcp.data.script.function.AbstractApi;
+import top.jiangliuhong.olcp.sdk.function.AbstractApi;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class ScriptExecution {
 
     private final Map<String, String> API_MAP = new ConcurrentHashMap<>();
 
-    public Object runAPI(APIContext context) {
+    public Object runAPI(HttpAPIContext context) {
         if (StringUtils.isBlank(context.getPath())) {
             throw new APINotFoundException("api path is empty");
         }

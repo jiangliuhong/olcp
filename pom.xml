@@ -9,6 +9,7 @@
         <module>olcp-common</module>
         <module>olcp-data</module>
         <module>olcp-api</module>
+        <module>olcp-example</module>
     </modules>
     <groupId>top.jiangliuhong.olcp</groupId>
     <artifactId>olcp</artifactId>
@@ -28,6 +29,8 @@
         <springdoc-openapi-ui.version>1.6.11</springdoc-openapi-ui.version>
         <swagger.version>2.2.2</swagger.version>
         <jwt.version>0.9.1</jwt.version>
+        <groovy.version>3.0.13</groovy.version>
+        <gson.version>2.9.0</gson.version>
     </properties>
 
     <dependencies>
@@ -94,6 +97,11 @@
                 <artifactId>olcp-data-api</artifactId>
                 <version>${olcp.version}</version>
             </dependency>
+            <dependency>
+                <groupId>top.jiangliuhong.olcp</groupId>
+                <artifactId>olcp-data-sdk</artifactId>
+                <version>${olcp.version}</version>
+            </dependency>
             <!-- module -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -141,6 +149,11 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
                 <version>${jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba.testable</groupId>

@@ -8,6 +8,10 @@ public class APIExecuteException extends BusinessException {
         super(message);
     }
 
+    public APIExecuteException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     public APIExecuteException(Throwable cause) {
         super(cause);
     }

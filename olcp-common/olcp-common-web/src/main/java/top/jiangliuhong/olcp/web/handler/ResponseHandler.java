@@ -41,7 +41,7 @@ public class ResponseHandler implements ResponseBodyAdvice<Object> {
         if (body instanceof ApiResult) {
             return body;
         }
-        if (returnType.getGenericParameterType().equals(String.class)) {
+        if (returnType.getGenericParameterType().equals(String.class) || body instanceof String) {
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 // 将数据包装在Result里后，再转换为json字符串响应给前端

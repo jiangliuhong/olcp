@@ -7,19 +7,29 @@
         <groupId>top.jiangliuhong.olcp</groupId>
         <version>0.1-SNAPSHOT</version>
     </parent>
-    <modules>
-        <module>olcp-data-base</module>
-        <module>olcp-data-context</module>
-        <module>olcp-data-sdk</module>
-    </modules>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>olcp-data</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>olcp-example</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>top.jiangliuhong.olcp</groupId>
+            <artifactId>olcp-data-sdk</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>groovy</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>resources</directory>
+            </resource>
+        </resources>
+    </build>
 </project>
