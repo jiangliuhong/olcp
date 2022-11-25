@@ -21,7 +21,7 @@ public abstract class AbstractApi {
         return new String(this.getRequestBody());
     }
 
-    protected Map<String, Object> getBodyMap() {
+    protected Map getBodyMap() {
         return this.getBody(Map.class);
     }
 

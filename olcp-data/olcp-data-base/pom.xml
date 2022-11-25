@@ -23,6 +23,10 @@
         </dependency>
         <dependency>
             <groupId>top.jiangliuhong.olcp</groupId>
+            <artifactId>olcp-common-auth</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>top.jiangliuhong.olcp</groupId>
             <artifactId>olcp-common-cache</artifactId>
         </dependency>
         <dependency>

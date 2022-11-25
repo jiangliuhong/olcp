@@ -1,7 +1,10 @@
 package top.jiangliuhong.olcp.data.script.context;
 
 import org.springframework.http.HttpMethod;
+import top.jiangliuhong.olcp.auth.bean.SimpleUserDO;
+import top.jiangliuhong.olcp.auth.utils.AuthUtils;
 import top.jiangliuhong.olcp.data.script.exception.APIExecuteException;
+import top.jiangliuhong.olcp.sdk.bean.User;
 import top.jiangliuhong.olcp.sdk.context.APIContext;
 
 import javax.servlet.ServletInputStream;
@@ -52,5 +55,28 @@ public class HttpAPIContext implements APIContext {
     @Override
     public String getMethod() {
         return this.httpMethod.name();
+    }
+
+    @Override
+    public String getCurrentUserId() {
+        SimpleUserDO currentUser = AuthUtils.getCurrentUser();
+        if (currentUser != null) {
+            return currentUser.getId();
+        }
+        return null;
+    }
+
+    @Override
+    public User getCurrentUser() {
+        SimpleUserDO currentUser = AuthUtils.getCurrentUser();
+        if(currentUser != null){
+            User user = new User();
+            user.setId(currentUser.getId());
+            user.setNickname(currentUser.getNickname());
+            user.setUsername(currentUser.getUsername());
+            user.setAppId(currentUser.getAppId());
+            return user;
+        }
+        return null;
     }
 }

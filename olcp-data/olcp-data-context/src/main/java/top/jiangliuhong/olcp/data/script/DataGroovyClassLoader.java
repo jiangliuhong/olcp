@@ -65,7 +65,7 @@ public class DataGroovyClassLoader extends GroovyClassLoader {
 
     private void loadClassCache(Class<?> clazz) {
         String packageName = clazz.getPackageName();
-        this.classCache.put(packageName, clazz);
+        //this.classCache.put(packageName, clazz);
         String simplePackageName = packageName.replace("top.jiangliuhong.olcp.sdk", "olcp.annotation");
         this.classCache.put(simplePackageName, clazz);
     }
