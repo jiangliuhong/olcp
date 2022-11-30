@@ -27,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>top.jiangliuhong.olcp</groupId>
-            <artifactId>olcp-data-sdk</artifactId>
+            <artifactId>olcp-data-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

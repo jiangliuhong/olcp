@@ -143,11 +143,13 @@ public class TableService {
         tableDOList.forEach(f -> tableIds.add(f.getId()));
         List<TableFieldDO> tableFields = tableFieldService.getTableFields(tableIds.toArray(new String[0]));
         Map<String, List<TableFieldDO>> tableFieldMap = tableFields.stream().collect(Collectors.groupingBy(TableFieldDO::getTableId));
+        List<TablePO> tableList = new ArrayList<>();
         tableDOList.forEach(tableDO -> {
             TablePO table = BeanUtils.copyBean(tableDO, TablePO.class);
             table.setFields(BeanUtils.copyBean(tableFieldMap.get(table.getId()), TableFieldPO.class));
+            tableList.add(table);
         });
-        return BeanUtils.copyBean(tableDOList, TablePO.class);
+        return tableList;
     }
 
     public void saveCache(TablePO table) {

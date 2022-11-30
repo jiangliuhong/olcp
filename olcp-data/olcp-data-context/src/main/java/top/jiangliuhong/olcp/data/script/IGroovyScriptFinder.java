@@ -6,4 +6,6 @@ public interface IGroovyScriptFinder {
 
     public boolean isRecompilable(String classname);
 
+    public boolean isPackageName(String classname);
+
 }

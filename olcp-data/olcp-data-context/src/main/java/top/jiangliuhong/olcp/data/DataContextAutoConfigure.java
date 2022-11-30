@@ -8,6 +8,7 @@ import org.codehaus.groovy.control.CompilerConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import top.jiangliuhong.olcp.data.context.TableExecutionContextFactoryImpl;
 import top.jiangliuhong.olcp.data.run.GroovyFileRunner;
 import top.jiangliuhong.olcp.data.script.DataGroovyClassLoader;
 import top.jiangliuhong.olcp.data.config.GroovyConfig;
@@ -25,7 +26,8 @@ import java.util.List;
         GroovyFileRunner.class,
         GroovyScriptFinder.class,
         ScriptRunner.class,
-        ScriptExecution.class
+        ScriptExecution.class,
+        TableExecutionContextFactoryImpl.class
 })
 public class DataContextAutoConfigure {
 

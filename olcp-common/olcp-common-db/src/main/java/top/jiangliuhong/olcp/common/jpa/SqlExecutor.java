@@ -1,5 +1,11 @@
 package top.jiangliuhong.olcp.common.jpa;
 
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import top.jiangliuhong.olcp.common.exception.SqlExecuteException;
+import top.jiangliuhong.olcp.common.utils.ExceptionUtils;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -27,16 +33,23 @@ public class SqlExecutor {
         return query.getResultList();
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Modifying
+    @org.springframework.data.jpa.repository.Query
     public int executeUpdate(String sql, Map<String, Object> parameters) {
-        Query query = entityManager.createQuery(sql);
-        if (parameters != null && !parameters.isEmpty()) {
-            parameters.forEach(query::setParameter);
+        try {
+            Query query = entityManager.createNativeQuery(sql);
+            if (parameters != null && !parameters.isEmpty()) {
+                parameters.forEach(query::setParameter);
+            }
+            return query.executeUpdate();
+        } catch (Exception e) {
+            throw new SqlExecuteException("执行sql异常:" + ExceptionUtils.getExceptionMessage(e), e);
         }
-        return query.executeUpdate();
     }
 
     public int executeUpdate(String sql, List<Object> parameters) {
-        Query query = entityManager.createQuery(sql);
+        Query query = entityManager.createNativeQuery(sql);
         if (parameters != null && !parameters.isEmpty()) {
             for (int i = 0; i < parameters.size(); i++) {
                 query.setParameter(i, parameters.get(i));

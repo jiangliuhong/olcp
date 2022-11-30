@@ -4,11 +4,16 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import top.jiangliuhong.olcp.sdk.annotation.*;
+import top.jiangliuhong.olcp.common.cache.CacheUtils;
+import top.jiangliuhong.olcp.common.utils.ExceptionUtils;
+import top.jiangliuhong.olcp.data.annotation.*;
+import top.jiangliuhong.olcp.data.consts.CacheNames;
+import top.jiangliuhong.olcp.data.context.AppContext;
+import top.jiangliuhong.olcp.data.context.AppContextHolder;
+import top.jiangliuhong.olcp.data.function.AbstractApi;
 import top.jiangliuhong.olcp.data.script.context.HttpAPIContext;
 import top.jiangliuhong.olcp.data.script.exception.APIExecuteException;
 import top.jiangliuhong.olcp.data.script.exception.APINotFoundException;
-import top.jiangliuhong.olcp.sdk.function.AbstractApi;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -33,15 +38,20 @@ public class ScriptExecution {
         String classname = apiValue.substring(0, index);
         String method = apiValue.substring(index + 1);
         try {
-            Class<?> clazz = ScriptRunner.getClassLoader().loadClass(classname);
+            Class<?> clazz = ScriptRunner.loadClass(classname);
+            String appName = CacheUtils.getCacheValue(CacheNames.GROOVY_FILE_APP, classname);
+            this.preHandler(appName);
             Object instance = clazz.getDeclaredConstructor().newInstance();
             if (instance instanceof AbstractApi) {
                 ((AbstractApi) instance).setContext(context);
             }
             Method declaredMethod = clazz.getDeclaredMethod(method);
-            return declaredMethod.invoke(instance);
+            Object result = declaredMethod.invoke(instance);
+            this.postHandler();
+            return result;
         } catch (Exception e) {
-            throw new APIExecuteException(e);
+            String message = ExceptionUtils.getExceptionMessage(e);
+            throw new APIExecuteException("执行API异常," + message, e);
         }
     }
 
@@ -93,5 +103,16 @@ public class ScriptExecution {
             this.API_MAP.put(key, value);
         }
     }
+
+    private void preHandler(String appName) {
+//        Thread.currentThread().
+        AppContext context = new AppContext(appName);
+        AppContextHolder.setCurrentAppContext(context);
+    }
+
+    private void postHandler() {
+        AppContextHolder.removeCurrentDataAppContext();
+    }
+
 
 }

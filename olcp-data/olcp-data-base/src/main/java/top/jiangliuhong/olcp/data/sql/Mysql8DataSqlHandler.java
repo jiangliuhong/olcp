@@ -2,11 +2,12 @@ package top.jiangliuhong.olcp.data.sql;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import top.jiangliuhong.olcp.data.bean.po.TableFieldPO;
-import top.jiangliuhong.olcp.data.bean.po.TablePO;
-import top.jiangliuhong.olcp.data.bean.proxy.FieldProxy;
-import top.jiangliuhong.olcp.data.bean.proxy.TableProxy;
+import top.jiangliuhong.olcp.common.utils.StringMap;
+import top.jiangliuhong.olcp.common.utils.StringObjectMap;
+import top.jiangliuhong.olcp.data.component.TableDefinition;
+import top.jiangliuhong.olcp.data.component.TableFieldDefinition;
 import top.jiangliuhong.olcp.data.type.EngineType;
+import top.jiangliuhong.olcp.data.utils.FieldTypeUtils;
 
 @Component
 public class Mysql8DataSqlHandler implements IDataSqlHandler {
@@ -17,12 +18,11 @@ public class Mysql8DataSqlHandler implements IDataSqlHandler {
     }
 
     @Override
-    public String createSql(TablePO tableSource) {
-        TableProxy table = new TableProxy(tableSource);
-        StringBuilder sql = new StringBuilder("CREATE TABLE ").append(table.getName()).append("(");
+    public String createSql(TableDefinition table) {
+        StringBuilder sql = new StringBuilder("CREATE TABLE ").append(table.getDbName()).append("(");
         table.eachFields(field -> {
-            sql.append(field.getName()).append(" ");
-            sql.append(field.getType()).append(" ");
+            sql.append(field.getDbName()).append(" ");
+            sql.append(field.getDbType()).append(" ");
             if (field.getSource().getRequired()) {
                 sql.append(" NOT NULL ");
             }
@@ -44,7 +44,7 @@ public class Mysql8DataSqlHandler implements IDataSqlHandler {
     }
 
     @Override
-    public String addColumn(String tableName, TableFieldPO... fieldPOS) {
+    public String addColumn(String tableName, TableFieldDefinition... fieldPOS) {
         if (StringUtils.isBlank(tableName)) {
             throw new RuntimeException("tableName is null");
         }
@@ -52,14 +52,13 @@ public class Mysql8DataSqlHandler implements IDataSqlHandler {
             throw new RuntimeException("fieldPOS is empty");
         }
         StringBuilder sqlBuilder = new StringBuilder();
-        for (TableFieldPO fieldPO : fieldPOS) {
-            FieldProxy fieldProxy = new FieldProxy(fieldPO);
+        for (TableFieldDefinition fieldPO : fieldPOS) {
             sqlBuilder.append(" ALTER TABLE ")
                     .append(tableName)
                     .append(" ADD ")
-                    .append(fieldProxy.getName())
+                    .append(fieldPO.getDbName())
                     .append(" ")
-                    .append(fieldProxy.getType());
+                    .append(fieldPO.getDbType());
         }
         return sqlBuilder.toString();
     }
@@ -84,7 +83,7 @@ public class Mysql8DataSqlHandler implements IDataSqlHandler {
     }
 
     @Override
-    public String updateColumn(String tableName, TableFieldPO... fieldPOS) {
+    public String updateColumn(String tableName, TableFieldDefinition... fieldPOS) {
         if (StringUtils.isBlank(tableName)) {
             throw new RuntimeException("tableName is null");
         }
@@ -92,17 +91,39 @@ public class Mysql8DataSqlHandler implements IDataSqlHandler {
             throw new RuntimeException("fieldPOS is empty");
         }
         StringBuilder sqlBuilder = new StringBuilder();
-        for (TableFieldPO fieldPO : fieldPOS) {
-            FieldProxy fieldProxy = new FieldProxy(fieldPO);
+        for (TableFieldDefinition fieldPO : fieldPOS) {
             sqlBuilder.append(" ALTER TABLE ")
                     .append(tableName)
                     .append(" MODIFY ")
-                    .append(fieldProxy.getName())
+                    .append(fieldPO.getDbName())
                     .append(" ")
-                    .append(fieldProxy.getType())
+                    .append(fieldPO.getDbType())
                     .append(";\n");
         }
         return sqlBuilder.toString();
     }
 
+    @Override
+    public String insertSql(TableDefinition table, StringObjectMap value) {
+        StringBuilder sqlBuilder = new StringBuilder("INSERT INTO ");
+        sqlBuilder.append(table.getDbName());
+        StringBuilder valueBuilder = new StringBuilder("(");
+        sqlBuilder.append("(");
+        table.eachFields(field -> {
+            sqlBuilder.append(field.getDbName()).append(",");
+//            Object valueString = FieldTypeUtils.transformDatabaseString(value.get(field.getName()), field.getType());
+//            if (valueString == null) {
+//                valueBuilder.append("NULL");
+//            } else {
+//                valueBuilder.append(valueString);
+//            }
+            valueBuilder.append(":").append(field.getName());
+            valueBuilder.append(",");
+        });
+        valueBuilder.deleteCharAt(valueBuilder.length() - 1);
+        valueBuilder.append(")");
+        sqlBuilder.deleteCharAt(sqlBuilder.length() - 1);
+        sqlBuilder.append(")").append(" VALUES ").append(valueBuilder);
+        return sqlBuilder.toString();
+    }
 }

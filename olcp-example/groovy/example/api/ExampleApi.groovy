@@ -1,9 +1,9 @@
 package example.api
 
-import top.jiangliuhong.olcp.sdk.annotation.Api
-import top.jiangliuhong.olcp.sdk.annotation.Get
-import top.jiangliuhong.olcp.sdk.annotation.Post
-import top.jiangliuhong.olcp.sdk.function.AbstractApi
+import top.jiangliuhong.olcp.data.annotation.Api
+import top.jiangliuhong.olcp.data.annotation.Get
+import top.jiangliuhong.olcp.data.annotation.Post
+import top.jiangliuhong.olcp.data.function.AbstractApi
 
 @Api("example")
 class ExampleApi extends AbstractApi {

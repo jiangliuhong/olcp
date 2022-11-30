@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS sys_table
 CREATE TABLE IF NOT EXISTS sys_table_field
 (
     id                 varchar(32)  not null,
-    name               VARCHAR(30)  NOT NULL unique,
+    name               VARCHAR(30)  NOT NULL,
     title              VARCHAR(200) NOT NULL,
     table_id           varchar(32)  not null,
     app_id             VARCHAR(32)  NOT NULL,

@@ -4,8 +4,8 @@ import org.springframework.http.HttpMethod;
 import top.jiangliuhong.olcp.auth.bean.SimpleUserDO;
 import top.jiangliuhong.olcp.auth.utils.AuthUtils;
 import top.jiangliuhong.olcp.data.script.exception.APIExecuteException;
-import top.jiangliuhong.olcp.sdk.bean.User;
-import top.jiangliuhong.olcp.sdk.context.APIContext;
+import top.jiangliuhong.olcp.data.bean.User;
+import top.jiangliuhong.olcp.data.context.APIContext;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;

@@ -10,7 +10,7 @@
     <modules>
         <module>olcp-data-base</module>
         <module>olcp-data-context</module>
-        <module>olcp-data-sdk</module>
+        <module>olcp-data-core</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
 

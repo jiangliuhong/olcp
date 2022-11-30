@@ -10,6 +10,7 @@ import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.GroovyFileDO;
 import top.jiangliuhong.olcp.data.bean.po.AppPO;
 import top.jiangliuhong.olcp.data.bean.po.GroovyFilePO;
+import top.jiangliuhong.olcp.data.component.SysAppCache;
 import top.jiangliuhong.olcp.data.consts.CacheNames;
 import top.jiangliuhong.olcp.data.dao.GroovyFileRepository;
 import top.jiangliuhong.olcp.data.event.GroovyFileChangeEvent;
@@ -90,7 +91,7 @@ public class GroovyFileService {
                 .oldFile(oldFolder, oldName)
                 .build();
         if (nameChange) {
-            this.deleteCache(oldFolder, oldName);
+            this.deleteCache(appPO.getId(), oldFolder, oldName);
         }
         this.saveCache(file);
         this.applicationEventPublisher.publishEvent(event);
@@ -111,13 +112,13 @@ public class GroovyFileService {
     }
 
     public void saveCache(GroovyFilePO file) {
-        String fileName = file.getFolder() + "." + file.getName();
-        CacheUtils.putCacheValue(CacheNames.GROOVY_FILE, fileName, file.getScript());
+        SysAppCache sysAppCache = new SysAppCache(file.getAppId());
+        sysAppCache.saveGroovyFile(file);
     }
 
-    public void deleteCache(String folder, String name) {
-        String fileName = folder + "." + name;
-        CacheUtils.remove(CacheNames.GROOVY_FILE, fileName);
+    public void deleteCache(String appId, String folder, String name) {
+        SysAppCache sysAppCache = new SysAppCache(appId);
+        sysAppCache.deleteGroovyFile(folder, name);
     }
 
 

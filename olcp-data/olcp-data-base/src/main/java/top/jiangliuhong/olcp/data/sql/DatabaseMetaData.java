@@ -9,8 +9,10 @@ import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.common.utils.NameUtils;
 import top.jiangliuhong.olcp.data.bean.po.TableFieldPO;
 import top.jiangliuhong.olcp.data.bean.po.TablePO;
-import top.jiangliuhong.olcp.data.bean.proxy.TableProxy;
+import top.jiangliuhong.olcp.data.component.TableDefinition;
+import top.jiangliuhong.olcp.data.component.TableFieldDefinition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,28 +30,28 @@ public class DatabaseMetaData {
         if (table == null || CollectionUtils.isEmpty(table.getFields())) {
             return;
         }
-        String createSql = dataSqlHandler.handler().createSql(table);
+        String createSql = dataSqlHandler.handler().createSql(new TableDefinition(table));
         sqlExecutor.executeDDL(createSql);
     }
 
     public void updateTable(TablePO table, List<String> deleteFields, List<TableFieldPO> updateFields, List<TableFieldPO> addFields) {
-        TableProxy tableProxy = new TableProxy(table);
+        TableDefinition tableDefinition = new TableDefinition(table);
         if (CollectionUtils.isNotEmpty(deleteFields)) {
             String[] deleted = deleteFields.toArray(new String[0]);
             for (int i = 0; i < deleted.length; i++) {
                 deleted[i] = NameUtils.camelToUnderline(deleted[i]);
             }
-            this.deleteColumn(tableProxy.getName(), deleted);
+            this.deleteColumn(tableDefinition.getDbName(), deleted);
         }
         if (CollectionUtils.isNotEmpty(updateFields)) {
             TableFieldPO[] addFieldArray = BeanUtils.copyBean(updateFields, TableFieldPO.class)
                     .toArray(new TableFieldPO[0]);
-            this.updateColumn(tableProxy.getName(), addFieldArray);
+            this.updateColumn(tableDefinition.getDbName(), addFieldArray);
         }
         if (CollectionUtils.isNotEmpty(addFields)) {
             TableFieldPO[] addFieldArray = BeanUtils.copyBean(addFields, TableFieldPO.class)
                     .toArray(new TableFieldPO[0]);
-            this.addColumn(tableProxy.getName(), addFieldArray);
+            this.addColumn(tableDefinition.getDbName(), addFieldArray);
         }
     }
 
@@ -73,7 +75,7 @@ public class DatabaseMetaData {
         if (fieldPOS == null || fieldPOS.length == 0) {
             return;
         }
-        String addColumnSql = dataSqlHandler.handler().addColumn(tableName, fieldPOS);
+        String addColumnSql = dataSqlHandler.handler().addColumn(tableName, convertFieldDefinition(fieldPOS));
         sqlExecutor.executeDDL(addColumnSql);
     }
 
@@ -86,8 +88,16 @@ public class DatabaseMetaData {
             return;
         }
 
-        String updateColumnSql = dataSqlHandler.handler().updateColumn(tableName, fieldPOS);
+        String updateColumnSql = dataSqlHandler.handler().updateColumn(tableName, convertFieldDefinition(fieldPOS));
         sqlExecutor.executeDDL(updateColumnSql);
+    }
+
+    private TableFieldDefinition[] convertFieldDefinition(TableFieldPO[] fieldPOS) {
+        List<TableFieldDefinition> list = new ArrayList<>();
+        for (TableFieldPO fieldPO : fieldPOS) {
+            list.add(new TableFieldDefinition(fieldPO));
+        }
+        return list.toArray(new TableFieldDefinition[0]);
     }
 
 }

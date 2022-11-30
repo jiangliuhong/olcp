@@ -9,6 +9,7 @@ public enum FieldType {
     Reference,
     Date,
     DateTime,
+    Timestamp,
     Script,
     Boolean,
     SysId,

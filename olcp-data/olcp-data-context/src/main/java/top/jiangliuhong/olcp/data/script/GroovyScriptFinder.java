@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 import top.jiangliuhong.olcp.common.cache.CacheUtils;
 import top.jiangliuhong.olcp.data.consts.CacheNames;
 import top.jiangliuhong.olcp.data.event.GroovyFileChangeEvent;
+import top.jiangliuhong.olcp.data.exception.GroovyScriptNotFoundException;
 
-import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,10 +15,6 @@ import java.util.Set;
 public class GroovyScriptFinder implements IGroovyScriptFinder, ApplicationListener<GroovyFileChangeEvent> {
 
     private final Set<String> needUpdate = new HashSet<>();
-
-    @PostConstruct
-    public void init() {
-    }
 
     @Override
     public void onApplicationEvent(GroovyFileChangeEvent event) {
@@ -32,9 +28,9 @@ public class GroovyScriptFinder implements IGroovyScriptFinder, ApplicationListe
         if (!this.isPackageName(classname)) {
             return null;
         }
-        String script = CacheUtils.getCacheValue(CacheNames.GROOVY_FILE, classname);
+        String script = CacheUtils.getCacheValue(CacheNames.GROOVY_FILE_SCRIPT, classname);
         if (StringUtils.isBlank(script)) {
-            throw new RuntimeException("service class script is empty:" + classname);
+            throw new GroovyScriptNotFoundException("class script is empty:" + classname);
         }
         this.needUpdate.remove(classname);
         return script;
@@ -45,8 +41,9 @@ public class GroovyScriptFinder implements IGroovyScriptFinder, ApplicationListe
         return this.isPackageName(classname) && this.needUpdate.contains(classname);
     }
 
-    private boolean isPackageName(String classname) {
-        Set<String> keys = CacheUtils.keys(CacheNames.GROOVY_FILE);
+    @Override
+    public boolean isPackageName(String classname) {
+        Set<String> keys = CacheUtils.keys(CacheNames.GROOVY_FILE_SCRIPT);
         return keys.contains(classname);
     }
 

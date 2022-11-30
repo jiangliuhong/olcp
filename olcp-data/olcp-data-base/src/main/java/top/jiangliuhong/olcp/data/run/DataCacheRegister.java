@@ -38,7 +38,8 @@ public class DataCacheRegister implements CommandLineRunner {
                 CacheNames.APP_NAME,
                 CacheNames.TABLE_ID,
                 CacheNames.TABLE_NAME,
-                CacheNames.GROOVY_FILE
+                CacheNames.GROOVY_FILE_APP,
+                CacheNames.GROOVY_FILE_SCRIPT
         );
         this.initAppCache();
         String[] serverAppIds = appService.getServerAppIds();

@@ -38,8 +38,8 @@ public class GroovyFileRunner implements CommandLineRunner {
      */
     private void loadClass(String appName, String classname) {
         try {
-            Class<?> clazz = ScriptRunner.getClassLoader().loadClass(classname);
-            executionService.loadAPI(appName,clazz);
+            Class<?> clazz = ScriptRunner.loadClass(classname);
+            executionService.loadAPI(appName, clazz);
         } catch (ClassNotFoundException e) {
             log.error("load class error,class[" + classname + "] not found", e);
         }

@@ -3,6 +3,7 @@ package top.jiangliuhong.olcp.data.component;
 import org.apache.commons.lang3.StringUtils;
 import top.jiangliuhong.olcp.common.cache.CacheUtils;
 import top.jiangliuhong.olcp.data.bean.po.AppPO;
+import top.jiangliuhong.olcp.data.bean.po.GroovyFilePO;
 import top.jiangliuhong.olcp.data.bean.po.TablePO;
 import top.jiangliuhong.olcp.data.consts.CacheNames;
 
@@ -50,4 +51,17 @@ public class SysAppCache {
     private String getAppModuleKeyName(String appName, String moduleName) {
         return appName + "." + moduleName;
     }
+
+    public void saveGroovyFile(GroovyFilePO file) {
+        String fileName = file.getFolder() + "." + file.getName();
+        CacheUtils.putCacheValue(CacheNames.GROOVY_FILE_SCRIPT, fileName, file.getScript());
+        CacheUtils.putCacheValue(CacheNames.GROOVY_FILE_APP, fileName, app.getName());
+    }
+
+    public void deleteGroovyFile(String folder, String name) {
+        String fileName = folder + "." + name;
+        CacheUtils.remove(CacheNames.GROOVY_FILE_SCRIPT, fileName);
+        CacheUtils.remove(CacheNames.GROOVY_FILE_APP, fileName);
+    }
+
 }

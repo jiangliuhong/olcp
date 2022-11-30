@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>top.jiangliuhong.olcp</groupId>
-            <artifactId>olcp-data-sdk</artifactId>
+            <artifactId>olcp-data-core</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

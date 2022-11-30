@@ -18,5 +18,4 @@ public class TablePO {
     private EngineType engineType = EngineType.InnoDB;
     private String defaultCharset = "utf8";
     private List<TableFieldPO> fields;
-
 }
