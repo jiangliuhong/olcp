@@ -22,10 +22,7 @@ import top.jiangliuhong.olcp.data.dao.TableRepository;
 import top.jiangliuhong.olcp.data.exception.TableException;
 import top.jiangliuhong.olcp.data.sql.DatabaseMetaData;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -146,7 +143,11 @@ public class TableService {
         List<TablePO> tableList = new ArrayList<>();
         tableDOList.forEach(tableDO -> {
             TablePO table = BeanUtils.copyBean(tableDO, TablePO.class);
-            table.setFields(BeanUtils.copyBean(tableFieldMap.get(table.getId()), TableFieldPO.class));
+            List<TableFieldDO> fields = tableFieldMap.get(table.getId());
+            if (fields != null) {
+                fields.sort(Comparator.comparingInt(TableFieldDO::getSn));
+            }
+            table.setFields(BeanUtils.copyBean(fields, TableFieldPO.class));
             tableList.add(table);
         });
         return tableList;
