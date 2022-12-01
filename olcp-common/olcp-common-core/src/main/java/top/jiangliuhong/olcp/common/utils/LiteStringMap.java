@@ -1,9 +1,14 @@
 package top.jiangliuhong.olcp.common.utils;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class LiteStringMap<V> implements Map<String, V> {
+/**
+ * 使用数组实现的有序的map
+ */
+public class LiteStringMap<V> implements Map<String, V>, Serializable {
 
+    private static final long serialVersionUID = 362498820763181265L;
     private static final int DEFAULT_CAPACITY = 8;
     private static final Map<String, String> internedMap = new HashMap<>();
 
@@ -590,7 +595,8 @@ public class LiteStringMap<V> implements Map<String, V> {
 
         @Override
         public V[] toArray() {
-            throw new UnsupportedOperationException("Entry Set to array not supported");
+            //throw new UnsupportedOperationException("Entry Set to array not supported");
+            return Arrays.copyOf(lsm.valueArray, lsm.lastIndex + 1);
         }
 
         @Override
