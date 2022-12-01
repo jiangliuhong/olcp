@@ -13,23 +13,26 @@ import java.util.List;
 @Log4j2
 public class TableExecutionContext {
 
-    private final SqlExecutor sqlExecutor;
-    private final DataSqlHandler dataSqlHandler;
+    private final TableExecutionContextFactoryImpl factory;
 
-    public TableExecutionContext(SqlExecutor sqlExecutor, DataSqlHandler dataSqlHandler) {
-        this.sqlExecutor = sqlExecutor;
-        this.dataSqlHandler = dataSqlHandler;
+    public TableExecutionContext(TableExecutionContextFactoryImpl factory) {
+        this.factory = factory;
     }
 
     public StringObjectMap create(TableDefinition tableDefinition, StringObjectMap values) {
         // TODO 公共字段维护,Table操作拦截器
-        String insertSql = this.dataSqlHandler.handler().insertSql(tableDefinition, values);
+        List<TableExecutionInterceptor> interceptorList = this.factory.getInterceptorList();
+        if (interceptorList != null) {
+            interceptorList.forEach(interceptor -> {
+                interceptor.preCreate(tableDefinition, values);
+            });
+        }
+        String insertSql = this.factory.getDataSqlHandler().handler().insertSql(tableDefinition, values);
         LiteStringMap<Object> liteStringMap = new LiteStringMap<>();
         tableDefinition.eachFields(field -> {
             liteStringMap.put(field.getName(), values.get(field.getName()));
         });
-        // TODO liteStringMap 预览异常
-        this.sqlExecutor.executeUpdate(insertSql, liteStringMap);
+        this.factory.getSqlExecutor().executeUpdate(insertSql, liteStringMap);
         return values;
     }
 

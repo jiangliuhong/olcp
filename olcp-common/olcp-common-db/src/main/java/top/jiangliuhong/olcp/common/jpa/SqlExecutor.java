@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import top.jiangliuhong.olcp.common.exception.SqlExecuteException;
 import top.jiangliuhong.olcp.common.utils.ExceptionUtils;
+import top.jiangliuhong.olcp.common.utils.LiteStringMap;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -36,7 +37,7 @@ public class SqlExecutor {
     @Transactional(propagation = Propagation.REQUIRED)
     @Modifying
     @org.springframework.data.jpa.repository.Query
-    public int executeUpdate(String sql, Map<String, Object> parameters) {
+    public int executeUpdate(String sql, LiteStringMap<Object> parameters) {
         try {
             Query query = entityManager.createNativeQuery(sql);
             if (parameters != null && !parameters.isEmpty()) {
@@ -48,14 +49,38 @@ public class SqlExecutor {
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Modifying
+    @org.springframework.data.jpa.repository.Query
     public int executeUpdate(String sql, List<Object> parameters) {
-        Query query = entityManager.createNativeQuery(sql);
-        if (parameters != null && !parameters.isEmpty()) {
-            for (int i = 0; i < parameters.size(); i++) {
-                query.setParameter(i, parameters.get(i));
+        try {
+            Query query = entityManager.createNativeQuery(sql);
+            if (parameters != null && !parameters.isEmpty()) {
+                for (int i = 0; i < parameters.size(); i++) {
+                    query.setParameter(i, parameters.get(i));
+                }
             }
+            return query.executeUpdate();
+        } catch (Exception e) {
+            throw new SqlExecuteException("执行sql异常:" + ExceptionUtils.getExceptionMessage(e), e);
         }
-        return query.executeUpdate();
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Modifying
+    @org.springframework.data.jpa.repository.Query
+    public int executeUpdate(String sql, Object... parameters) {
+        try {
+            Query query = entityManager.createNativeQuery(sql);
+            if (parameters != null && parameters.length > 0) {
+                for (int i = 0; i < parameters.length; i++) {
+                    query.setParameter(i, parameters[i]);
+                }
+            }
+            return query.executeUpdate();
+        } catch (Exception e) {
+            throw new SqlExecuteException("执行sql异常:" + ExceptionUtils.getExceptionMessage(e), e);
+        }
     }
 
 }

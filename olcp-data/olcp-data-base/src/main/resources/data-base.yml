@@ -31,11 +31,11 @@ olcp:
             sn: 0
           - name: createTime
             title: 创建时间
-            type: DateTime
+            type: Timestamp
             sn: 1001
           - name: updateTime
             title: 修改时间
-            type: DateTime
+            type: Timestamp
             sn: 1002
           - name: createUser
             title: 创建人

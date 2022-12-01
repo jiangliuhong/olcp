@@ -71,9 +71,9 @@ public class TableService {
         // TODO 关系
         // TODO 创建默认列表
         // TODO 创建默认表单
-        this.saveCache(table);
         // 创建表
         databaseMetaData.createTable(table);
+        this.saveCache(table);
     }
 
     @Transactional
@@ -105,10 +105,10 @@ public class TableService {
         table.getFields().addAll(createFields);
         // TODO 索引
         // TODO 关系
-        this.saveCache(table);
         // 修改表结构
         List<TableFieldPO> updateForDDLFields = BeanUtils.copyBean(res.getUpdateForDDL(), TableFieldPO.class);
         databaseMetaData.updateTable(table, res.getDeletes(), updateForDDLFields, createFields);
+        this.saveCache(table);
     }
 
     public TablePO getTableInfo(String id) {

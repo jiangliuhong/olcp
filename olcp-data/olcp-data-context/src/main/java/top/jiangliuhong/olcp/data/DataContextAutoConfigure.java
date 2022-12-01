@@ -20,14 +20,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-@ComponentScan({"top.jiangliuhong.olcp.data.service"})
+@ComponentScan({
+        "top.jiangliuhong.olcp.data.service",
+        "top.jiangliuhong.olcp.data.context"}
+)
 @Import({
         GroovyConfig.class,
         GroovyFileRunner.class,
         GroovyScriptFinder.class,
         ScriptRunner.class,
         ScriptExecution.class,
-        TableExecutionContextFactoryImpl.class
 })
 public class DataContextAutoConfigure {
 

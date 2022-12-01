@@ -1,5 +1,6 @@
 package top.jiangliuhong.olcp.data.component;
 
+import org.apache.commons.lang3.StringUtils;
 import top.jiangliuhong.olcp.common.cache.CacheUtils;
 import top.jiangliuhong.olcp.common.utils.NameUtils;
 import top.jiangliuhong.olcp.data.bean.po.AppPO;
@@ -50,5 +51,14 @@ public class TableDefinition {
     public String getPrimaryFieldName() {
         // 默认所有主键都是id
         return "id";
+    }
+
+    public Boolean hasField(String fieldName) {
+        for (TableFieldPO field : this.source.getFields()) {
+            if (StringUtils.equals(fieldName, field.getName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -14,7 +14,7 @@ class EntityApi extends AbstractApi {
                 .value("exampleTest")
                 .set("testString", "123")
                 .set("testInt", 123)
-                .genId().create()
+                .create()
         return value;
     }
 }
