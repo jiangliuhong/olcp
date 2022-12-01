@@ -40,7 +40,11 @@ public class TableEntityImpl implements TableEntity {
 
     @Override
     public EntityFind find(String tableName) {
-        return null;
+        TablePO table = this.appCache.getTable(tableName);
+        if (table == null) {
+            throw new TableNotFoundException("未找到" + tableName);
+        }
+        return new TableEntityFindImpl(table,this,executionContext);
     }
 
 

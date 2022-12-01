@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface EntityFind {
 
-    EntityFind entity(String name);
+    EntityValue getByPrimary(Object primaryValue);
 
     EntityFind condition(String fieldName, Object value);
 
@@ -53,4 +53,6 @@ public interface EntityFind {
     int getPageIndex();
 
     int getPageSize();
+
+    EntityList query();
 }

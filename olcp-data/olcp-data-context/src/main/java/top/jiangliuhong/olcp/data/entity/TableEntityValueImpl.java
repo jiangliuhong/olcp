@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Log4j2
-public class TableEntityValueImpl implements TableEntityValue {
+public class TableEntityValueImpl implements EntityValue {
 
     private final TableDefinition table;
     private final StringObjectMap valueMapInternal;
@@ -31,11 +31,6 @@ public class TableEntityValueImpl implements TableEntityValue {
     public EntityValue genId() {
         this.put(this.table.getPrimaryFieldName(), IdUtils.generate());
         return this;
-    }
-
-    @Override
-    public String getAppName() {
-        return this.tableEntity.getAppName();
     }
 
     @Override
