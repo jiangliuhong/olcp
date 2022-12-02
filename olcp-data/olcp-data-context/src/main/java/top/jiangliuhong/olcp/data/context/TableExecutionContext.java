@@ -1,12 +1,10 @@
 package top.jiangliuhong.olcp.data.context;
 
 import lombok.extern.log4j.Log4j2;
-import top.jiangliuhong.olcp.common.jpa.SqlExecutor;
 import top.jiangliuhong.olcp.common.utils.LiteStringMap;
 import top.jiangliuhong.olcp.common.utils.StringObjectMap;
 import top.jiangliuhong.olcp.data.component.TableDefinition;
 import top.jiangliuhong.olcp.data.entity.EntityCondition;
-import top.jiangliuhong.olcp.data.sql.DataSqlHandler;
 
 import java.util.List;
 
