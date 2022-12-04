@@ -22,9 +22,17 @@ class EntityApi extends AbstractApi {
         return value;
     }
 
-    @Get("queryById")
+    @Get("/queryById")
     def queryEntityById() {
         def id = getParameter("id")
-        Context.table.find(tableName)
+        def entityValue = Context.table.find(tableName).get(id)
+        return entityValue.getMap()
+    }
+
+    @Get("/queryByCon")
+    def queryEntityByCon() {
+        def ef = Context.table.find(tableName)
+        def list = ef.condition([testInt: 123]).query()
+        return list;
     }
 }

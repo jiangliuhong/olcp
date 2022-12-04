@@ -1,7 +1,5 @@
 package top.jiangliuhong.olcp.data.entity;
 
-import java.util.Map;
-
 public interface EntityCondition {
 
     ComparisonOperator EQUALS = ComparisonOperator.EQUALS;
@@ -22,4 +20,5 @@ public interface EntityCondition {
     JoinOperator AND = JoinOperator.AND;
     JoinOperator OR = JoinOperator.OR;
 
+    void accept(EntityConditionBuilder builder);
 }

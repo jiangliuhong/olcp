@@ -1,13 +1,14 @@
 package top.jiangliuhong.olcp.data.entity;
 
+import top.jiangliuhong.olcp.common.utils.StringMap;
+
 import java.util.List;
-import java.util.Map;
 
 public interface EntityConditionFactory {
 
-    EntityCondition getTrueCondition();
-
     EntityCondition makeCondition(EntityCondition lhs, JoinOperator operator, EntityCondition rhs);
+
+    EntityCondition makeCondition(String fieldName, Object value);
 
     EntityCondition makeCondition(String fieldName, ComparisonOperator operator, Object value);
 
@@ -21,9 +22,9 @@ public interface EntityConditionFactory {
 
     EntityCondition makeCondition(List<Object> conditionList, String listOperator, String mapComparisonOperator, String mapJoinOperator);
 
-    EntityCondition makeCondition(Map<String, Object> fieldMap, ComparisonOperator comparisonOperator, JoinOperator joinOperator);
+    EntityCondition makeCondition(StringMap<Object> fieldMap, ComparisonOperator comparisonOperator, JoinOperator joinOperator);
 
-    EntityCondition makeCondition(Map<String, Object> fieldMap);
+    EntityCondition makeCondition(StringMap<Object> fieldMap);
 
 
 }

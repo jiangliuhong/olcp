@@ -6,11 +6,11 @@ import java.util.Collection;
 
 public class FieldValueCondition extends AbstractEntityCondition {
 
-    private ConditionField field;
-    private ComparisonOperator operator;
-    private Object value;
+    private final String field;
+    private final ComparisonOperator operator;
+    private final Object value;
 
-    public FieldValueCondition(ConditionField field, ComparisonOperator operator, Object value) {
+    public FieldValueCondition(String field, ComparisonOperator operator, Object value) {
         this.field = field;
         ComparisonOperator tempOperator = operator != null ? operator : EQUALS;
         if (value instanceof Collection) {
@@ -24,4 +24,15 @@ public class FieldValueCondition extends AbstractEntityCondition {
         this.value = value;
     }
 
+    public String getField() {
+        return this.field;
+    }
+
+    public ComparisonOperator getOperator() {
+        return this.operator;
+    }
+
+    public Object getValue() {
+        return this.value;
+    }
 }

@@ -15,27 +15,34 @@ import java.util.Set;
 @Log4j2
 public class TableEntityValueImpl implements EntityValue {
 
-    private final TableDefinition table;
+    private final TableDefinition definition;
     private final StringObjectMap valueMapInternal;
-    private final TableExecutionContext tableExecutionContext;
-    private final TableEntity tableEntity;
+    private final TableExecutionContext context;
+    private final TableEntity entity;
 
-    public TableEntityValueImpl(TablePO table, TableEntity tableEntity, TableExecutionContext tableExecutionContext) {
-        this.tableEntity = tableEntity;
-        this.table = new TableDefinition(table);
-        this.valueMapInternal = new StringObjectMap(this.table.getFields().size());
-        this.tableExecutionContext = tableExecutionContext;
+    public TableEntityValueImpl(TablePO definition, TableEntity entity, TableExecutionContext context) {
+        this.entity = entity;
+        this.definition = new TableDefinition(definition);
+        this.valueMapInternal = new StringObjectMap(this.definition.getFields().size());
+        this.context = context;
+    }
+
+    public TableEntityValueImpl(TableDefinition definition, TableEntity entity, TableExecutionContext context) {
+        this.entity = entity;
+        this.definition = definition;
+        this.valueMapInternal = new StringObjectMap(this.definition.getFields().size());
+        this.context = context;
     }
 
     @Override
     public EntityValue genId() {
-        this.put(this.table.getPrimaryFieldName(), IdUtils.generate());
+        this.put(this.definition.getPrimaryFieldName(), IdUtils.generate());
         return this;
     }
 
     @Override
     public String getName() {
-        return this.table.getDbName();
+        return this.definition.getDbName();
     }
 
     @Override
@@ -62,13 +69,13 @@ public class TableEntityValueImpl implements EntityValue {
 
     @Override
     public String getPrimary() {
-        return this.valueMapInternal.get(this.table.getPrimaryFieldName()).toString();
+        return this.valueMapInternal.get(this.definition.getPrimaryFieldName()).toString();
     }
 
     @Override
     public Set<String> getColumnNames() {
         Set<String> names = new HashSet<>();
-        this.table.eachFields(field -> {
+        this.definition.eachFields(field -> {
             names.add(field.getName());
         });
         return names;
@@ -76,7 +83,7 @@ public class TableEntityValueImpl implements EntityValue {
 
     @Override
     public EntityValue create() {
-        StringObjectMap createResult = this.tableExecutionContext.create(this.table, this.valueMapInternal);
+        StringObjectMap createResult = this.context.create(this.definition, this.valueMapInternal);
         this.setAll(createResult);
         return this;
     }

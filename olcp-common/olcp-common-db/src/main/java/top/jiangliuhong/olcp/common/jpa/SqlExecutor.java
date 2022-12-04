@@ -1,16 +1,18 @@
 package top.jiangliuhong.olcp.common.jpa;
 
+import org.hibernate.query.NativeQuery;
+import org.hibernate.transform.ResultTransformer;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import top.jiangliuhong.olcp.common.exception.SqlExecuteException;
 import top.jiangliuhong.olcp.common.utils.ExceptionUtils;
 import top.jiangliuhong.olcp.common.utils.LiteStringMap;
+import top.jiangliuhong.olcp.common.utils.StringObjectMap;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Map;
 
@@ -26,8 +28,21 @@ public class SqlExecutor {
         return entityManager.createNativeQuery(sql).executeUpdate();
     }
 
+    public List<StringObjectMap> executeQuery(String sql, ResultTransformer resultSetMapping, Object... parameters) {
+        Query query = entityManager.createNativeQuery(sql);
+        query.unwrap(NativeQuery.class).setResultTransformer(resultSetMapping);
+        if (parameters != null && parameters.length > 0) {
+            for (int i = 0; i < parameters.length; i++) {
+                Object parameter = parameters[i];
+                query.setParameter(i + 1, parameter);
+            }
+        }
+//        query.
+        return query.getResultList();
+    }
+
     public <T> List<T> executeQuery(String sql, Map<String, Object> parameters, Class<T> resultClass) {
-        TypedQuery<T> query = entityManager.createQuery(sql, resultClass);
+        Query query = entityManager.createNativeQuery(sql, resultClass);
         if (parameters != null && !parameters.isEmpty()) {
             parameters.forEach(query::setParameter);
         }
@@ -57,7 +72,7 @@ public class SqlExecutor {
             Query query = entityManager.createNativeQuery(sql);
             if (parameters != null && !parameters.isEmpty()) {
                 for (int i = 0; i < parameters.size(); i++) {
-                    query.setParameter(i, parameters.get(i));
+                    query.setParameter(i + 1, parameters.get(i));
                 }
             }
             return query.executeUpdate();
@@ -74,7 +89,7 @@ public class SqlExecutor {
             Query query = entityManager.createNativeQuery(sql);
             if (parameters != null && parameters.length > 0) {
                 for (int i = 0; i < parameters.length; i++) {
-                    query.setParameter(i, parameters[i]);
+                    query.setParameter(i + 1, parameters[i]);
                 }
             }
             return query.executeUpdate();

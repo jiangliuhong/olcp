@@ -1,20 +1,36 @@
 package top.jiangliuhong.olcp.data.entity.condition;
 
 import top.jiangliuhong.olcp.data.entity.EntityCondition;
+import top.jiangliuhong.olcp.data.entity.EntityConditionBuilder;
 import top.jiangliuhong.olcp.data.entity.JoinOperator;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.RandomAccess;
+import java.util.*;
 
 public class ListCondition extends AbstractEntityCondition {
-    private List<EntityCondition> conditionList = new ArrayList<>();
+    private final List<EntityCondition> conditionList = new ArrayList<>();
     private int conditionListSize = 0;
-    private JoinOperator operator;
+    private final JoinOperator operator;
 
-    public ListCondition(List<EntityCondition> conditionList, JoinOperator operator) {
+    public ListCondition(List<EntityCondition> conditionList) {
+        this.operator = AND;
+        initListCondition(conditionList);
+    }
+
+    public ListCondition(JoinOperator operator, EntityCondition... conditions) {
         this.operator = operator != null ? operator : AND;
+        List<EntityCondition> conditionList = new ArrayList<>();
+        if (conditions != null) {
+            conditionList.addAll(Arrays.asList(conditions));
+        }
+        initListCondition(conditionList);
+    }
+
+    public ListCondition(JoinOperator operator, List<EntityCondition> conditionList) {
+        this.operator = operator != null ? operator : AND;
+        initListCondition(conditionList);
+    }
+
+    private void initListCondition(List<EntityCondition> conditionList) {
         if (conditionList != null) {
             conditionListSize = conditionList.size();
             if (conditionListSize > 0) {

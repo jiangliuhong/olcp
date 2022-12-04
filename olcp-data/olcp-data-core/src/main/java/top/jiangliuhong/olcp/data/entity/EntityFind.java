@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface EntityFind {
 
-    EntityValue getByPrimary(Object primaryValue);
+    EntityValue get(Object primaryValue);
 
     EntityFind condition(String fieldName, Object value);
 

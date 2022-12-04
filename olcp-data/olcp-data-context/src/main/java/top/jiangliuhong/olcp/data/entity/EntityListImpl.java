@@ -10,6 +10,10 @@ public class EntityListImpl implements EntityList {
         values = new ArrayList<>(initialCapacity);
     }
 
+    public EntityListImpl() {
+        values = new ArrayList<>();
+    }
+
     @Override
     public int size() {
         return values.size();

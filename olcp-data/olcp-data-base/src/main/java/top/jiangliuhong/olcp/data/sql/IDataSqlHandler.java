@@ -21,7 +21,7 @@ public interface IDataSqlHandler {
 
     public String updateColumn(String tableName, TableFieldDefinition... fieldPOS);
 
-    public String insertSql(TableDefinition table, StringObjectMap value);
+    public String insertSql(TableDefinition table);
 
 //    public String
 

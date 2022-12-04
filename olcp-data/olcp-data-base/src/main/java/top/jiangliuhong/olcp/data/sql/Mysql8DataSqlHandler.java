@@ -104,19 +104,13 @@ public class Mysql8DataSqlHandler implements IDataSqlHandler {
     }
 
     @Override
-    public String insertSql(TableDefinition table, StringObjectMap value) {
+    public String insertSql(TableDefinition table) {
         StringBuilder sqlBuilder = new StringBuilder("INSERT INTO ");
         sqlBuilder.append(table.getDbName());
         StringBuilder valueBuilder = new StringBuilder("(");
         sqlBuilder.append("(");
         table.eachFields(field -> {
             sqlBuilder.append(field.getDbName()).append(",");
-//            Object valueString = FieldTypeUtils.transformDatabaseString(value.get(field.getName()), field.getType());
-//            if (valueString == null) {
-//                valueBuilder.append("NULL");
-//            } else {
-//                valueBuilder.append(valueString);
-//            }
             valueBuilder.append(":").append(field.getName());
             valueBuilder.append(",");
         });

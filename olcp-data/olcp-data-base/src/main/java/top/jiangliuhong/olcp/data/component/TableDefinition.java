@@ -30,6 +30,10 @@ public class TableDefinition {
         return this.source;
     }
 
+    public String getName() {
+        return this.source.getName();
+    }
+
     public String getDbName() {
         return NameUtils.camelToUnderline(this.app.getName()) + "_" + NameUtils.camelToUnderline(this.source.getName());
     }
@@ -60,5 +64,14 @@ public class TableDefinition {
             }
         }
         return false;
+    }
+
+    public TableFieldDefinition getField(String fieldName) {
+        for (TableFieldPO field : this.source.getFields()) {
+            if (StringUtils.equals(fieldName, field.getName())) {
+                return new TableFieldDefinition(field);
+            }
+        }
+        return null;
     }
 }

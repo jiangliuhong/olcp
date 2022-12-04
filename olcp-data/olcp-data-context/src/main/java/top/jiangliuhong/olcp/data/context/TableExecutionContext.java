@@ -17,15 +17,19 @@ public class TableExecutionContext {
         this.factory = factory;
     }
 
+    public TableExecutionContextFactory getFactory() {
+        return this.factory;
+    }
+
     public StringObjectMap create(TableDefinition tableDefinition, StringObjectMap values) {
-        // TODO 公共字段维护,Table操作拦截器
+        // Table操作拦截器
         List<TableExecutionInterceptor> interceptorList = this.factory.getInterceptorList();
         if (interceptorList != null) {
             interceptorList.forEach(interceptor -> {
                 interceptor.preCreate(tableDefinition, values);
             });
         }
-        String insertSql = this.factory.getDataSqlHandler().handler().insertSql(tableDefinition, values);
+        String insertSql = this.factory.getDataSqlHandler().handler().insertSql(tableDefinition);
         LiteStringMap<Object> liteStringMap = new LiteStringMap<>();
         tableDefinition.eachFields(field -> {
             liteStringMap.put(field.getName(), values.get(field.getName()));
@@ -46,8 +50,8 @@ public class TableExecutionContext {
 
     }
 
-    public List<StringObjectMap> query(TableDefinition tableDefinition, EntityCondition condition) {
-        return null;
+    public List<StringObjectMap> query(TableDefinition tableDefinition, String querySql, Object... parameters) {
+        return this.factory.getSqlExecutor().executeQuery(querySql, new TableDataResultTransformer(tableDefinition), parameters);
     }
 
 
