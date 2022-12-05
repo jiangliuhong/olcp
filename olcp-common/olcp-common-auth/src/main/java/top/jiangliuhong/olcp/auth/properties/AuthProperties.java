@@ -19,7 +19,7 @@ public class AuthProperties {
     public List<String> getIgnoreUrls() {
         // add default urls
         List<String> list = new ArrayList<>() {{
-            add("/api/v1/auth/login");
+            add("/api/v1/user/login");
             add("/swagger-resources/**");
             add("/swagger-ui.html");
             add("/swagger-ui/**");

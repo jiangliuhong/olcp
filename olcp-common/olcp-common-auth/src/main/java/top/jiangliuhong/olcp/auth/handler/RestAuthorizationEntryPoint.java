@@ -22,6 +22,7 @@ public class RestAuthorizationEntryPoint implements AuthenticationEntryPoint {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         ApiResult<Void> restResult = ApiResult.fail(ApiResultStatus.UNAUTHORIZED);
+        response.setStatus(restResult.getCode());
         out.write(new ObjectMapper().writeValueAsString(restResult));
         out.flush();
         out.close();
