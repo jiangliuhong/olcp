@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import top.jiangliuhong.olcp.auth.bean.TokenResult;
 import top.jiangliuhong.olcp.auth.handler.JwtTokenHandler;
 import top.jiangliuhong.olcp.common.exception.BusinessException;
 
@@ -18,7 +19,7 @@ public class UserAuthService {
     @Autowired
     private JwtTokenHandler jwtTokenHandler;
 
-    public String login(String username, String password) {
+    public TokenResult login(String username, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         // String pwd = passwordEncoder.encode("test");
         // test: $2a$10$BUuG0a5K7cVd6ktES5.oEOVtGQFnIg3csRLL28bBzTaGWl4rGimyO

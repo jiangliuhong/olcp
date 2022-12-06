@@ -4,10 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import top.jiangliuhong.olcp.auth.bean.LoginVO;
-import top.jiangliuhong.olcp.auth.bean.SimpleUserDO;
-import top.jiangliuhong.olcp.auth.bean.UserInfoVO;
-import top.jiangliuhong.olcp.auth.bean.UserVO;
+import top.jiangliuhong.olcp.auth.bean.*;
 import top.jiangliuhong.olcp.auth.service.UserAuthService;
 import top.jiangliuhong.olcp.auth.service.UserService;
 import top.jiangliuhong.olcp.auth.utils.AuthUtils;
@@ -33,14 +30,11 @@ public class UserAuthApi {
      */
     @PostMapping("/login")
     @Tag(name = "登录")
-    public Map<String, String> login(@RequestBody LoginVO loginVO) {
+    public TokenResult login(@RequestBody LoginVO loginVO) {
         if (StringUtils.isBlank(loginVO.getUsername()) || StringUtils.isBlank(loginVO.getPassword())) {
             throw new RuntimeException("请输入用户名密码");
         }
-        String token = userAuthService.login(loginVO.getUsername(), loginVO.getPassword());
-        Map<String, String> result = new HashMap<>();
-        result.put("token", token);
-        return result;
+        return userAuthService.login(loginVO.getUsername(), loginVO.getPassword());
     }
 
     @GetMapping("/current")

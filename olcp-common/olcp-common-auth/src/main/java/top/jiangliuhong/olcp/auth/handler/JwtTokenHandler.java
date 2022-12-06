@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import top.jiangliuhong.olcp.auth.bean.TokenResult;
 import top.jiangliuhong.olcp.auth.properties.AuthProperties;
 
 import java.util.Date;
@@ -46,7 +47,7 @@ public class JwtTokenHandler {
     /**
      * 根据用户信息生成token
      */
-    public String generateToken(UserDetails userDetails) {
+    public TokenResult generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
         claims.put(CLAIM_KEY_CREATED, new Date());
@@ -61,13 +62,18 @@ public class JwtTokenHandler {
         return expiredDate.before(new Date());
     }
 
-    private String generateToken(Map<String, Object> claims) {
-        return Jwts.builder()
+    private TokenResult generateToken(Map<String, Object> claims) {
+        Date expirationDate = generateExpirationDate();
+        String token = Jwts.builder()
                 .setClaims(claims)
-                .setExpiration(generateExpirationDate())
+                .setExpiration(expirationDate)
                 //签名算法
                 .signWith(SignatureAlgorithm.HS512, authProperties.getJwt().getSecret())
                 .compact();
+        TokenResult result = new TokenResult();
+        result.setToken(token);
+        result.setExpiration(expirationDate);
+        return result;
     }
 
     /**
