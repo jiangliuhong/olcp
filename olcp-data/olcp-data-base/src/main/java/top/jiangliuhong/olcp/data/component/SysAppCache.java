@@ -14,6 +14,18 @@ public class SysAppCache {
 
     private final AppPO app;
 
+    public static SysAppCache forName(String appName) {
+        if (StringUtils.isBlank(appName)) {
+            return null;
+        }
+        String appId = CacheUtils.getCacheValue(CacheNames.APP_NAME, appName);
+        if (StringUtils.isBlank(appId)) {
+            return null;
+        }
+        return new SysAppCache(appId);
+    }
+
+
     public SysAppCache(String appId) {
         if (StringUtils.isBlank(appId)) {
             throw new NullPointerException("appId is empty");
@@ -34,6 +46,9 @@ public class SysAppCache {
     }
 
     public TablePO getTable(String tableName) {
+        if (StringUtils.isBlank(tableName)) {
+            return null;
+        }
         String keyName = this.getAppModuleKeyName(this.app.getName(), tableName);
         String tableId = CacheUtils.getCacheValue(CacheNames.TABLE_NAME, keyName);
         if (StringUtils.isBlank(tableId)) {

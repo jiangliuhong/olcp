@@ -82,7 +82,11 @@ public class AppService {
     public void saveCache(AppDO app) {
         AppPO appPO = new AppPO();
         BeanUtils.copyProperties(app, appPO);
-        CacheUtils.putCacheValue(CacheNames.APP_ID, app.getId(), appPO);
+        this.saveCache(appPO);
+    }
+
+    public void saveCache(AppPO app) {
+        CacheUtils.putCacheValue(CacheNames.APP_ID, app.getId(), app);
         CacheUtils.putCacheValue(CacheNames.APP_NAME, app.getName(), app.getId());
     }
 

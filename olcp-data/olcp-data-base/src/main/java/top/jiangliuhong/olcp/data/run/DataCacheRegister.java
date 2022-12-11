@@ -10,6 +10,7 @@ import top.jiangliuhong.olcp.common.cache.properties.CacheInfo;
 import top.jiangliuhong.olcp.data.bean.AppDO;
 import top.jiangliuhong.olcp.data.bean.po.GroovyFilePO;
 import top.jiangliuhong.olcp.data.bean.po.TablePO;
+import top.jiangliuhong.olcp.data.config.properties.SystemTableProperties;
 import top.jiangliuhong.olcp.data.consts.CacheNames;
 import top.jiangliuhong.olcp.data.service.AppService;
 import top.jiangliuhong.olcp.data.service.GroovyFileService;
@@ -29,6 +30,8 @@ public class DataCacheRegister implements CommandLineRunner {
     private TableService tableService;
     @Autowired
     private GroovyFileService groovyFileService;
+    @Autowired
+    private SystemTableProperties properties;
 
     @Override
     public void run(String... args) throws Exception {
@@ -53,11 +56,14 @@ public class DataCacheRegister implements CommandLineRunner {
         for (AppDO app : apps) {
             appService.saveCache(app);
         }
+        new DataSystemAppRegister().getRegisterBean().forEach(app -> appService.saveCache(app));
     }
 
     private void initTableCache(String[] serverAppIds) {
         List<TablePO> tables = tableService.getAllTableByApp(serverAppIds);
         tables.forEach(table -> tableService.saveCache(table));
+        List<TablePO> registerBean = new DataSystemTableRegister(properties).getRegisterBean();
+        registerBean.forEach(table -> tableService.saveCache(table));
     }
 
     private void buildSysCache(String... cacheName) {

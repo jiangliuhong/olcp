@@ -51,5 +51,6 @@ public class SystemTableProperties {
         private String name;
         private String title;
         private String appId;
+        private String clazz;
     }
 }

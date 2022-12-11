@@ -1,5 +1,7 @@
 package top.jiangliuhong.olcp.data.entity;
 
+import top.jiangliuhong.olcp.common.bean.PageInfo;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -55,4 +57,8 @@ public interface EntityFind {
     int getPageSize();
 
     EntityList query();
+
+    int count();
+
+    PageInfo<EntityValue> page();
 }

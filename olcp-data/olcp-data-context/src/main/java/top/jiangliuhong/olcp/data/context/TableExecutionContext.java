@@ -54,5 +54,9 @@ public class TableExecutionContext {
         return this.factory.getSqlExecutor().executeQuery(querySql, new TableDataResultTransformer(tableDefinition), parameters);
     }
 
+    public int count(String querySql, Object... parameters) {
+        return this.factory.getSqlExecutor().executeQueryCount(querySql, parameters);
+    }
+
 
 }

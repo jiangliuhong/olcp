@@ -1,6 +1,7 @@
 package top.jiangliuhong.olcp.data.entity;
 
 import org.apache.commons.lang3.StringUtils;
+import top.jiangliuhong.olcp.common.bean.PageInfo;
 import top.jiangliuhong.olcp.common.utils.StringObjectMap;
 import top.jiangliuhong.olcp.data.bean.po.TablePO;
 import top.jiangliuhong.olcp.data.component.TableDefinition;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 public class TableEntityFindImpl implements EntityFind {
     private final TableDefinition definition;
@@ -23,6 +25,8 @@ public class TableEntityFindImpl implements EntityFind {
     private EntityCondition havingEntityCondition;
     private Integer offset = 0;
     private Integer limit = 10;
+
+    private Integer count = 0;
 
     public TableEntityFindImpl(TablePO table, TableEntity tableEntity, TableExecutionContext context) {
         this.entity = tableEntity;
@@ -37,7 +41,7 @@ public class TableEntityFindImpl implements EntityFind {
     @Override
     public EntityValue get(Object primaryValue) {
         EntityCondition condition = getConditionFactory().makeCondition(definition.getPrimaryFieldName(), primaryValue);
-        List<StringObjectMap> list = query(condition);
+        List<StringObjectMap> list = query(condition, null);
         if (list == null || list.isEmpty()) {
             return null;
         }
@@ -259,7 +263,7 @@ public class TableEntityFindImpl implements EntityFind {
 
     @Override
     public EntityList query() {
-        List<StringObjectMap> list = query(this.getWhereEntityCondition());
+        List<StringObjectMap> list = query(this.getWhereEntityCondition(), null);
         if (list == null || list.isEmpty()) {
             return new EntityListImpl();
         }
@@ -270,6 +274,38 @@ public class TableEntityFindImpl implements EntityFind {
             entityList.add(value);
         }
         return entityList;
+    }
+
+    @Override
+    public int count() {
+        return this.count;
+    }
+
+    @Override
+    public PageInfo<EntityValue> page() {
+        PageInfo<EntityValue> pageInfo = new PageInfo<>();
+        pageInfo.setPage(this.getPageIndex());
+        pageInfo.setSize(this.getPageSize());
+        // 查询count
+        this.count = this.count(this.getWhereEntityCondition());
+        if (this.count > 0) {
+            EntityListImpl entityList = new EntityListImpl();
+            pageInfo.setData(entityList);
+            List<StringObjectMap> list = query(this.getWhereEntityCondition(), (builder, params) -> {
+                builder.append(" LIMIT ").append(this.limit);
+                builder.append(" OFFSET ").append(this.offset);
+            });
+            if (list != null && !list.isEmpty()) {
+                list.forEach(item -> {
+                    EntityValue value = new TableEntityValueImpl(this.definition, this.entity, this.context);
+                    value.setAll(item);
+                    entityList.add(value);
+                });
+            }
+        }
+        pageInfo.setTotal(this.count);
+
+        return pageInfo;
     }
 
     private String getSelectFieldsString() {
@@ -284,12 +320,35 @@ public class TableEntityFindImpl implements EntityFind {
         return StringUtils.join(selectFields, ",");
     }
 
+    private int count(EntityCondition condition) {
+        StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM ");
+        queryBuilder.append(definition.getDbName()).append(" ");
+        List<Object> parameters = buildQueryCondition(condition, queryBuilder);
+        if (!parameters.isEmpty()) {
+            return this.context.count(queryBuilder.toString(), parameters.toArray());
+        } else {
+            return this.context.count(queryBuilder.toString());
+        }
+    }
 
-    private List<StringObjectMap> query(EntityCondition condition) {
+
+    private List<StringObjectMap> query(EntityCondition condition, BiConsumer<StringBuilder, List<Object>> queryBuilderConsumer) {
         StringBuilder queryBuilder = new StringBuilder("SELECT ");
         String selectFieldsString = this.getSelectFieldsString();
         queryBuilder.append(selectFieldsString);
         queryBuilder.append(" FROM ").append(definition.getDbName()).append(" ");
+        List<Object> parameters = buildQueryCondition(condition, queryBuilder);
+        if (queryBuilderConsumer != null) {
+            queryBuilderConsumer.accept(queryBuilder, parameters);
+        }
+        if (!parameters.isEmpty()) {
+            return this.context.query(this.definition, queryBuilder.toString(), parameters.toArray());
+        } else {
+            return this.context.query(this.definition, queryBuilder.toString());
+        }
+    }
+
+    private List<Object> buildQueryCondition(EntityCondition condition, StringBuilder queryBuilder) {
         List<Object> parameters = null;
         if (condition != null) {
             TableSqlEntityConditionBuilder builder = new TableSqlEntityConditionBuilder(this.definition);
@@ -300,10 +359,9 @@ public class TableEntityFindImpl implements EntityFind {
                 parameters = builder.getParameters();
             }
         }
-        if (parameters != null && !parameters.isEmpty()) {
-            return this.context.query(this.definition, queryBuilder.toString(), parameters.toArray());
-        } else {
-            return this.context.query(this.definition, queryBuilder.toString());
+        if (parameters == null) {
+            parameters = new ArrayList<>();
         }
+        return parameters;
     }
 }

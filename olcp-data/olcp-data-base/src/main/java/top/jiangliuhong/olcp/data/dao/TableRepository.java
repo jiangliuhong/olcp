@@ -1,5 +1,8 @@
 package top.jiangliuhong.olcp.data.dao;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -34,5 +37,7 @@ public interface TableRepository extends PagingAndSortingRepository<TableDO, Str
      * @return 数据表
      */
     public List<TableDO> findAllByAppIdIn(String[] appIds);
+
+    public Page<TableDO> findAll(Specification<TableDO> spec, Pageable pageable);
 
 }

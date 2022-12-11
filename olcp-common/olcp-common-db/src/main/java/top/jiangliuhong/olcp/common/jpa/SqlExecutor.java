@@ -28,17 +28,28 @@ public class SqlExecutor {
         return entityManager.createNativeQuery(sql).executeUpdate();
     }
 
+    public int executeQueryCount(String sql, Object... parameters) {
+        Query query = executeBaseQuery(sql, null, parameters);
+        return ((Number) query.getSingleResult()).intValue();
+    }
+
     public List<StringObjectMap> executeQuery(String sql, ResultTransformer resultSetMapping, Object... parameters) {
+        Query query = executeBaseQuery(sql, resultSetMapping, parameters);
+        return query.getResultList();
+    }
+
+    private Query executeBaseQuery(String sql, ResultTransformer resultSetMapping, Object[] parameters) {
         Query query = entityManager.createNativeQuery(sql);
-        query.unwrap(NativeQuery.class).setResultTransformer(resultSetMapping);
+        if (resultSetMapping != null) {
+            query.unwrap(NativeQuery.class).setResultTransformer(resultSetMapping);
+        }
         if (parameters != null && parameters.length > 0) {
             for (int i = 0; i < parameters.length; i++) {
                 Object parameter = parameters[i];
                 query.setParameter(i + 1, parameter);
             }
         }
-//        query.
-        return query.getResultList();
+        return query;
     }
 
     public <T> List<T> executeQuery(String sql, Map<String, Object> parameters, Class<T> resultClass) {
