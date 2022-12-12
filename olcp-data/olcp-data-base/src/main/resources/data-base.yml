@@ -3,27 +3,27 @@ olcp:
     system:
       base:
         tables:
-          - name: sys_app
+          - name: app
             title: 应用程序
             clazz: top.jiangliuhong.olcp.data.bean.AppDO
-          - name: sys_code_type
+          - name: code_type
             title: 代码类型
-          - name: sys_code_value
+          - name: code_value
             title: 代码值
-          - name: sys_list
+          - name: list
             title: 列表
-          - name: sys_list_field
+          - name: list_field
             title: 列表字段
-          - name: sys_table
+          - name: table
             title: 数据表
             clazz: top.jiangliuhong.olcp.data.bean.TableDO
-          - name: sys_table_field
+          - name: table_field
             title: 数据表字段
-          - name: sys_table_relationship
+          - name: table_relationship
             title: 数据表关联关系
-          - name: sys_table_index
+          - name: table_index
             title: 数据表索引
-          - name: sys_user
+          - name: user
             title: 用户
         default_fields:
           - name: id
@@ -42,10 +42,10 @@ olcp:
           - name: createUser
             title: 创建人
             type: Reference
-            reference-table-id: system.sys_user
+            reference-table-id: sys.user
             sn: 1003
           - name: updateUser
             title: 最后修改人
             type: Reference
-            reference-table-id: system.sys_user
+            reference-table-id: sys.user
             sn: 1004

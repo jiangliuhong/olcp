@@ -36,7 +36,7 @@ public class AppApi {
             return new ArrayList<>();
         }
         String userId = currentUser.getId();
-        List<AppDO> userAppList = appManagerService.getUserAppList(userId);
+        List<AppPO> userAppList = appManagerService.getUserAppList(userId);
         return BeanUtils.copyBean(userAppList, AppVO.class);
     }
 

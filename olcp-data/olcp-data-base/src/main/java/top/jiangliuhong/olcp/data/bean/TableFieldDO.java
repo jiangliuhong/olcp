@@ -6,6 +6,8 @@ import top.jiangliuhong.olcp.common.bean.BaseDO;
 import top.jiangliuhong.olcp.data.type.FieldType;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 @Getter
@@ -17,6 +19,7 @@ public class TableFieldDO extends BaseDO {
     private String title;
     private String tableId;
     private String appId;
+    @Enumerated(EnumType.STRING)
     private FieldType type;
     private Integer maxLength;
     private Integer maxPrecision;

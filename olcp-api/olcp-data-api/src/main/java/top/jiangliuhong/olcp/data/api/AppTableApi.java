@@ -11,6 +11,7 @@ import top.jiangliuhong.olcp.data.bean.TablePageQueryParam;
 import top.jiangliuhong.olcp.data.bean.TableVO;
 import top.jiangliuhong.olcp.data.bean.po.TablePO;
 import top.jiangliuhong.olcp.data.entity.EntityValue;
+import top.jiangliuhong.olcp.data.exception.TableNotFoundException;
 import top.jiangliuhong.olcp.data.service.AppTableService;
 
 @Tag(name = "appTable", description = "应用数据表API")
@@ -22,9 +23,13 @@ public class AppTableApi {
     private AppTableService appTableService;
 
     @GetMapping("/struct")
+    @Operation(summary = "查询数据表结构")
     public TableVO queryTableStruct(@PathVariable String appName,
                                     @PathVariable String tableName) {
         TablePO table = appTableService.getTable(appName, tableName);
+        if (table == null) {
+            throw new TableNotFoundException("没有找到表:" + appName + "." + tableName);
+        }
         TableVO vo = new TableVO();
         BeanUtils.copyProperties(table, vo);
         return vo;

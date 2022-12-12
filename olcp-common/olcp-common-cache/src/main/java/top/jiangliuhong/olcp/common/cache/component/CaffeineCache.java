@@ -71,4 +71,32 @@ public class CaffeineCache<K, V> implements ICache<K, V> {
     public Set<K> keys() {
         return this.keys;
     }
+
+    @Override
+    public Set<Entry<K, V>> entrySet() {
+        Set<Entry<K, V>> entrySet = new HashSet<>();
+        this.keys().forEach(key -> entrySet.add(new CaffeineCacheEntry(key, this.get(key))));
+        return entrySet;
+    }
+
+    class CaffeineCacheEntry implements Entry<K, V> {
+
+        private K k;
+        private V v;
+
+        public CaffeineCacheEntry(K k, V v) {
+            this.k = k;
+            this.v = v;
+        }
+
+        @Override
+        public K getKey() {
+            return this.k;
+        }
+
+        @Override
+        public V getValue() {
+            return this.v;
+        }
+    }
 }
