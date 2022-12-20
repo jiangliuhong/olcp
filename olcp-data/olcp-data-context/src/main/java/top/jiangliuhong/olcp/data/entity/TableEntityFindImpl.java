@@ -5,14 +5,13 @@ import top.jiangliuhong.olcp.common.bean.PageInfo;
 import top.jiangliuhong.olcp.common.utils.StringObjectMap;
 import top.jiangliuhong.olcp.data.bean.po.TablePO;
 import top.jiangliuhong.olcp.data.component.TableDefinition;
+import top.jiangliuhong.olcp.data.component.TableFieldDefinition;
+import top.jiangliuhong.olcp.data.consts.Sorts;
 import top.jiangliuhong.olcp.data.context.TableExecutionContext;
 import top.jiangliuhong.olcp.data.entity.condition.FieldValueCondition;
 import top.jiangliuhong.olcp.data.entity.condition.ListCondition;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 public class TableEntityFindImpl implements EntityFind {
@@ -20,7 +19,7 @@ public class TableEntityFindImpl implements EntityFind {
     private final TableExecutionContext context;
     private final TableEntity entity;
     private List<String> selectFields;
-    private List<String> orderFields;
+    private Map<Sorts, List<String>> orderFields;
     private EntityCondition whereEntityCondition;
     private EntityCondition havingEntityCondition;
     private Integer offset = 0;
@@ -196,30 +195,39 @@ public class TableEntityFindImpl implements EntityFind {
 
     @Override
     public EntityFind orderBy(String orderByFieldName) {
+        return this.orderBy(orderByFieldName, Sorts.ASC);
+    }
+
+    @Override
+    public EntityFind orderBy(String orderByFieldName, Sorts sorts) {
+        if (sorts == null) {
+            sorts = Sorts.ASC;
+        }
         if (StringUtils.isBlank(orderByFieldName)) {
             return this;
         }
         if (this.orderFields == null) {
-            this.orderFields = new ArrayList<>();
+            this.orderFields = new HashMap<>();
         }
-        buildFieldNameArray(this.orderFields, orderByFieldName);
+        List<String> strings = this.orderFields.computeIfAbsent(sorts, k -> new ArrayList<>());
+        buildFieldNameArray(strings, orderByFieldName);
+        return this;
+    }
+
+    @Override
+    public EntityFind orderBy(List<String> orderByFieldNames, Sorts sorts) {
+        if (orderByFieldNames == null || orderByFieldNames.isEmpty()) {
+            return this;
+        }
+        for (String orderByFieldName : orderByFieldNames) {
+            this.orderBy(orderByFieldName, sorts);
+        }
         return this;
     }
 
     @Override
     public EntityFind orderBy(List<String> orderByFieldNames) {
-        if (orderByFieldNames == null || orderByFieldNames.isEmpty()) {
-            return this;
-        }
-        for (String orderByFieldName : orderByFieldNames) {
-            this.orderBy(orderByFieldName);
-        }
-        return this;
-    }
-
-    @Override
-    public List<String> getOrderBy() {
-        return this.orderFields;
+        return this.orderBy(orderByFieldNames, Sorts.ASC);
     }
 
     @Override
@@ -331,13 +339,27 @@ public class TableEntityFindImpl implements EntityFind {
         }
     }
 
-
     private List<StringObjectMap> query(EntityCondition condition, BiConsumer<StringBuilder, List<Object>> queryBuilderConsumer) {
         StringBuilder queryBuilder = new StringBuilder("SELECT ");
         String selectFieldsString = this.getSelectFieldsString();
         queryBuilder.append(selectFieldsString);
         queryBuilder.append(" FROM ").append(definition.getDbName()).append(" ");
         List<Object> parameters = buildQueryCondition(condition, queryBuilder);
+        // order by
+        if (this.orderFields != null) {
+            StringBuilder orderBuilder = new StringBuilder();
+            this.orderFields.forEach((sorts, string) -> string.forEach(name -> {
+                TableFieldDefinition field = this.definition.getField(name);
+                if (field != null) {
+                    orderBuilder.append(" ").append(field.getDbName()).append(" ").append(sorts.name()).append(",");
+                }
+            }));
+            if (orderBuilder.length() > 0) {
+                orderBuilder.insert(0, " ORDER BY ");
+                orderBuilder.deleteCharAt(orderBuilder.length() - 1);
+                queryBuilder.append(orderBuilder);
+            }
+        }
         if (queryBuilderConsumer != null) {
             queryBuilderConsumer.accept(queryBuilder, parameters);
         }

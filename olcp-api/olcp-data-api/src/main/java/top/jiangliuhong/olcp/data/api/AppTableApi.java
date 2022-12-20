@@ -7,12 +7,17 @@ import org.springframework.web.bind.annotation.*;
 import top.jiangliuhong.olcp.common.bean.PageInfo;
 import top.jiangliuhong.olcp.common.utils.BeanUtils;
 import top.jiangliuhong.olcp.data.bean.AppTableQuery;
+import top.jiangliuhong.olcp.data.bean.SortData;
 import top.jiangliuhong.olcp.data.bean.TablePageQueryParam;
 import top.jiangliuhong.olcp.data.bean.TableVO;
 import top.jiangliuhong.olcp.data.bean.po.TablePO;
+import top.jiangliuhong.olcp.data.consts.Sorts;
 import top.jiangliuhong.olcp.data.entity.EntityValue;
 import top.jiangliuhong.olcp.data.exception.TableNotFoundException;
 import top.jiangliuhong.olcp.data.service.AppTableService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Tag(name = "appTable", description = "应用数据表API")
 @RestController
@@ -43,6 +48,20 @@ public class AppTableApi {
         TablePageQueryParam param = new TablePageQueryParam();
         param.setPage(query.getPage());
         param.setSize(query.getSize());
+        List<String> orderBy = query.getOrderBy();
+        if (orderBy != null && !orderBy.isEmpty()) {
+            if (param.getOrders() == null) {
+                param.setOrders(new ArrayList<>());
+            }
+            orderBy.forEach(names -> {
+                String[] split = names.split(",");
+                String type = "";
+                if (split.length == 2) {
+                    type = split[1];
+                }
+                param.getOrders().add(new SortData(split[0], Sorts.getSortsByName(type)));
+            });
+        }
         return appTableService.queryTableDate(appName, tableName, param);
     }
 

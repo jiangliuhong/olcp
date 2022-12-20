@@ -1,6 +1,7 @@
 package top.jiangliuhong.olcp.data.entity;
 
 import top.jiangliuhong.olcp.common.bean.PageInfo;
+import top.jiangliuhong.olcp.data.consts.Sorts;
 
 import java.util.Collection;
 import java.util.List;
@@ -38,9 +39,11 @@ public interface EntityFind {
 
     EntityFind orderBy(String orderByFieldName);
 
+    EntityFind orderBy(String orderByFieldName, Sorts sorts);
+
     EntityFind orderBy(List<String> orderByFieldNames);
 
-    List<String> getOrderBy();
+    EntityFind orderBy(List<String> orderByFieldNames, Sorts sorts);
 
     EntityFind offset(Integer offset);
 
