@@ -26,7 +26,7 @@ import java.util.List;
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "top.jiangliuhong.olcp")
 @EntityScan(basePackages = "top.jiangliuhong.olcp")
-@Import({SqlExecutor.class})
+@Import({SqlExecutor.class, DatasourceClusterConfig.class})
 @PropertySource(factory = YamlPropertySourceFactory.class, value = "classpath:common-db.yml")
 public class DatabaseAutoConfigure {
 
