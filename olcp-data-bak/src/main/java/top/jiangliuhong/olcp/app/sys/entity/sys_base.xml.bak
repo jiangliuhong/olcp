@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<entityInfo title="系统基础表" virtual="true">
-    <short-description>系统基础表，一个虚拟定义，不会在数据库中创建，所有表默认继承该表</short-description>
-    <fieldInfo name="id" title="ID" type="SysId"/>
-    <fieldInfo name="createTime" title="创建时间" type="Date" length="20"/>
-    <fieldInfo name="createUser" title="创建人" type="Reference" reference="sys_user"/>
-    <fieldInfo name="updateTime" title="最后修改时间" type="String" length="30"/>
-    <fieldInfo name="updateUser" title="最后修改人" type="Reference" reference="sys_user"/>
-</entityInfo>

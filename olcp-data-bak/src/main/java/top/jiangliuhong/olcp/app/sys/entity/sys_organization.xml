@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<entityInfo title="系统组织机构">
-    <short-description>系统组织机构</short-description>
-    <filed name="name" title="名称" type="String" length="30"/>
-    <filed name="type" title="类型" type="String" length="30" short-description="单位、部门"/>
-    <filed name="parent" title="父组织" type="Reference" length="30"/>
-</entityInfo>

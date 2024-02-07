@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<entity name="sys_tables" title="系统表">
-    <short-description>系统表定义，存储所有应用表</short-description>
-    <filed name="name" title="表名" type="String" length="15"/>
-    <filed name="title" title="显示名" type="String" length="20"/>
-    <filed name="parent" title="继承表" type="SysId"/>
-    <filed name="shortDescription" title="简介" type="String" length="30"/>
-    <filed name="appid" title="应用" type="SysId"/>
-</entity>
